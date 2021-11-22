@@ -21,9 +21,10 @@
                     "
                 >
 
+                @for ($luna = 0; $luna <= 1 ; $luna++)
                     @php
-                        $luna_aceasta_prima_zi = \Carbon\Carbon::today()->startOfMonth();
-                        $luna_aceasta_ultima_zi = \Carbon\Carbon::today()->endOfMonth();
+                        $luna_prima_zi = \Carbon\Carbon::today()->addMonth($luna)->startOfMonth();
+                        $luna_ultima_zi = \Carbon\Carbon::today()->addMonth($luna)->endOfMonth();
                     @endphp
 
                     {{-- <div class="d-flex flex-wrap">
@@ -73,66 +74,72 @@
 
                     <div class="row p-md-4 justify-content-center">
                         <div class="table-responsive">
-                    <table class="table align-middle" id="lunar" style="width: 100%">
-                        <tr>
-                            <th colspan="7">
-                                {{ ucfirst($luna_aceasta_prima_zi->isoFormat('MMMM YYYY')) }}
-                            </th>
-                        </tr>
-                        <tr>
-                            <th width="13%">
-                                Luni
-                            </th>
-                            <th width="13%">
-                                Marți
-                            </th>
-                            <th width="13%">
-                                Miercuri
-                            </th>
-                            <th width="13%">
-                                Joi
-                            </th>
-                            <th width="13%">
-                                Vineri
-                            </th>
-                            <th width="13%">
-                                Sâmbătă
-                            </th>
-                            <th width="13%">
-                                Duminică
-                            </th>
-                        </tr>
-                        <tr>
-                            @if ($luna_aceasta_prima_zi->isSunday())
-                                <td>
-                                    {{ $luna_aceasta_prima_zi->subDays(6)->isoFormat('DD') }}
-                                </td>
-                            @endif
+                            <table class="table align-middle" id="lunar" style="width: 100%">
+                                <tr>
+                                    <th colspan="7">
+                                        {{ ucfirst($luna_prima_zi->isoFormat('MMMM YYYY')) }}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th width="13%">
+                                        Luni
+                                    </th>
+                                    <th width="13%">
+                                        Marți
+                                    </th>
+                                    <th width="13%">
+                                        Miercuri
+                                    </th>
+                                    <th width="13%">
+                                        Joi
+                                    </th>
+                                    <th width="13%">
+                                        Vineri
+                                    </th>
+                                    <th width="13%">
+                                        Sâmbătă
+                                    </th>
+                                    <th width="13%">
+                                        Duminică
+                                    </th>
+                                </tr>
+                                <tr>
+                                    @for ($ziua = $luna_prima_zi->startOfWeek(); $ziua < $luna_ultima_zi->endOfWeek(); $ziua->addDay())
+                                        @if (($ziua->isMonday() == true) && ($ziua->day > 1))
+                                            <tr>
+                                        @endif
 
+                                        @if ($ziua->month != \Carbon\Carbon::today()->addMonth($luna)->month)
+                                            <td class="" style="">
+                                                {{ $ziua->isoFormat('DD') }}
+                                            </td>
+                                        @elseif (($ziua->isWeekend() == true) || ($ziua->lessThan(\Carbon\Carbon::tomorrow())))
+                                            <td class="" style="background-color:rgb(119, 118, 118)">
+                                                {{ $ziua->isoFormat('DD') }}
+                                            </td>
+                                        @else
+                                            <td class="p-0" style="">
+                                                    <div class="d-grid" style="height:100%;width:100%">
+                                                        {{-- <button class="btn btn-primary" type="button">1</button> --}}
+                                                        <a class="btn btn-success btn-block" href="#" role="button">
+                                                            {{ $ziua->isoFormat('DD') }}
+                                                        </a>
+                                                        {{-- {{ $ziua->isoFormat('DD') }} --}}
+                                                    </div>
+                                            </td>
+                                        @endif
 
-                            {{-- @for ($ziua = $luna_aceasta_prima_zi; $ziua < $luna_aceasta_ultima_zi; $ziua->addDay())
-                                @if (($ziua->isMonday() == true) && ($ziua->day > 1))
-                                    <tr>
-                                @endif
-
-                                @if ($ziua->isWeekend() != true)
-                                    <td class="" style="background-color:rgb(0, 187, 109)">
-                                        {{ $ziua->isoFormat('DD') }}
-                                    </td>
-                                @else
-                                    <td class="" style="background-color:rgb(119, 118, 118)">
-                                        {{ $ziua->isoFormat('DD') }}
-                                    </td>
-                                @endif
-
-                                @if ($ziua->isSunday() == true)
-                                    </tr>
-                                @endif
-                            @endfor --}}
-                        </tr>
-                    </table>
+                                        @if ($ziua->isSunday() == true)
+                                            </tr>
+                                        @endif
+                                    @endfor
+                                </tr>
+                            </table>
                         </div>
                     </div>
+                @endfor
+
+
                 </div>
             </div>
         </div>
