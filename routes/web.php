@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\ProgramareOnlineController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,4 +23,4 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/constantin', [App\Http\Controllers\ConstantinController::class, 'index'])->name('constantin');
+Route::get('programare-online', [ProgramareOnlineController::class, 'adauga_programare_online_pasul_1'])->name('programare_online.adauga_programare_online_pasul_1');
