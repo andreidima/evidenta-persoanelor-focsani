@@ -23,4 +23,9 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('programare-online', [ProgramareOnlineController::class, 'adauga_programare_online_pasul_1'])->name('programare_online.adauga_programare_online_pasul_1');
+Route::get('programari-online/adauga-programare-online-noua', [ProgramareOnlineController::class, 'adaugaProgramareOnlineNoua'])->name('programare_online.adauga_programare_online_noua');
+Route::get('programari-online/adauga-programare-online-pasul-1', [ProgramareOnlineController::class, 'adaugaProgramareOnlinePasul1']);
+Route::post('programari-online/adauga-programare-online-pasul-1', [ProgramareOnlineController::class, 'postadaugaProgramareOnlinePasul1']);
+Route::get('programari-online/adauga-programare-online-pasul-2', [ProgramareOnlineController::class, 'adaugaProgramareOnlinePasul2']);
+Route::post('programari-online/adauga-programare-online-pasul-2', [ProgramareOnlineController::class, 'postAdaugaProgramareOnlinePasul2']);
+Route::get('programari-online/adauga-programare-online-pasul-3', [ProgramareOnlineController::class, 'adaugaProgramareOnlinePasul3']);
