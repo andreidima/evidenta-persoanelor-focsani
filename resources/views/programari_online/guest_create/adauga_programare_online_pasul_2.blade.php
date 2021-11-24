@@ -5,7 +5,7 @@
     <div class="row my-4 justify-content-center">
         <div class="col-md-9 p-0">
             <div class="shadow-lg bg-white" style="border-radius: 40px 40px 40px 40px;">
-                <div class="p-2 d-flex justify-content-between align-items-end"
+                <div class="p-2"
                     style="
                         border-radius: 40px 40px 0px 0px;
                         border:5px solid #B0413E;
@@ -13,11 +13,18 @@
                         background-color:#B0413E;
                     "
                 >
-                    <h3 class="ms-3 my-2" style="color:#ffffff"><i class="fas fa-users fa-lg me-1"></i>Evidența persoanelor Focșani</h3>
-                    {{-- <img src="{{ asset('images/logo.png') }}" height="70" class="mr-3"> --}}
+                    <div class="row">
+                        <div class="col-lg-12 mb-4 d-flex justify-content-between align-items-end">
+                            <h3 class="ms-3 my-2" style="color:#ffffff"><i class="fas fa-users fa-lg me-1"></i>Evidența persoanelor Focșani</h3>
+                            {{-- <img src="{{ asset('images/logo.png') }}" height="70" class="mr-3"> --}}
+                        </div>
+                        <div class="col-lg-12">
+                            <h3 class="mb-0 text-center" style="color:#ffffff">
+                                Depunerea cererii în vederea eliberării actului de identitate
+                            </h3>
+                        </div>
+                    </div>
                 </div>
-
-                @include ('errors')
 
                 <div class="card-body py-2 text-center"
                     style="
@@ -28,9 +35,11 @@
                     "
                 >
 
-                    <h3 class="mb-5 text-center" style="color:#B0413E">
+                @include ('errors')
+
+                    {{-- <h3 class="mb-5 text-center" style="color:#B0413E">
                         Depunerea cererii în vederea eliberării actului de identitate
-                    </h3>
+                    </h3> --}}
 
                     <h5 class="ps-4 mb-4 text-center">
                         Programări disponibile pentru
@@ -84,16 +93,21 @@
                                         @csrf
 
                                             <input type="hidden" id="ora" name="ora" value="{{ $ora_afisare }}">
-                                            <button type="submit" name=""
-                                                class="btn btn-sm btn-success px-1 mx-1 text-white" style="">
-                                                    {{-- <span class="badge bg-success"> --}}
-                                                        {{-- <h6 class="mb-0"> --}}
-                                                            {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
-                                                            -
-                                                            {{ $ora_afisare->addMinutes(15)->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
-                                                            {{-- </h6> --}}
-                                                    {{-- </span> --}}
-                                            </button>
+                                            @if (random_int(1, 3) != 1)
+                                                <button type="submit" name=""
+                                                    class="btn btn-sm btn-success px-1 mx-1 text-white" style="">
+                                                        {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                                        -
+                                                        {{ $ora_afisare->addMinutes(15)->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                                </button>
+                                            @else
+                                                <button type="submit" name=""
+                                                    class="btn btn-sm btn-danger px-1 mx-1 text-white" disabled style="">
+                                                        {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                                        -
+                                                        {{ $ora_afisare->addMinutes(15)->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                                </button>
+                                            @endif
 
                                     </form>
                                 @else
@@ -125,7 +139,13 @@
                                 @endif
                             @endfor --}}
                         </div>
+
+                    <div class="row py-2 g-3 justify-content-center">
+                        <div class="col-lg-4 d-grid">
+                            <a class="btn btn-primary text-white rounded-pill" href="/programari-online/adauga-programare-online-pasul-1">Înapoi</a>
+                        </div>
                     </div>
+
 
 
 

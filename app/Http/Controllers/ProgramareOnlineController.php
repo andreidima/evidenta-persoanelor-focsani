@@ -56,6 +56,7 @@ class ProgramareOnlineController extends Controller
                 'data' => 'required|date'
             ])
         );
+        $programare_online->offsetUnset('ora');
 
         $request->session()->put('programare_online', $programare_online);
 
@@ -95,7 +96,7 @@ class ProgramareOnlineController extends Controller
 
         $request->session()->put('programare_online', $programare_online);
 
-        return redirect('programari-online/adauga-programare-online-pasul-3');
+        return redirect('/programari-online/adauga-programare-online-pasul-3');
     }
 
     /**
@@ -107,9 +108,52 @@ class ProgramareOnlineController extends Controller
     {
         if(empty($request->session()->get('programare_online'))){
             return redirect('/programari-online/adauga-programare-online-noua');
+        }elseif(empty($request->session()->get('programare_online')->ora)){
+            return redirect('/programari-online/adauga-programare-online-pasul-2');
         }else{
             $programare_online = $request->session()->get('programare_online');
             return view('programari_online.guest_create.adauga_programare_online_pasul_3', compact('programare_online'));
+        }
+    }
+
+    /**
+     * Post Request to store step3 info in session
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function postAdaugaProgramareOnlinePasul3(Request $request)
+    {
+        $programare_online = $request->session()->get('programare_online');
+
+        $programare_online->fill(
+            $request->validate([
+                'nume' => 'required|max:500',
+                'email' => 'nullable|max:500',
+                'cnp' => 'required|numeric|integer|digits:13',
+                'gdpr' => 'required',
+                'acte_necesare' => 'required'
+            ])
+        );
+
+        $request->session()->put('programare_online', $programare_online);
+
+        return redirect('/programari-online/adauga-programare-online-pasul-4');
+    }
+
+    /**
+     * Show the step 4 Form for creating a new 'programare online'.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function adaugaProgramareOnlinePasul4(Request $request)
+    {
+        if(empty($request->session()->get('programare_online'))){
+            return redirect('/programari-online/adauga-programare-online-noua');
+        }else{
+            $programare_online = $request->session()->get('programare_online');
+            $request->session()->forget('programare_online');
+            return view('programari_online.guest_create.adauga_programare_online_pasul_4', compact('programare_online'));
         }
     }
 
