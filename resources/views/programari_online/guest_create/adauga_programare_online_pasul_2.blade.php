@@ -26,7 +26,7 @@
                     </div>
                 </div>
 
-                <div class="card-body py-2 text-center"
+                <div class="card-body py-2 text-start"
                     style="
                         color:rgb(0, 0, 0);
                         background-color:#ffffff;
@@ -61,14 +61,40 @@
                     <br>
 
                     @php
-                    $ora_inceput = \Carbon\Carbon::today();
-                    $ora_inceput->hour = 8;
-                    $ora_inceput->minute = 30;
-
-                    $ora_sfarsit = \Carbon\Carbon::today();
-                    $ora_sfarsit->hour = 16;
-                    $ora_sfarsit->minute = 30;
-
+                    // switch (\Carbon\Carbon::parse($programare_online->data)->dayOfWeek) {
+                    //     case '1':
+                    //         $ora_inceput->hour = 8;
+                    //         $ora_inceput->minute = 30;
+                    //         $ora_sfarsit->hour = 12;
+                    //         $ora_sfarsit->minute = 30;
+                    //         break;
+                    //     case '2':
+                    //         $ora_inceput->hour = 8;
+                    //         $ora_inceput->minute = 30;
+                    //         $ora_sfarsit->hour = 12;
+                    //         $ora_sfarsit->minute = 30;
+                    //         break;
+                    //     case '3':
+                    //         $ora_inceput->hour = 12;
+                    //         $ora_inceput->minute = 00;
+                    //         $ora_sfarsit->hour = 18;
+                    //         $ora_sfarsit->minute = 30;
+                    //         break;
+                    //     case '4':
+                    //         $ora_inceput->hour = 8;
+                    //         $ora_inceput->minute = 30;
+                    //         $ora_sfarsit->hour = 12;
+                    //         $ora_sfarsit->minute = 30;
+                    //         break;
+                    //     case '5':
+                    //         $ora_inceput->hour = 8;
+                    //         $ora_inceput->minute = 30;
+                    //         $ora_sfarsit->hour = 12;
+                    //         $ora_sfarsit->minute = 30;
+                    //         break;
+                    //     default:
+                    //         echo 'nu este program';
+                    // }
 
                     $ora_afisare = \Carbon\Carbon::parse($ora_inceput);
                     $ora_afisare = $ora_afisare->startOfHour();
@@ -87,13 +113,12 @@
                                             Ora {{ $ora_afisare->isoFormat('HH') }} :
                                         </b>
                                 @endif
-
                                 @if (($ora_afisare->greaterThanOrEqualTo($ora_inceput)) && ($ora_afisare->lessThan($ora_sfarsit)))
                                     <form class="needs-validation mb-0" novalidate method="POST" action="/programari-online/adauga-programare-online-pasul-2">
                                         @csrf
 
                                             <input type="hidden" id="ora" name="ora" value="{{ $ora_afisare }}">
-                                            @if (random_int(1, 3) != 1)
+                                            @if (in_array($ora_afisare->toTimeString(), $ore_disponibile))
                                                 <button type="submit" name=""
                                                     class="btn btn-sm btn-success px-1 mx-1 text-white" style="">
                                                         {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}

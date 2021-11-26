@@ -66,6 +66,8 @@
                                         <label for="ora" class="col-form-label">
                                             <b>
                                                 {{ \Carbon\Carbon::parse($programare_online->ora)->isoFormat('HH:mm') }}
+                                                -
+                                                {{ \Carbon\Carbon::parse($programare_online->ora)->addMinutes(15)->isoFormat('HH:mm') }}
                                             </b>
                                         </label>
                                     </div>
@@ -86,7 +88,7 @@
                                 </div>
                                 <div class="row g-3 align-items-center">
                                     <div class="col-lg-2">
-                                        <label for="email" class="col-form-label">Email:</label>
+                                        <label for="email" class="col-form-label">Email*:</label>
                                     </div>
                                     <div class="col-lg-8">
                                         <input
