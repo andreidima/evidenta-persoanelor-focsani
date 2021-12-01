@@ -49,7 +49,7 @@ if (document.querySelector('#app1')) {
             ora: ((typeof oraVeche !== 'undefined') ? oraVeche : ''),
 
             // se incarca prin axios orele disponibile din data aleasa
-            ore:''
+            ore:'',
         },
         watch: {
             data: function () {
@@ -61,7 +61,7 @@ if (document.querySelector('#app1')) {
         },
         methods: {
             getOre: function () {
-                if (this.data !== null) {
+                if (this.data) {
                     axios.get('/programari/axios', {
                         params: {
                             request: 'ore',
