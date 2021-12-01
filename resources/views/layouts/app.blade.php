@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html class="h-100" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,10 +23,10 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
 </head>
-<body>
+<body class="d-flex flex-column h-100">
     @auth
     {{-- <div id="app"> --}}
-    <div>
+    <header>
         <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background-color: darkcyan">
             <div class="container">
                 <a class="navbar-brand me-5" href="{{ url('/') }}">
@@ -91,13 +91,24 @@
                 </div>
             </div>
         </nav>
-
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
-    @else
-        @yield('content')
+    </header>
     @endauth
+
+    <main class="flex-shrink-0 py-4">
+        @yield('content')
+    </main>
+
+    <footer class="mt-auto py-3 bg-light text-center">
+        <div class="">
+            <span class="text-muted border-top">
+                <a href="https://validsoftware.ro/dezvoltare-aplicatii-web-personalizate/" target="_blank">
+                    Aplicație web</a>
+                dezvoltată de
+                <a href="https://validsoftware.ro/" target="_blank">
+                    validsoftware.ro
+                </a>
+            </span>
+        </div>
+    </footer>
 </body>
 </html>

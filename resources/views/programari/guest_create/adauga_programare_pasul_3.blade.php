@@ -136,7 +136,7 @@
                                             <input type="checkbox" class="form-check-input {{ $errors->has('acte_necesare') ? 'is-invalid' : '' }}" name="acte_necesare" value="1" required
                                             {{ old('acte_necesare', ($programare->acte_necesare ?? "0")) === "1" ? 'checked' : '' }}>
                                             <label class="form-check-label" for="acte_necesare">
-                                                * Am luat la cunoștinţă cu ce <a href="#">acte sunt necesare</a>
+                                                * Am luat la cunoștinţă de ce acte sunt necesare
                                             </label>
                                         </div>
                                     </div>

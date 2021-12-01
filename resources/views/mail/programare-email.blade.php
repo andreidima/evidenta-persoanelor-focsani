@@ -1,4 +1,4 @@
-@component('mail::message')
+@component('mail::layout')
     @slot('header')
         @component('mail::header', ['url' => config('app.url')])
             Evidența persoanelor Focșani
@@ -37,6 +37,7 @@ Mulțumim,<br>
             © {{ date('Y') }} {{ config('app.name') }}
             <br>
             Sistem informatic dezvoltat de <a href="validsoftware.ro" target="_blank">validsoftware.ro</a>
+            <br>
             - Servicii Informatice Focșani -
         @endcomponent
     @endslot

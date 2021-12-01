@@ -49,7 +49,7 @@
                     </h5>
 
                     <div class="row">
-                        <div class="col-lg-6 text-start">
+                        <div class="col-lg-12 text-start">
                             Intervale orare disponibile:
                             <b>
                                 {{ \Carbon\Carbon::parse($ora_inceput)->isoFormat('HH:mm') }}
@@ -59,7 +59,8 @@
                             <br>
                             Legendă:
                             <span class="badge bg-success"><h6 class="mb-0">Perioadă disponibilă</h6></span>
-                            <span class="badge bg-danger border border-white"><h6 class="mb-0">Perioadă indisponibilă</h6></span>
+                            <span class="badge border border-white" style="background-color:#ED7C78"><h6 class="mb-0">Perioadă indisponibilă</h6></span>
+                            <span class="badge border border-white" style="background-color:#A0A6AB"><h6 class="mb-0">Perioadă în afara programului</h6></span>
                         </div>
                     </div>
 
