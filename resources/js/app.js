@@ -20,6 +20,7 @@ window.Vue = require('vue').default;
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('vue2-datepicker', require('./components/DatePicker.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -27,6 +28,58 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
-    el: '#app',
-});
+if (document.querySelector('#app')) {
+    const app = new Vue({
+        el: '#app',
+    });
+}
+
+if (document.querySelector('#app1')) {
+    const app1 = new Vue({
+        el: '#app1',
+        data: {
+            // data_initiala si ora_nitiala = necesare pentru returnarea cu axios a orelor disponibile pe ziua respectiva, inclusiv cea salvata la programarea curenta
+            data_initiala: ((typeof dataVecheInitiala !== 'undefined') ? dataVecheInitiala : ''),
+            ora_initiala: ((typeof oraVecheInitiala !== 'undefined') ? oraVecheInitiala : ''),
+
+            // data programarii = se incarca initial cu data programarii, dar apoi se tot schimba in functie de ce alege clientul
+            data: ((typeof dataVeche !== 'undefined') ? dataVeche : ''),
+
+            // ora programarii = se incarca initial cu ora programarii, dar apoi se tot schimba in functie de ce alege clientul din lista
+            ora: ((typeof oraVeche !== 'undefined') ? oraVeche : ''),
+
+            // se incarca prin axios orele disponibile din data aleasa
+            ore:''
+        },
+        watch: {
+            data: function () {
+                this.getOre();
+            },
+        },
+        created: function () {
+            this.getOre()
+        },
+        methods: {
+            getOre: function () {
+                if (this.data !== null) {
+                    axios.get('/programari/axios', {
+                        params: {
+                            request: 'ore',
+                            data: this.data,
+                            data_initiala: this.data_initiala,
+                            ora_initiala: this.ora_initiala
+                        }
+                    })
+                        .then(function (response) {
+                            app1.ore = response.data.raspuns;
+                        });
+                } else {
+                    this.ore = '';
+                }
+            },
+            dataProgramareTrimisa(data) {
+                this.data = data;
+            },
+        }
+    });
+}

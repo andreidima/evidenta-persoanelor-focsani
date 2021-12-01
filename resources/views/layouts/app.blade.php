@@ -25,7 +25,8 @@
 </head>
 <body>
     @auth
-    <div id="app">
+    {{-- <div id="app"> --}}
+    <div>
         <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background-color: darkcyan">
             <div class="container">
                 <a class="navbar-brand me-5" href="{{ url('/') }}">
@@ -38,6 +39,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item me-3">
+                            <a class="nav-link active" aria-current="page" href="{{ route('programari.index') }}">
+                                <i class="fas fa-calendar-check me-1"></i>Programări
+                            </a>
+                        </li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link active" aria-current="page" href="{{ route('programari.afisare_saptamanal') }}">
+                                <i class="fas fa-calendar-check me-1"></i>Programări săptămânal
+                            </a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
