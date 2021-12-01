@@ -40,11 +40,13 @@
                     {{-- <h3 class="mb-5 text-center" style="color:#B0413E">
                         Depunerea cererii în vederea eliberării actului de identitate
                     </h3> --}}
-                <h5 class="ps-3 py-2 text-start alert alert-success">
-                    Înregistrarea dumneavoastră a fost salvată cu success în baza de date.
-                </h5>
 
                     <div class="row">
+                        <div class="col-lg-7 py-2 mx-auto">
+                            <h5 class="ps-3 py-2 mb-0 text-center alert alert-success">
+                                Programarea dumneavoastră a fost înregistrată cu success!
+                            </h5>
+                        </div>
                         <div class="col-lg-6 mx-auto">
                             <form  class="mb-0 needs-validation" novalidate method="POST" action="programari/adauga-programare-pasul-3">
                                 <div class="row g-3 align-items-center">
@@ -97,7 +99,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="row g-3 align-items-center">
+                                <div class="row g-3 mb-2 align-items-center">
                                     <div class="col-lg-2">
                                         <label for="cnp" class="col-form-label">CNP:</label>
                                     </div>
@@ -111,7 +113,11 @@
                                 </div>
 
                                 <div class="row g-3 justify-content-center">
-                                    <div class="col-lg-12 mb-4">
+                                    <div class="col-lg-12 m-4 text-center">
+                                            Dacă doriți, puteți achita taxa online la
+                                                <a href="https://www.ghiseul.ro/" target="_blank">
+                                                    Ghiseul.ro
+                                                </a>
                                     </div>
                                 </div>
 
