@@ -44,6 +44,7 @@ Route::get('/programari/axios2', function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/programari/afisare-saptamanal', [ProgramareController::class, 'afisare_saptamanal'])->name('programari.afisare_saptamanal');;
+    Route::get('/programari/afisare-saptamanal', [ProgramareController::class, 'afisare_saptamanal'])->name('programari.afisare_saptamanal');
+    Route::get('/programari/afisare-zilnic', [ProgramareController::class, 'afisare_zilnic'])->name('programari.afisare_zilnic');
     Route::resource('programari', ProgramareController::class,  ['parameters' => ['programari' => 'programare']]);
 });

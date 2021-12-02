@@ -171,32 +171,6 @@ class ProgramareController extends Controller
         );
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function afisare_saptamanal()
-    {
-        $search_data = \Request::get('search_data') ? \Carbon\Carbon::parse(\Request::get('search_data')) : \Carbon\Carbon::today();
-        $data_de_cautat = \Carbon\Carbon::parse($search_data);
-
-        $ore_de_program = ProgramareOraDeProgram::select('ziua_din_saptamana', 'ora')
-            ->orderBy('ziua_din_saptamana')
-            ->orderBy('ora')
-            ->get();
-
-        $programari_din_saptamana_cautata = Programare::
-            whereDate('data', '>=', $data_de_cautat->startOfWeek())
-            ->whereDate('data', '<=', $data_de_cautat->endOfWeek())
-            ->orderBy('ora')
-            ->get();
-
-        return view('programari.diverse.afisare_saptamanal', compact('programari_din_saptamana_cautata', 'ore_de_program', 'search_data'));
-        // return view('programari.diverse.afisare_saptamanala', compact('search_data'));
-    }
-
     //
     // Functii pentru Multi Page Form pentru Clienti
     //
@@ -430,6 +404,55 @@ class ProgramareController extends Controller
 
             return view('programari.guest_create.adauga_programare_pasul_4', compact('programare'));
         }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function afisare_saptamanal()
+    {
+        $search_data = \Request::get('search_data') ? \Carbon\Carbon::parse(\Request::get('search_data')) : \Carbon\Carbon::today();
+        $data_de_cautat = \Carbon\Carbon::parse($search_data);
+
+        $ore_de_program = ProgramareOraDeProgram::select('ziua_din_saptamana', 'ora')
+            ->orderBy('ziua_din_saptamana')
+            ->orderBy('ora')
+            ->get();
+
+        $programari_din_saptamana_cautata = Programare::
+            whereDate('data', '>=', $data_de_cautat->startOfWeek())
+            ->whereDate('data', '<=', $data_de_cautat->endOfWeek())
+            ->orderBy('ora')
+            ->get();
+
+        return view('programari.diverse.afisare_saptamanal', compact('programari_din_saptamana_cautata', 'ore_de_program', 'search_data'));
+        // return view('programari.diverse.afisare_saptamanala', compact('search_data'));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function afisare_zilni()
+    {
+        $search_data = \Request::get('search_data') ? \Carbon\Carbon::parse(\Request::get('search_data')) : \Carbon\Carbon::today();
+
+        $ore_de_program = ProgramareOraDeProgram::select('ziua_din_saptamana', 'ora')
+            ->orderBy('ziua_din_saptamana')
+            ->orderBy('ora')
+            ->get();
+
+        $programari_din_saptamana_cautata = Programare::
+            whereDate('data', '>=', $data_de_cautat->startOfWeek())
+            ->whereDate('data', '<=', $data_de_cautat->endOfWeek())
+            ->orderBy('ora')
+            ->get();
+
+        return view('programari.diverse.afisare_saptamanal', compact('programari_din_saptamana_cautata', 'ore_de_program', 'search_data'));
+        // return view('programari.diverse.afisare_saptamanala', compact('search_data'));
     }
 
 }

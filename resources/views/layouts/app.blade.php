@@ -49,6 +49,11 @@
                                 <i class="fas fa-calendar-check me-1"></i>Programări săptămânal
                             </a>
                         </li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link active" aria-current="page" href="{{ route('programari.afisare_saptamanal') }}">
+                                <i class="fas fa-print me-1"></i>Programări săptămânal
+                            </a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
