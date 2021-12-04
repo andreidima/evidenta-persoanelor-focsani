@@ -50,8 +50,8 @@
                             </a>
                         </li>
                         <li class="nav-item me-3">
-                            <a class="nav-link active" aria-current="page" href="{{ route('programari.afisare_saptamanal') }}">
-                                <i class="fas fa-print me-1"></i>Programări săptămânal
+                            <a class="nav-link active" aria-current="page" href="{{ route('programari.afisare_zilnic') }}">
+                                <i class="fas fa-print me-1"></i>Printează programări
                             </a>
                         </li>
                     </ul>

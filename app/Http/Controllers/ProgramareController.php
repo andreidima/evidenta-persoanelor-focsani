@@ -436,23 +436,44 @@ class ProgramareController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function afisare_zilni()
+    public function afisare_zilnic()
     {
         $search_data = \Request::get('search_data') ? \Carbon\Carbon::parse(\Request::get('search_data')) : \Carbon\Carbon::today();
 
         $ore_de_program = ProgramareOraDeProgram::select('ziua_din_saptamana', 'ora')
-            ->orderBy('ziua_din_saptamana')
+            ->where('ziua_din_saptamana', $search_data->dayOfWeekIso)
             ->orderBy('ora')
             ->get();
 
-        $programari_din_saptamana_cautata = Programare::
-            whereDate('data', '>=', $data_de_cautat->startOfWeek())
-            ->whereDate('data', '<=', $data_de_cautat->endOfWeek())
+        $programari = Programare::
+            whereDate('data', '=', $search_data)
             ->orderBy('ora')
             ->get();
 
-        return view('programari.diverse.afisare_saptamanal', compact('programari_din_saptamana_cautata', 'ore_de_program', 'search_data'));
-        // return view('programari.diverse.afisare_saptamanala', compact('search_data'));
+        return view('programari.diverse.afisare_zilnic', compact('programari', 'ore_de_program', 'search_data'));
+    }
+
+    public function pdfExportPeZi(Request $request, $data = null)
+    {
+        $data = \Carbon\Carbon::parse($data);
+
+        $ore_de_program = ProgramareOraDeProgram::select('ziua_din_saptamana', 'ora')
+            ->where('ziua_din_saptamana', $data->dayOfWeekIso)
+            ->orderBy('ora')
+            ->get();
+
+        $programari = Programare::
+            whereDate('data', '=', $data)
+            ->orderBy('ora')
+            ->get();
+
+        if ($request->view_type === 'programari-html') {
+            return view('programari.export.programari-pdf', compact('programari', 'ore_de_program', 'data'));
+        } elseif ($request->view_type === 'programari-pdf') {
+            $pdf = \PDF::loadView('programari.export.programari-pdf', compact('programari', 'ore_de_program', 'data'))
+                ->setPaper('a4');
+            return $pdf->download('Programari din data ' . $data->isoFormat('DD.MM.YYYY') . '.pdf');
+        }
     }
 
 }

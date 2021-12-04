@@ -27,7 +27,7 @@
                         </button>
                     </div>
                     <div class="col-lg-4 d-grid">
-                        <a class="btn btn-sm bg-secondary text-white border border-dark rounded-pill" href="{{ route('programari.index') }}" role="button">
+                        <a class="btn btn-sm bg-secondary text-white border border-dark rounded-pill" href="{{ route('programari.afisare_saptamanal') }}" role="button">
                             <i class="far fa-trash-alt text-white me-1"></i>Resetează căutarea
                         </a>
                     </div>
