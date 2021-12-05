@@ -17,13 +17,29 @@ class ProgramareController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($serviciu = null)
     {
         $search_nume = \Request::get('search_nume');
         $search_data = \Request::get('search_data');
 
         $programari = Programare::
-            when($search_nume, function ($query, $search_nume) {
+            where (function($query) use ($serviciu) {
+                switch ($serviciu) {
+                    case 'evidenta-persoanelor':
+                        $query->where('serviciu', 1);
+                        break;
+                    case 'transcrieri-certificate':
+                        $query->where('serviciu', 2);
+                        break;
+                    case 'casatorii':
+                        $query->where('serviciu', 3);
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            })
+            ->when($search_nume, function ($query, $search_nume) {
                 return $query->where('nume', 'like', '%' . $search_nume . '%');
             })
             ->when($search_data, function ($query, $search_data) {
@@ -32,7 +48,7 @@ class ProgramareController extends Controller
             ->latest()
             ->simplePaginate(25);
 
-        return view('programari.index', compact('programari', 'search_nume', 'search_data'));
+        return view('programari.index', compact('programari', 'search_nume', 'search_data', 'serviciu'));
     }
 
     /**
@@ -40,9 +56,9 @@ class ProgramareController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($serviciu = null)
     {
-        return view('programari.create');
+        return view('programari.create', compact('serviciu'));
     }
 
     /**
@@ -51,9 +67,26 @@ class ProgramareController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $serviciu = null)
     {
-        $programare = Programare::create($this->validateRequest($request));
+        $programare = Programare::make($this->validateRequest($request));
+
+        switch ($serviciu) {
+            case 'evidenta-persoanelor':
+                $programare->serviciu = 1;
+                break;
+            case 'transcrieri-certificate':
+                $programare->serviciu = 2;
+                break;
+            case 'casatorii':
+                $programare->serviciu = 3;
+                break;
+            default:
+                # code...
+                break;
+            }
+
+        $programare->save();
 
         if (isset($programare->email)){
             \Mail::to($programare->email)
@@ -62,7 +95,7 @@ class ProgramareController extends Controller
                 );
         }
 
-        return redirect('/programari')->with('status', 'Programarea pentru „' . ($programare->nume ?? '') . '” a fost adăugată cu succes!');
+        return redirect('/' . $serviciu . '/programari')->with('status', 'Programarea pentru „' . ($programare->nume ?? '') . '” a fost adăugată cu succes!');
     }
 
     /**
@@ -71,9 +104,9 @@ class ProgramareController extends Controller
      * @param  \App\Programare  $programare
      * @return \Illuminate\Http\Response
      */
-    public function show(Programare $programare)
+    public function show($serviciu = null, Programare $programare)
     {
-        return view('programari.show', compact('programare'));
+        return view('programari.show', compact('serviciu', 'programare'));
     }
 
     /**
@@ -82,9 +115,9 @@ class ProgramareController extends Controller
      * @param  \App\Programare  $programare
      * @return \Illuminate\Http\Response
      */
-    public function edit(Programare $programare)
+    public function edit($serviciu = null, Programare $programare)
     {
-        return view('programari.edit', compact('programare'));
+        return view('programari.edit', compact('serviciu', 'programare'));
     }
 
     /**
@@ -94,11 +127,11 @@ class ProgramareController extends Controller
      * @param  \App\Programare  $programare
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Programare $programare)
+    public function update(Request $request, $serviciu = null, Programare $programare)
     {
         $programare->update($this->validateRequest($request));
 
-        return redirect('/programari')->with('status', 'Programarea pentru „' . ($programare->nume ?? '') . '” a fost modificată cu succes!');
+        return redirect('/' . $serviciu . '/programari')->with('status', 'Programarea pentru „' . ($programare->nume ?? '') . '” a fost modificată cu succes!');
     }
 
     /**
@@ -107,11 +140,11 @@ class ProgramareController extends Controller
      * @param  \App\Programare  $programare
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Programare $programare)
+    public function destroy($serviciu = null, Programare $programare)
     {
         $programare->delete();
 
-        return redirect('/programari')->with('status', 'Programarea pentru „' . ($programare->nume ?? '') . '” a fost ștearsă cu succes!');
+        return redirect('/' . $serviciu . '/programari')->with('status', 'Programarea pentru „' . ($programare->nume ?? '') . '” a fost ștearsă cu succes!');
     }
 
     /**
@@ -123,6 +156,7 @@ class ProgramareController extends Controller
             case 'ore':
                 $ore_disponibile = DB::table('programari_ore_de_program')
                     ->select(DB::raw('DATE_FORMAT(ora, "%H:%i") as ora'))
+                    ->where('serviciu', $request->serviciu)
                     ->where('ziua_din_saptamana', '=', \Carbon\Carbon::parse($request->data)->dayOfWeekIso)
                     ->orderBy('ora')
                     ->pluck('ora')
@@ -131,6 +165,7 @@ class ProgramareController extends Controller
                 $ora_initiala = $request->ora_initiala;
                 $ore_indisponibile = DB::table('programari')
                     ->select(DB::raw('DATE_FORMAT(ora, "%H:%i") as ora'))
+                    ->where('serviciu', $request->serviciu)
                     ->where('data', '=', $request->data)
                     // Daca data aleasa din calendar este aceeasi cu data programarii, se afiseaza si ora programarii ca fiind disponibila
                     ->when($request->data == $request->data_initiala, function ($query) use($ora_initiala) {
@@ -185,7 +220,7 @@ class ProgramareController extends Controller
             $programare = $request->session()->forget('programare');
         }
 
-        return redirect('programari/adauga-programare-pasul-1');
+        return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
     }
 
     /**
@@ -269,7 +304,7 @@ class ProgramareController extends Controller
 
         $request->session()->put('programare', $programare);
 
-        return redirect('programari/adauga-programare-pasul-2');
+        return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-2');
     }
 
     /**
@@ -336,7 +371,7 @@ class ProgramareController extends Controller
 
         $request->session()->put('programare', $programare);
 
-        return redirect('/programari/adauga-programare-pasul-3');
+        return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-3');
     }
 
     /**
@@ -377,7 +412,7 @@ class ProgramareController extends Controller
 
         $request->session()->put('programare', $programare);
 
-        return redirect('/programari/adauga-programare-pasul-4');
+        return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-4');
     }
 
     /**
@@ -428,7 +463,6 @@ class ProgramareController extends Controller
             ->get();
 
         return view('programari.diverse.afisare_saptamanal', compact('programari_din_saptamana_cautata', 'ore_de_program', 'search_data'));
-        // return view('programari.diverse.afisare_saptamanala', compact('search_data'));
     }
 
     /**
@@ -453,7 +487,7 @@ class ProgramareController extends Controller
         return view('programari.diverse.afisare_zilnic', compact('programari', 'ore_de_program', 'search_data'));
     }
 
-    public function pdfExportPeZi(Request $request, $data = null)
+    public function pdfExportPeZi(Request $request, $serviciu = null, $data = null)
     {
         $data = \Carbon\Carbon::parse($data);
 

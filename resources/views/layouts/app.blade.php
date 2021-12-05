@@ -39,20 +39,110 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item me-3">
-                            <a class="nav-link active" aria-current="page" href="{{ route('programari.index') }}">
-                                <i class="fas fa-calendar-check me-1"></i>Programări
+                        <li class="nav-item me-3 dropdown">
+                            <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-users me-1"></i>
+                                Evidența persoanelor
                             </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="/evidenta-persoanelor/programari">
+                                        <i class="fas fa-calendar-check me-1"></i>
+                                        Programări
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/evidenta-persoanelor/programari/afisare-saptamanal">
+                                        <i class="fas fa-calendar-check me-1"></i>
+                                        Programări săptămânal
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/evidenta-persoanelor/programari/afisare-zilnic">
+                                        <i class="fas fa-print me-1"></i>
+                                        Printează programări
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                            </ul>
                         </li>
-                        <li class="nav-item me-3">
-                            <a class="nav-link active" aria-current="page" href="{{ route('programari.afisare_saptamanal') }}">
-                                <i class="fas fa-calendar-check me-1"></i>Programări săptămânal
+                        <li class="nav-item me-3 dropdown">
+                            <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-certificate me-1"></i>
+                                Transcrieri certificate
                             </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="/transcrieri-certificate/programari">
+                                        <i class="fas fa-calendar-check me-1"></i>
+                                        Programări
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/transcrieri-certificate/programari/afisare-saptamanal">
+                                        <i class="fas fa-calendar-check me-1"></i>
+                                        Programări săptămânal
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/transcrieri-certificate/programari/afisare-zilnic">
+                                        <i class="fas fa-print me-1"></i>
+                                        Printează programări
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                            </ul>
                         </li>
-                        <li class="nav-item me-3">
-                            <a class="nav-link active" aria-current="page" href="{{ route('programari.afisare_zilnic') }}">
-                                <i class="fas fa-print me-1"></i>Printează programări
+                        <li class="nav-item me-3 dropdown">
+                            <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-ring me-1"></i>
+                                Căsătorii
                             </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="/casatorii/programari">
+                                        <i class="fas fa-calendar-check me-1"></i>
+                                        Programări
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/casatorii/programari/afisare-saptamanal">
+                                        <i class="fas fa-calendar-check me-1"></i>
+                                        Programări săptămânal
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/casatorii/programari/afisare-zilnic">
+                                        <i class="fas fa-print me-1"></i>
+                                        Printează programări
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                            </ul>
                         </li>
                     </ul>
 

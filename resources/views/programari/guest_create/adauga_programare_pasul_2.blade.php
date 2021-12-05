@@ -120,7 +120,7 @@
                                         </b>
                                 @endif
                                 @if (($ora_afisare->greaterThanOrEqualTo($ora_inceput)) && ($ora_afisare->lessThan($ora_sfarsit)))
-                                    <form class="needs-validation mb-0" novalidate method="POST" action="/programari/adauga-programare-pasul-2">
+                                    <form class="needs-validation mb-0" novalidate method="POST" action="/evidenta-persoanelor/programari/adauga-programare-pasul-2">
                                         @csrf
 
                                             <input type="hidden" id="ora" name="ora" value="{{ $ora_afisare }}">
@@ -173,7 +173,7 @@
 
                     <div class="row py-2 g-3 justify-content-center">
                         <div class="col-lg-4 d-grid">
-                            <a class="btn btn-primary text-white rounded-pill" href="/programari/adauga-programare-pasul-1">Înapoi</a>
+                            <a class="btn btn-primary text-white rounded-pill" href="/evidenta-persoanelor/programari/adauga-programare-pasul-1">Înapoi</a>
                         </div>
                     </div>
 

@@ -48,7 +48,7 @@
                             </h5>
                         </div>
                         <div class="col-lg-6 mx-auto">
-                            <form  class="mb-0 needs-validation" novalidate method="POST" action="programari/adauga-programare-pasul-3">
+                            <form  class="mb-0 needs-validation" novalidate method="POST" action="/evidenta-persoanelor/programari/adauga-programare-pasul-3">
                                 <div class="row g-3 align-items-center">
                                     <div class="col-lg-2">
                                         <label for="data" class="col-form-label">Data:</label>

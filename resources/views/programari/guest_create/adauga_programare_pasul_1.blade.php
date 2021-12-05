@@ -274,7 +274,7 @@
                                                 </td>
                                         @else
                                             <td class="p-0" style="">
-                                                <form class="needs-validation mb-0" novalidate method="POST" action="/programari/adauga-programare-pasul-1">
+                                                <form class="needs-validation mb-0" novalidate method="POST" action="/evidenta-persoanelor/programari/adauga-programare-pasul-1">
                                                     @csrf
                                                     <div class="d-grid" style="height:100%;width:100%;">
                                                         <input type="hidden" id="data" name="data" value="{{ $ziua->toDateString(); }}">

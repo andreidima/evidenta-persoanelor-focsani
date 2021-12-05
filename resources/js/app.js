@@ -38,6 +38,9 @@ if (document.querySelector('#app1')) {
     const app1 = new Vue({
         el: '#app1',
         data: {
+            // serviciul pentru care este programarea
+            serviciu: ((typeof serviciu !== 'undefined') ? serviciu : ''),
+
             // data_initiala si ora_nitiala = necesare pentru returnarea cu axios a orelor disponibile pe ziua respectiva, inclusiv cea salvata la programarea curenta
             data_initiala: ((typeof dataVecheInitiala !== 'undefined') ? dataVecheInitiala : ''),
             ora_initiala: ((typeof oraVecheInitiala !== 'undefined') ? oraVecheInitiala : ''),
@@ -62,9 +65,10 @@ if (document.querySelector('#app1')) {
         methods: {
             getOre: function () {
                 if (this.data) {
-                    axios.get('/programari/axios', {
+                    axios.get('/evidenta-persoanelor/programari/axios', {
                         params: {
                             request: 'ore',
+                            serviciu: this.serviciu,
                             data: this.data,
                             data_initiala: this.data_initiala,
                             ora_initiala: this.ora_initiala

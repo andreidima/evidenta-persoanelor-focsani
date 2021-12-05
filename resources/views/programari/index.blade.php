@@ -4,10 +4,27 @@
 <div class="container card" style="border-radius: 40px 40px 40px 40px;">
         <div class="row card-header align-items-center" style="border-radius: 40px 40px 0px 0px;">
             <div class="col-lg-3">
-                <h4 class="mb-0"><a href="{{ route('programari.index') }}"><i class="fas fa-calendar-check me-1"></i>Programări</a></h4>
+                <h4 class="mb-0">
+                    <a href="/{{ $serviciu }}/programari">
+                        <i class="fas fa-calendar-check me-1"></i>
+                        @switch($serviciu)
+                            @case('evidenta-persoanelor')
+                                Evidența persoanelor
+                                @break
+                            @case('transcrieri-certificate')
+                                Transcrieri certificate
+                                @break
+                            @case('casatorii')
+                                Căsătorii
+                                @break
+                            @default
+                        @endswitch
+                        - Programări
+                    </a>
+                </h4>
             </div>
             <div class="col-lg-6" id="app">
-                <form class="needs-validation" novalidate method="GET" action="{{ route('programari.index') }}">
+                <form class="needs-validation" novalidate method="GET" action="/{{ $serviciu }}/programari">
                     @csrf
                     <div class="row mb-1 input-group custom-search-form justify-content-center">
                         <input type="text" class="form-control form-control-sm col-md-4 me-1 border rounded-pill" id="search_nume" name="search_nume" placeholder="Nume" autofocus
@@ -28,14 +45,14 @@
                         <button class="btn btn-sm btn-primary text-white col-md-4 me-1 border border-dark rounded-pill" type="submit">
                             <i class="fas fa-search text-white me-1"></i>Caută
                         </button>
-                        <a class="btn btn-sm bg-secondary text-white col-md-4 border border-dark rounded-pill" href="{{ route('programari.index') }}" role="button">
+                        <a class="btn btn-sm bg-secondary text-white col-md-4 border border-dark rounded-pill" href="/{{ $serviciu }}/programari" role="button">
                             <i class="far fa-trash-alt text-white me-1"></i>Resetează căutarea
                         </a>
                     </div>
                 </form>
             </div>
             <div class="col-lg-3 text-end">
-                <a class="btn btn-sm bg-success text-white border border-dark rounded-pill col-md-8" href="{{ route('programari.create') }}" role="button">
+                <a class="btn btn-sm bg-success text-white border border-dark rounded-pill col-md-8" href="/{{ $serviciu }}/programari/adauga" role="button">
                     <i class="fas fa-plus-square text-white me-1"></i>Adaugă programare
                 </a>
             </div>

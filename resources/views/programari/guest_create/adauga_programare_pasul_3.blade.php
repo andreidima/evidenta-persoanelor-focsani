@@ -43,7 +43,7 @@
 
                     <div class="row">
                         <div class="col-lg-6 mx-auto">
-                            <form  class="mb-0 needs-validation" novalidate method="POST" action="/programari/adauga-programare-pasul-3">
+                            <form  class="mb-0 needs-validation" novalidate method="POST" action="/evidenta-persoanelor/programari/adauga-programare-pasul-3">
                                 @csrf
 
                                 <div class="row g-3 align-items-center">
@@ -144,7 +144,7 @@
 
                                 <div class="row g-3 py-2 justify-content-center">
                                     <div class="col-lg-3 py-2 d-grid">
-                                        <a class="btn btn-primary text-white rounded-pill" href="/programari/adauga-programare-pasul-2">Înapoi</a>
+                                        <a class="btn btn-primary text-white rounded-pill" href="/evidenta-persoanelor/programari/adauga-programare-pasul-2">Înapoi</a>
                                     </div>
                                     <div class="col-lg-6 py-2 d-grid">
                                         <button type="submit" class="btn btn-success text-white rounded-pill">Înscrie programarea</button>

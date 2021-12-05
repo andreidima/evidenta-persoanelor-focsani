@@ -14,6 +14,6 @@ class Programare extends Model
 
     public function path()
     {
-        return "/programari/{$this->id}";
+        return "programari/{$this->id}";
     }
 }
