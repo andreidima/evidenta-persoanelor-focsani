@@ -16,11 +16,21 @@
                     <div class="row">
                         <div class="col-lg-12 mb-4 d-flex justify-content-between align-items-end">
                             <h3 class="ms-3 my-2" style="color:#ffffff"><i class="fas fa-users fa-lg me-1"></i>Evidența persoanelor Focșani</h3>
-                            {{-- <img src="{{ asset('images/logo.png') }}" height="70" class="mr-3"> --}}
                         </div>
                         <div class="col-lg-12">
                             <h3 class="mb-0 text-center" style="color:#ffffff">
-                                Depunerea cererii în vederea eliberării actului de identitate
+                                @switch($serviciu)
+                                    @case('evidenta-persoanelor')
+                                        Depunerea cererii în vederea eliberării actului de identitate
+                                        @break
+                                    @case('transcrieri-certificate')
+                                        Transcrieri certificate
+                                        @break
+                                    @case('casatorii')
+                                        Căsătorii
+                                        @break
+                                    @default
+                                @endswitch
                             </h3>
                         </div>
                     </div>
@@ -37,129 +47,119 @@
 
                 @include ('errors')
 
-                {{-- <h3 class="mb-5 text-center" style="color:#B0413E">
-                    Depunerea cererii în vederea eliberării actului de identitate
-                </h3> --}}
+
+                @switch($serviciu)
+                    @case('evidenta-persoanelor')
+                        Pentru depunerea cererii în vederea eliberării actului de identitate/ înscrierea menţiunii de stabilire a reşedinţei pe actul de identitate.
+                        <br>
+                        <ul style="text-start">
+                            <li>
+                                <b>Art.1</b> Programarea la ghișeul online în vederea obținerii actelor de identitate se face pe pagina de internet a Direcţiei de Evidenţă a Persoanelor Focșani - https://evidentapersoanelorfocsani.ro/ de către persoana interesată. Nu se pot face programări prin email, fax sau telefonic.
+                            </li>
+                            <li>
+                                <b>Art.2. Programarea este gratuită şi netransmisibilă</b>, iar înainte de completarea programării, solicitantul se asigură că deţine toate actele necesare depunerii cererii pentru obţinerea actului de identitate.
+                            </li>
+                            <li>
+                                <b>Art.3.</b> Durata unui interval de depunere a cererii este de 15 minute pentru fiecare persoană, <b>un interval fiind alocat unei singure persoane şi nu unei familii</b>.
+                            </li>
+                            <li>
+                                <b>Art.4.</b> Neconcordanţa dintre datele înscrise în formularul de programare (nume, prenume, CNP) şi datele de identificare ale persoanei care se prezintă la depunerea cererii <b>duce la anularea programării</b>. Neprezentarea la data şi ora programată, neconformitatea datelor din formularul de programare sau lipsa actelor necesare duc la <b>anularea programării</b>.
+                            </li>
+                            <li>
+                                <b>Art.5.</b> Nu se fac programări pentru zilele nelucrătoare, stabilite sau anunţate ulterior prin acte normative, zile în care nu se desfăşoară activitate de lucru cu publicul.
+                            </li>
+                            <li>
+                                <b>Art.6.</b> Prin continuarea procedurii de programare online, solicitantul este de accord cu prelucrarea datelor cu caracter personal, în conformitate cu prevederile <b>Regulamentului (UE) 2016/679</b> pentru protecţia persoanelor fizice în ceea ce priveşte prelucrarea datelor cu caracter personal privind libera circulație a acestor date şi de abrogare a Directivei 95/46/CE.
+                            </li>
+                            <li>
+                                <b>Art.7.</b> După realizarea programării va fi verificată căsuța de e-mail. La adresa de e-mail indicată în formularul de înregistrare se va trimite de sistem o confirmare cu data și ora programării.
+                            </li>
+                            <li>
+                                <b>Art.8. Programul de lucru cu publicul</b> aferent activităţii de primire a cererilor pentru eliberarea actului de identitate se desfăşoară în zilele lucrătoare de luni-vineri, conform intervalului orar:
+                                <div class="row">
+                                    <div class="col-lg-3 offset-lg-1">
+                                        <table class="fs-6 table table-sm table-striped table-hover">
+                                            <tr>
+                                                <td class="">
+                                                    Luni
+                                                </td>
+                                                <td class="text-center">
+                                                    08:30 - 12:30
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Marți
+                                                </td>
+                                                <td class="text-center">
+                                                    08:30 - 12:30
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pe-4">
+                                                    Miercuri
+                                                </td>
+                                                <td class="text-center">
+                                                    12:00 - 18:30
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Joi
+                                                </td>
+                                                <td class="text-center">
+                                                    08:30 - 12:30
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Vineri
+                                                </td>
+                                                <td class="text-center">
+                                                    08:30 - 12:30
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <b>Art.9.</b> Cererile pentru eliberarea actului de identitate se depun personal sau pe bază de procură specială obţinută de la misiunile diplomatice ori oficiile consulare ale României din străinătate. Înainte de depunerea cererii se vor achita taxele necesare pentru eliberarea actelor de identitate la casieria unităţii.
+                            </li>
+                                Este <b>obligatoriu</b> ca persoana care depune cererea să prezinte toate documentele necesare eliberării actului de identitate, conform listei de documente afişate. Actele se prezintă în original şi copie.
+                            <li>
+                                <b>Art.10.</b> Termenul de soluţionare a cererilor stabilit de Direcţia de Evidenţă a Persoanelor Focșani este fixat la 4 zile lucrătoare, excepţie făcând situaţiile în care sunt necesare verificări prevăzute de lege, în acest caz termenul fiind de 30 de zile.Funcţionarul care primeşte cererea înmânează solicitantului o dovadă care cuprinde numărul de înregistrare şi data înregistrării, precum şi data prezentării pentru eliberarea actului de identitate.
+                            </li>
+
+                        <b>Nu se fac programării online pentru eliberarea documentelor.</b>
+
+                            <li>
+                                <b><u>Art.11. Pentru cererile care vizează cetăţenii care nu au avut niciodată domiciliul în România(dobândire /redobândire cetăţenie), respectiv care solicită schimbarea domiciliului din străinătate în România nu se fac programări online, persoanele interesate urmând să se prezinte la sediul nostru.</u></b>
+                            </li>
+                        </ul>
 
 
-                Pentru depunerea cererii în vederea eliberării actului de identitate/ înscrierea menţiunii de stabilire a reşedinţei pe actul de identitate.
-                <br>
-                <ul style="text-start">
-                    <li>
-                        <b>Art.1</b> Programarea la ghișeul online în vederea obținerii actelor de identitate se face pe pagina de internet a Direcţiei de Evidenţă a Persoanelor Focșani - https://evidentapersoanelorfocsani.ro/ de către persoana interesată. Nu se pot face programări prin email, fax sau telefonic.
-                    </li>
-                    <li>
-                        <b>Art.2. Programarea este gratuită şi netransmisibilă</b>, iar înainte de completarea programării, solicitantul se asigură că deţine toate actele necesare depunerii cererii pentru obţinerea actului de identitate.
-                    </li>
-                    <li>
-                        <b>Art.3.</b> Durata unui interval de depunere a cererii este de 15 minute pentru fiecare persoană, <b>un interval fiind alocat unei singure persoane şi nu unei familii</b>.
-                    </li>
-                    <li>
-                        <b>Art.4.</b> Neconcordanţa dintre datele înscrise în formularul de programare (nume, prenume, CNP) şi datele de identificare ale persoanei care se prezintă la depunerea cererii <b>duce la anularea programării</b>. Neprezentarea la data şi ora programată, neconformitatea datelor din formularul de programare sau lipsa actelor necesare duc la <b>anularea programării</b>.
-                    </li>
-                    <li>
-                        <b>Art.5.</b> Nu se fac programări pentru zilele nelucrătoare, stabilite sau anunţate ulterior prin acte normative, zile în care nu se desfăşoară activitate de lucru cu publicul.
-                    </li>
-                    <li>
-                        <b>Art.6.</b> Prin continuarea procedurii de programare online, solicitantul este de accord cu prelucrarea datelor cu caracter personal, în conformitate cu prevederile <b>Regulamentului (UE) 2016/679</b> pentru protecţia persoanelor fizice în ceea ce priveşte prelucrarea datelor cu caracter personal privind libera circulație a acestor date şi de abrogare a Directivei 95/46/CE.
-                    </li>
-                    <li>
-                        <b>Art.7.</b> După realizarea programării va fi verificată căsuța de e-mail. La adresa de e-mail indicată în formularul de înregistrare se va trimite de sistem o confirmare cu data și ora programării.
-                    </li>
-                    <li>
-                        <b>Art.8. Programul de lucru cu publicul</b> aferent activităţii de primire a cererilor pentru eliberarea actului de identitate se desfăşoară în zilele lucrătoare de luni-vineri, conform intervalului orar:
-                        <div class="row">
-                            <div class="col-lg-3 offset-lg-1">
-                                <table class="fs-6 table table-sm table-striped table-hover">
-                                    <tr>
-                                        <td class="">
-                                            Luni
-                                        </td>
-                                        <td class="text-center">
-                                            08:30 - 12:30
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Marți
-                                        </td>
-                                        <td class="text-center">
-                                            08:30 - 12:30
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="pe-4">
-                                            Miercuri
-                                        </td>
-                                        <td class="text-center">
-                                            12:00 - 18:30
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Joi
-                                        </td>
-                                        <td class="text-center">
-                                            08:30 - 12:30
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Vineri
-                                        </td>
-                                        <td class="text-center">
-                                            08:30 - 12:30
-                                        </td>
-                                    </tr>
-                                </table>
+                        <h5 class="ps-3 alert alert-warning mb-0">
+                            Selectați o zi disponibilă din următoarele 2 luni calendaristice:
+                        </h5>
+
+                        <div class="row mb-0">
+                            <div class="col-lg-12 ps-4 mb-0">
+                                Legendă:
+                                <span class="badge bg-success"><h6 class="mb-0">Zile cu ore disponibile</h6></span>
+                                <span class="badge" style="background-color:rgb(219, 107, 107)"><h6 class="mb-0">Zile ocupate complet</h6></span>
+                                <span class="badge" style="background-color:rgb(219, 219, 219); color:rgb(151, 0, 0)"><h6 class="mb-0">Zile indisponibile</h6></span>
                             </div>
                         </div>
-                        {{-- <ul>
-                            <li>
-                                Luni 08:30 - 12:30
-                            </li>
-                            <li>
-                                Marți 08:30 - 12:30
-                            </li>
-                            <li>
-                                Miercuri 12:00 - 18:30
-                            </li>
-                            <li>
-                                Joi 08:30 - 12:30
-                            </li>
-                            <li>
-                                Vineri 08:30 - 12:30
-                            </li>
-                        </ul> --}}
-                    </li>
-                    <li>
-                        <b>Art.9.</b> Cererile pentru eliberarea actului de identitate se depun personal sau pe bază de procură specială obţinută de la misiunile diplomatice ori oficiile consulare ale României din străinătate. Înainte de depunerea cererii se vor achita taxele necesare pentru eliberarea actelor de identitate la casieria unităţii.
-                    </li>
-                        Este <b>obligatoriu</b> ca persoana care depune cererea să prezinte toate documentele necesare eliberării actului de identitate, conform listei de documente afişate. Actele se prezintă în original şi copie.
-                    <li>
-                        <b>Art.10.</b> Termenul de soluţionare a cererilor stabilit de Direcţia de Evidenţă a Persoanelor Focșani este fixat la 4 zile lucrătoare, excepţie făcând situaţiile în care sunt necesare verificări prevăzute de lege, în acest caz termenul fiind de 30 de zile.Funcţionarul care primeşte cererea înmânează solicitantului o dovadă care cuprinde numărul de înregistrare şi data înregistrării, precum şi data prezentării pentru eliberarea actului de identitate.
-                    </li>
-
-                <b>Nu se fac programării online pentru eliberarea documentelor.</b>
-
-                    <li>
-                        <b><u>Art.11. Pentru cererile care vizează cetăţenii care nu au avut niciodată domiciliul în România(dobândire /redobândire cetăţenie), respectiv care solicită schimbarea domiciliului din străinătate în România nu se fac programări online, persoanele interesate urmând să se prezinte la sediul nostru.</u></b>
-                    </li>
-                </ul>
-
-
-                <h5 class="ps-3 alert alert-warning mb-0">
-                    Selectați o zi disponibilă din următoarele 2 luni calendaristice:
-                </h5>
-
-                <div class="row mb-0">
-                    <div class="col-lg-12 ps-4 mb-0">
-                        Legendă:
-                        <span class="badge bg-success"><h6 class="mb-0">Zile cu ore disponibile</h6></span>
-                        <span class="badge" style="background-color:rgb(219, 107, 107)"><h6 class="mb-0">Zile ocupate complet</h6></span>
-                        <span class="badge" style="background-color:rgb(219, 219, 219); color:rgb(151, 0, 0)"><h6 class="mb-0">Zile indisponibile</h6></span>
-                    </div>
-                </div>
+                        @break
+                    @case('transcrieri-certificate')
+                        Transcrieri certificate
+                        @break
+                    @case('casatorii')
+                        Căsătorii
+                        @break
+                    @default
+                @endswitch
 
                 @for ($luna = 0; $luna <= 1 ; $luna++)
                     @php
@@ -167,29 +167,6 @@
                         $luna_ultima_zi = \Carbon\Carbon::today()->addMonth($luna)->endOfMonth();
                     @endphp
 
-                    {{-- <div class="d-flex flex-wrap">
-                            <div style="width:100px; border:1px solid white">
-                                Luni
-                            </div>
-                            <div style="width:100px; border:1px solid white">
-                                Marți
-                            </div>
-                            <div style="width:100px; border:1px solid white">
-                                Miercuri
-                            </div>
-                            <div style="width:100px; border:1px solid white">
-                                Joi
-                            </div>
-                            <div style="width:100px; border:1px solid white">
-                                Vineri
-                            </div>
-                            <div style="width:100px; border:1px solid white">
-                                Sâmbătă
-                            </div>
-                            <div style="width:100px; border:1px solid white">
-                                Duminică
-                            </div>
-                    </div> --}}
 
 
                     <style>
@@ -197,7 +174,6 @@
                     border-collapse: collapse;
                     color: rgb(151, 0, 0);
                     margin: auto;
-                    /* width: 100% !important; */
                     }
 
                     #lunar td, #lunar th {

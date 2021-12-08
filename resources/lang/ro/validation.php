@@ -132,4 +132,12 @@ return [
             'rule-name' => 'custom-message',
         ],
     ],
+
+    'values' => [
+        // or whatever fields you wanna translate
+        'data' => [
+            // or tomorrow
+            'today' => 'astăzi'
+    ]
+]
 ];

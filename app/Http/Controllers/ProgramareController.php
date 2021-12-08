@@ -69,24 +69,7 @@ class ProgramareController extends Controller
      */
     public function store(Request $request, $serviciu = null)
     {
-        $programare = Programare::make($this->validateRequest($request));
-
-        switch ($serviciu) {
-            case 'evidenta-persoanelor':
-                $programare->serviciu = 1;
-                break;
-            case 'transcrieri-certificate':
-                $programare->serviciu = 2;
-                break;
-            case 'casatorii':
-                $programare->serviciu = 3;
-                break;
-            default:
-                # code...
-                break;
-            }
-
-        $programare->save();
+        $programare = Programare::create($this->validateRequest($request, $serviciu));
 
         if (isset($programare->email)){
             \Mail::to($programare->email)
@@ -129,7 +112,7 @@ class ProgramareController extends Controller
      */
     public function update(Request $request, $serviciu = null, Programare $programare)
     {
-        $programare->update($this->validateRequest($request));
+        $programare->update($this->validateRequest($request, $serviciu));
 
         return redirect('/' . $serviciu . '/programari')->with('status', 'Programarea pentru „' . ($programare->nume ?? '') . '” a fost modificată cu succes!');
     }
@@ -190,15 +173,67 @@ class ProgramareController extends Controller
      *
      * @return array
      */
-    protected function validateRequest(Request $request)
+    protected function validateRequest(Request $request, $serviciu = null)
     {
-        return request()->validate(
+        switch ($serviciu) {
+            case 'evidenta-persoanelor':
+                $serviciu = 1;
+                break;
+            case 'transcrieri-certificate':
+                $serviciu = 2;
+                break;
+            case 'casatorii':
+                $serviciu = 3;
+                break;
+            default:
+                # code...
+                break;
+            }
+
+        $request->request->add(['serviciu' => $serviciu]);
+
+        return $request->validate(
             [
                 'nume' => 'required|max:500',
                 'email' => 'nullable|max:500|email:rfc,dns',
                 'cnp' => 'nullable|numeric|integer|digits:13',
-                'data' => 'required',
-                'ora' => 'required'
+                'data' => ['required',
+                    'after:today',
+                    function ($attribute, $value, $fail) {
+                        $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
+                        if (\Carbon\Carbon::parse($value)->isWeekend() || (in_array($value, $zile_nelucratoare))) {
+                            $fail('Data aleasă, ' . \Carbon\Carbon::parse($value)->isoFormat('DD.MM.YYYY') . ', nu este o zi lucrătoare');
+                        }
+                    },
+                ],
+                'ora' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+
+                        // Data se preia din:
+                        // 1. Aplicatie angajati -> data se ia din request
+                        // 2. Formular extern din site -> data se ia din sesiune
+                        $data = $request->data ?? $request->session()->get('programare')->data;
+
+                        $ore_disponibile = DB::table('programari_ore_de_program')
+                            ->where('serviciu', $request->serviciu)
+                            ->where('ziua_din_saptamana', '=', \Carbon\Carbon::parse($data)->dayOfWeekIso)
+                            ->orderBy('ora')
+                            ->pluck('ora')
+                            ->all();
+                        $ore_indisponibile = DB::table('programari')
+                            ->where('serviciu', $request->serviciu)
+                            ->where('data', '=', $data)
+                            ->pluck('ora')
+                            ->all();
+                        $ore_disponibile = array_diff($ore_disponibile, $ore_indisponibile);
+
+                        if ((!in_array(\Carbon\Carbon::parse($value)->toTimeString(), $ore_disponibile))) {
+                            $fail('Ora aleasă, ' . \Carbon\Carbon::parse($value)->isoFormat('HH:mm') . ', este indisponibilă');
+                        }
+                    },
+                ],
+                'serviciu' => 'required'
             ],
             [
 
@@ -214,39 +249,61 @@ class ProgramareController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function adaugaProgramareNoua(Request $request)
+    public function adaugaProgramareNoua(Request $request, $serviciu = null)
     {
-        if(!empty($request->session()->get('programare'))){
-            $programare = $request->session()->forget('programare');
+        if(!empty($request->session()->get($serviciu . '-programare'))){
+            // $programare = $request->session()->forget($serviciu . '-programare');
         }
+
+        $programare = new Programare();
+
+        switch ($serviciu) {
+            case 'evidenta-persoanelor':
+                $programare->serviciu = 1;
+                break;
+            case 'transcrieri-certificate':
+                $programare->serviciu = 2;
+                break;
+            case 'casatorii':
+                $programare->serviciu = 3;
+                break;
+            default:
+                # code...
+                break;
+            }
+
+        $request->session()->put($serviciu . '-programare', $programare);
 
         return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
     }
 
     /**
-     * Show the step 1 Form for creating a new 'programare '.
+     * Show the step 1 Form for creating a new 'programare'.
      *
      * @return \Illuminate\Http\Response
      */
-    public function adaugaProgramarePasul1(Request $request)
+    public function adaugaProgramarePasul1(Request $request, $serviciu = null)
     {
-        $programare = $request->session()->get('programare');
+        dd($request->session(), $request->session()->get($serviciu . '-programare'));
+        if(empty($request->session()->get('programare'))){
+            return redirect('/' . $serviciu . '/programari/adauga-programare-noua');
+        } else {
+            $programare = $request->session()->get('programare');
+        }
+
         $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
 
-
-        $ore_disponibile = ProgramareOraDeProgram::all();
-        $ore_indisponibile = Programare::where('data', '>=', \Carbon\Carbon::tomorrow()->toDateString())->get();
-
-        // $ore_disponibile = array_diff($ore_disponibile, $ore_indisponibile);
+        $ore_disponibile = ProgramareOraDeProgram::all()->where('serviciu', $programare->serviciu);
+        $ore_indisponibile = Programare::where('serviciu', $programare->serviciu)->where('data', '>=', \Carbon\Carbon::tomorrow()->toDateString())->get();
+// dd($ore_disponibile, $ore_indisponibile);
         $data = \Carbon\Carbon::tomorrow();
         $zile_pline = array();
         while ($data->lessThan(\Carbon\Carbon::today()->addMonth(1)->endOfMonth())){
-
             $ore_disponibile_la_data = $ore_disponibile->where('ziua_din_saptamana', $data->dayOfWeekIso)->pluck('ora')->toArray();
             $ore_indisponibile_la_data = $ore_indisponibile->where('data', $data->toDateString())->pluck('ora')->toArray();
-            // dd($data->toDateString(), $ore_disponibile, $ore_disponibile_la_data, $ore_indisponibile, $ore_indisponibile_la_data);
+
             $ore_disponibile_ramase = array_diff($ore_disponibile_la_data, $ore_indisponibile_la_data);
-            // dd(count($ore_disponibile));
+
             if (count($ore_disponibile_ramase) === 0){
                 array_push($zile_pline, $data->toDateString());
             }
@@ -258,14 +315,10 @@ class ProgramareController extends Controller
             } else{
                 $data->addDay(1);
             }
-
-
-            // dd($zile_pline);
         }
-            // dd($zile_pline);
-        // dd($zile_nelucratoare);
+        dd($zile_pline);
 
-        return view('programari.guest_create.adauga_programare_pasul_1', compact('programare', 'zile_nelucratoare', 'zile_pline'));
+        return view('programari.guest_create.adauga_programare_pasul_1', compact('programare', 'zile_nelucratoare', 'zile_pline', 'serviciu'));
     }
 
     /**
@@ -274,15 +327,30 @@ class ProgramareController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function postAdaugaProgramarePasul1(Request $request)
+    public function postAdaugaProgramarePasul1(Request $request, $serviciu = null)
     {
-        $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
-
         if(empty($request->session()->get('programare'))){
             $programare = new Programare();
         }else{
             $programare = $request->session()->get('programare');
         }
+
+        switch ($serviciu) {
+            case 'evidenta-persoanelor':
+                $programare->serviciu = 1;
+                break;
+            case 'transcrieri-certificate':
+                $programare->serviciu = 2;
+                break;
+            case 'casatorii':
+                $programare->serviciu = 3;
+                break;
+            default:
+                # code...
+                break;
+            }
+
+        $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
 
         $programare->fill(
             $request->validate([
