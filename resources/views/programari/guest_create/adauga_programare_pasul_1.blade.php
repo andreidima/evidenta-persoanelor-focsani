@@ -237,6 +237,9 @@
                                         @elseif (
                                             ($ziua->isWeekend() == true)
                                             ||
+                                            // transcrieri-certificate: se lucreaza doar 2 zile pe saptamana (nu luni, joi sau vineri)
+                                            (($programare->serviciu == 2) && ($ziua->isMonday() || $ziua->isThursday() || $ziua->isFriday()))
+                                            ||
                                             ($ziua->lessThan(\Carbon\Carbon::tomorrow()))
                                             ||
                                             (in_array($ziua->toDateString(), $zile_nelucratoare))
@@ -250,7 +253,7 @@
                                                 </td>
                                         @else
                                             <td class="p-0" style="">
-                                                <form class="needs-validation mb-0" novalidate method="POST" action="/evidenta-persoanelor/programari/adauga-programare-pasul-1">
+                                                <form class="needs-validation mb-0" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-1">
                                                     @csrf
                                                     <div class="d-grid" style="height:100%;width:100%;">
                                                         <input type="hidden" id="data" name="data" value="{{ $ziua->toDateString(); }}">

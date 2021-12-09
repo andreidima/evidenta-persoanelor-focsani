@@ -20,7 +20,18 @@
                         </div>
                         <div class="col-lg-12">
                             <h3 class="mb-0 text-center" style="color:#ffffff">
-                                Depunerea cererii în vederea eliberării actului de identitate
+                                @switch($serviciu)
+                                    @case('evidenta-persoanelor')
+                                        Depunerea cererii în vederea eliberării actului de identitate
+                                        @break
+                                    @case('transcrieri-certificate')
+                                        Transcrieri certificate
+                                        @break
+                                    @case('casatorii')
+                                        Căsătorii
+                                        @break
+                                    @default
+                                @endswitch
                             </h3>
                         </div>
                     </div>
@@ -70,7 +81,9 @@
                                             <b>
                                                 {{ \Carbon\Carbon::parse($programare->ora)->isoFormat('HH:mm') }}
                                                 -
-                                                {{ \Carbon\Carbon::parse($programare->ora)->addMinutes(15)->isoFormat('HH:mm') }}
+                                                {{-- Programari evidenta persoanelor: la fiecare 15 minute
+                                                Programari transcrieri certificate sau casatorii: la fiecare 30 de minute --}}
+                                                {{ \Carbon\Carbon::parse($programare->ora)->addMinutes(($programare->serviciu == 1) ? 15 : 30)->isoFormat('HH:mm') }}
                                             </b>
                                         </label>
                                     </div>

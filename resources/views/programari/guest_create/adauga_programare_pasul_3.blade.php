@@ -20,7 +20,18 @@
                         </div>
                         <div class="col-lg-12">
                             <h3 class="mb-0 text-center" style="color:#ffffff">
-                                Depunerea cererii în vederea eliberării actului de identitate
+                                @switch($serviciu)
+                                    @case('evidenta-persoanelor')
+                                        Depunerea cererii în vederea eliberării actului de identitate
+                                        @break
+                                    @case('transcrieri-certificate')
+                                        Transcrieri certificate
+                                        @break
+                                    @case('casatorii')
+                                        Căsătorii
+                                        @break
+                                    @default
+                                @endswitch
                             </h3>
                         </div>
                     </div>
@@ -43,7 +54,7 @@
 
                     <div class="row">
                         <div class="col-lg-6 mx-auto">
-                            <form  class="mb-0 needs-validation" novalidate method="POST" action="/evidenta-persoanelor/programari/adauga-programare-pasul-3">
+                            <form  class="mb-0 needs-validation" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-3">
                                 @csrf
 
                                 <div class="row g-3 align-items-center">
@@ -67,7 +78,9 @@
                                             <b>
                                                 {{ \Carbon\Carbon::parse($programare->ora)->isoFormat('HH:mm') }}
                                                 -
-                                                {{ \Carbon\Carbon::parse($programare->ora)->addMinutes(15)->isoFormat('HH:mm') }}
+                                                {{-- Programari evidenta persoanelor: la fiecare 15 minute
+                                                Programari transcrieri certificate sau casatorii: la fiecare 30 de minute --}}
+                                                {{ \Carbon\Carbon::parse($programare->ora)->addMinutes(($programare->serviciu == 1) ? 15 : 30)->isoFormat('HH:mm') }}
                                             </b>
                                         </label>
                                     </div>
@@ -144,7 +157,7 @@
 
                                 <div class="row g-3 py-2 justify-content-center">
                                     <div class="col-lg-3 py-2 d-grid">
-                                        <a class="btn btn-primary text-white rounded-pill" href="/evidenta-persoanelor/programari/adauga-programare-pasul-2">Înapoi</a>
+                                        <a class="btn btn-primary text-white rounded-pill" href="/{{ $serviciu }}/programari/adauga-programare-pasul-2">Înapoi</a>
                                     </div>
                                     <div class="col-lg-6 py-2 d-grid">
                                         <button type="submit" class="btn btn-success text-white rounded-pill">Înscrie programarea</button>

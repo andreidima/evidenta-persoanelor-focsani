@@ -20,7 +20,18 @@
                         </div>
                         <div class="col-lg-12">
                             <h3 class="mb-0 text-center" style="color:#ffffff">
-                                Depunerea cererii în vederea eliberării actului de identitate
+                                @switch($serviciu)
+                                    @case('evidenta-persoanelor')
+                                        Depunerea cererii în vederea eliberării actului de identitate
+                                        @break
+                                    @case('transcrieri-certificate')
+                                        Transcrieri certificate
+                                        @break
+                                    @case('casatorii')
+                                        Căsătorii
+                                        @break
+                                    @default
+                                @endswitch
                             </h3>
                         </div>
                     </div>
@@ -36,10 +47,6 @@
                 >
 
                 @include ('errors')
-
-                    {{-- <h3 class="mb-5 text-center" style="color:#B0413E">
-                        Depunerea cererii în vederea eliberării actului de identitate
-                    </h3> --}}
 
                     <h5 class="ps-4 mb-4 text-center">
                         Programări disponibile pentru
@@ -67,49 +74,13 @@
                     <br>
 
                     @php
-                    // switch (\Carbon\Carbon::parse($programare->data)->dayOfWeek) {
-                    //     case '1':
-                    //         $ora_inceput->hour = 8;
-                    //         $ora_inceput->minute = 30;
-                    //         $ora_sfarsit->hour = 12;
-                    //         $ora_sfarsit->minute = 30;
-                    //         break;
-                    //     case '2':
-                    //         $ora_inceput->hour = 8;
-                    //         $ora_inceput->minute = 30;
-                    //         $ora_sfarsit->hour = 12;
-                    //         $ora_sfarsit->minute = 30;
-                    //         break;
-                    //     case '3':
-                    //         $ora_inceput->hour = 12;
-                    //         $ora_inceput->minute = 00;
-                    //         $ora_sfarsit->hour = 18;
-                    //         $ora_sfarsit->minute = 30;
-                    //         break;
-                    //     case '4':
-                    //         $ora_inceput->hour = 8;
-                    //         $ora_inceput->minute = 30;
-                    //         $ora_sfarsit->hour = 12;
-                    //         $ora_sfarsit->minute = 30;
-                    //         break;
-                    //     case '5':
-                    //         $ora_inceput->hour = 8;
-                    //         $ora_inceput->minute = 30;
-                    //         $ora_sfarsit->hour = 12;
-                    //         $ora_sfarsit->minute = 30;
-                    //         break;
-                    //     default:
-                    //         echo 'nu este program';
-                    // }
 
                     $ora_afisare = \Carbon\Carbon::parse($ora_inceput);
                     $ora_afisare = $ora_afisare->startOfHour();
-                    // echo $ora_afisare . '<br>' . $ora_inceput;
 
                     $ora_sfarsit_afisare = \Carbon\Carbon::parse($ora_sfarsit);
                     $ora_sfarsit_afisare = $ora_sfarsit_afisare->endOfHour();
                     @endphp
-{{-- {{ $ora_afisare }}{{ $ora_inceput }} --}}
                     <div class="row">
                             @while ($ora_afisare->lessThan($ora_sfarsit_afisare))
 
@@ -120,7 +91,7 @@
                                         </b>
                                 @endif
                                 @if (($ora_afisare->greaterThanOrEqualTo($ora_inceput)) && ($ora_afisare->lessThan($ora_sfarsit)))
-                                    <form class="needs-validation mb-0" novalidate method="POST" action="/evidenta-persoanelor/programari/adauga-programare-pasul-2">
+                                    <form class="needs-validation mb-0" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-2">
                                         @csrf
 
                                             <input type="hidden" id="ora" name="ora" value="{{ $ora_afisare }}">
@@ -129,51 +100,40 @@
                                                     class="btn btn-sm btn-success px-1 mx-1 text-white" style="">
                                                         {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                                         -
-                                                        {{ $ora_afisare->addMinutes(15)->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                                        {{-- Programari evidenta persoanelor: la fiecare 15 minute
+                                                        Programari transcrieri certificate sau casatorii: la fiecare 30 de minute --}}
+                                                        {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : 30)->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                                 </button>
                                             @else
                                                 <button type="submit" name=""
                                                     class="btn btn-sm btn-danger px-1 mx-1 text-white" disabled style="">
                                                         {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                                         -
-                                                        {{ $ora_afisare->addMinutes(15)->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                                        {{-- Programari evidenta persoanelor: la fiecare 15 minute
+                                                        Programari transcrieri certificate sau casatorii: la fiecare 30 de minute --}}
+                                                        {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : 30)->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                                 </button>
                                             @endif
 
                                     </form>
                                 @else
-                                            <button type="" name=""
-                                                class="btn btn-sm btn-secondary px-1 mx-1 text-white" disabled style="">
-                                     {{-- <span class="badge" style="background-color: rgb(170, 170, 170)">
-                                        <h6 class="mb-0"> --}}
+                                    <button type="" name=""
+                                        class="btn btn-sm btn-secondary px-1 mx-1 text-white" disabled style="">
                                             {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                             -
-                                            {{ $ora_afisare->addMinutes(15)->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
-                                            {{-- </h6>
-                                    </span> --}}
+                                            {{-- Programari evidenta persoanelor: la fiecare 15 minute
+                                            Programari transcrieri certificate sau casatorii: la fiecare 30 de minute --}}
+                                            {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : 30)->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                 @endif
                                 @if ($ora_afisare->minute == 0)
                                     </div>
                                 @endif
                             @endwhile
-                            {{-- @for ($ora_afisare; $ora_afisare->lessThan($ora_sfarsit->endOfHour()) ; $ora_afisare->addMinutes(15))
-                                <span class="badge bg-success">
-                                    <h6 class="mb-0">
-                                        {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
-                                        -
-                                        {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
-                                        </h6>
-                                </span>
-                                @if ($ora_afisare->minute == 0)
-                                    </div>
-                                    <div class="col-lg-12 mb-2">
-                                @endif
-                            @endfor --}}
                         </div>
 
                     <div class="row py-2 g-3 justify-content-center">
                         <div class="col-lg-4 d-grid">
-                            <a class="btn btn-primary text-white rounded-pill" href="/evidenta-persoanelor/programari/adauga-programare-pasul-1">Înapoi</a>
+                            <a class="btn btn-primary text-white rounded-pill" href="/{{ $serviciu }}/programari/adauga-programare-pasul-1">Înapoi</a>
                         </div>
                     </div>
 

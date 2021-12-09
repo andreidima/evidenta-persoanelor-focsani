@@ -8,6 +8,22 @@
 # Bună ziua {{ $programare->nume ?? ''}},
 <br>
 
+V-ați programat la serviciul:
+@switch($programare->serviciu)
+    @case('1')
+        Depuneri cereri în vederea eliberării actului de identitate
+        @break
+    @case('2')
+        Transcrieri certificate
+        @break
+    @case('3')
+        Căsătorii
+        @break
+    @default
+@endswitch
+
+<br>
+
 Datele programării dumneavoastră sunt următoarele:
 <ul>
         <li>
