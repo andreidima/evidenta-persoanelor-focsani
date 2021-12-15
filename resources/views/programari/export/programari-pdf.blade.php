@@ -67,10 +67,22 @@
                     border-radius: 10px;">
 
                 <h1 style="text-align: center">
-                    Programări
+                    @switch($serviciu)
+                        @case('evidenta-persoanelor')
+                            Evidența persoanelor
+                            @break
+                        @case('transcrieri-certificate')
+                            Transcrieri certificate
+                            @break
+                        @case('casatorii')
+                            Căsătorii
+                            @break
+                        @default
+                    @endswitch
                 </h1>
+
                 <h2 style="text-align: center">
-                    {{ \Carbon\Carbon::parse($data)->isoFormat('DD.MM.YYYY') }}
+                    Programări - {{ \Carbon\Carbon::parse($data)->isoFormat('DD.MM.YYYY') }}
                 </h2>
 
                 <br><br>

@@ -43,9 +43,11 @@ class ProgramareController extends Controller
                 return $query->where('nume', 'like', '%' . $search_nume . '%');
             })
             ->when($search_data, function ($query, $search_data) {
-                return $query->whereDate('data', '=', $search_data);
+                return $query->whereDate('data', '=', $search_data)
+                            ->orderBy('ora');
+            }, function ($query) {
+                return $query->latest();
             })
-            ->latest()
             ->simplePaginate(25);
 
         return view('programari.index', compact('programari', 'search_nume', 'search_data', 'serviciu'));
@@ -112,7 +114,7 @@ class ProgramareController extends Controller
      */
     public function update(Request $request, $serviciu = null, Programare $programare)
     {
-        $programare->update($this->validateRequest($request, $serviciu));
+        $programare->update($this->validateRequest($request, $serviciu, $programare));
 
         return redirect('/' . $serviciu . '/programari')->with('status', 'Programarea pentru „' . ($programare->nume ?? '') . '” a fost modificată cu succes!');
     }
@@ -173,7 +175,7 @@ class ProgramareController extends Controller
      *
      * @return array
      */
-    protected function validateRequest(Request $request, $serviciu = null)
+    protected function validateRequest(Request $request, $serviciu = null, Programare $programare = null)
     {
         switch ($serviciu) {
             case 'evidenta-persoanelor':
@@ -201,26 +203,31 @@ class ProgramareController extends Controller
                     'after:today',
                     'before:' . \Carbon\Carbon::today()->addMonth(1)->endOfMonth(),
                     function ($attribute, $value, $fail) use ($request) {
+                        $data_selectata = \Carbon\Carbon::parse($value);
+                        // dd($data_selectata, $value);
                         $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
                         if (
-                            \Carbon\Carbon::parse($value)->isWeekend()
+                            $data_selectata->isWeekend()
                             ||
                             // transcrieri-certificate: se lucreaza doar 2 zile pe saptamana (nu luni, joi sau vineri)
-                            (($request->serviciu == 2) && ($value->isMonday() || $value->isThursday() || $value->isFriday()))
+                            (($request->serviciu == 2) && ($data_selectata->isMonday() || $data_selectata->isThursday() || $data_selectata->isFriday()))
                             ||
                             (in_array($value, $zile_nelucratoare))) {
-                            $fail('Data aleasă, ' . \Carbon\Carbon::parse($value)->isoFormat('DD.MM.YYYY') . ', nu este o zi lucrătoare');
+                            $fail('Data aleasă, ' . $data_selectata->isoFormat('DD.MM.YYYY') . ', nu este o zi lucrătoare');
                         }
                     },
                 ],
                 'ora' => [
                     'required',
-                    function ($attribute, $value, $fail) use ($request) {
+                    function ($attribute, $value, $fail) use ($request, $programare) {
 
                         // Data se preia din:
                         // 1. Aplicatie angajati -> data se ia din request
                         // 2. Formular extern din site -> data se ia din sesiune
                         $data = $request->data ?? $request->session()->get('programare')->data;
+
+                        $data_initiala = $request->data_initiala;
+                        $ora_initiala = $request->ora_initiala;
 
                         $ore_disponibile = DB::table('programari_ore_de_program')
                             ->where('serviciu', $request->serviciu)
@@ -231,6 +238,12 @@ class ProgramareController extends Controller
                         $ore_indisponibile = DB::table('programari')
                             ->where('serviciu', $request->serviciu)
                             ->where('data', '=', $data)
+                            // Daca data aleasa din calendar este aceeasi cu data programarii, se afiseaza si ora programarii ca fiind disponibila
+                            ->when($programare, function ($query) use($request, $programare) {
+                                return $query->when($request->data == $programare->data, function ($query) use($programare) {
+                                    return $query->where('ora', '<>', $programare->ora);
+                                    });
+                            })
                             ->pluck('ora')
                             ->all();
                         $ore_disponibile = array_diff($ore_disponibile, $ore_indisponibile);
@@ -573,23 +586,55 @@ class ProgramareController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function afisare_saptamanal()
+    public function afisare_saptamanal($serviciu = null)
     {
         $search_data = \Request::get('search_data') ? \Carbon\Carbon::parse(\Request::get('search_data')) : \Carbon\Carbon::today();
         $data_de_cautat = \Carbon\Carbon::parse($search_data);
 
         $ore_de_program = ProgramareOraDeProgram::select('ziua_din_saptamana', 'ora')
+            ->where (function($query) use ($serviciu) {
+                switch ($serviciu) {
+                    case 'evidenta-persoanelor':
+                        $query->where('serviciu', 1);
+                        break;
+                    case 'transcrieri-certificate':
+                        $query->where('serviciu', 2);
+                        break;
+                    case 'casatorii':
+                        $query->where('serviciu', 3);
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            })
             ->orderBy('ziua_din_saptamana')
             ->orderBy('ora')
             ->get();
 
         $programari_din_saptamana_cautata = Programare::
-            whereDate('data', '>=', $data_de_cautat->startOfWeek())
+            where (function($query) use ($serviciu) {
+                switch ($serviciu) {
+                    case 'evidenta-persoanelor':
+                        $query->where('serviciu', 1);
+                        break;
+                    case 'transcrieri-certificate':
+                        $query->where('serviciu', 2);
+                        break;
+                    case 'casatorii':
+                        $query->where('serviciu', 3);
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            })
+            ->whereDate('data', '>=', $data_de_cautat->startOfWeek())
             ->whereDate('data', '<=', $data_de_cautat->endOfWeek())
             ->orderBy('ora')
             ->get();
 
-        return view('programari.diverse.afisare_saptamanal', compact('programari_din_saptamana_cautata', 'ore_de_program', 'search_data'));
+        return view('programari.diverse.afisare_saptamanal', compact('programari_din_saptamana_cautata', 'ore_de_program', 'search_data', 'serviciu'));
     }
 
     /**
@@ -597,21 +642,53 @@ class ProgramareController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function afisare_zilnic()
+    public function afisare_zilnic($serviciu = null)
     {
         $search_data = \Request::get('search_data') ? \Carbon\Carbon::parse(\Request::get('search_data')) : \Carbon\Carbon::today();
 
         $ore_de_program = ProgramareOraDeProgram::select('ziua_din_saptamana', 'ora')
+            ->where (function($query) use ($serviciu) {
+                switch ($serviciu) {
+                    case 'evidenta-persoanelor':
+                        $query->where('serviciu', 1);
+                        break;
+                    case 'transcrieri-certificate':
+                        $query->where('serviciu', 2);
+                        break;
+                    case 'casatorii':
+                        $query->where('serviciu', 3);
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            })
             ->where('ziua_din_saptamana', $search_data->dayOfWeekIso)
             ->orderBy('ora')
             ->get();
 
         $programari = Programare::
-            whereDate('data', '=', $search_data)
+            where (function($query) use ($serviciu) {
+                switch ($serviciu) {
+                    case 'evidenta-persoanelor':
+                        $query->where('serviciu', 1);
+                        break;
+                    case 'transcrieri-certificate':
+                        $query->where('serviciu', 2);
+                        break;
+                    case 'casatorii':
+                        $query->where('serviciu', 3);
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            })
+            ->whereDate('data', '=', $search_data)
             ->orderBy('ora')
             ->get();
 
-        return view('programari.diverse.afisare_zilnic', compact('programari', 'ore_de_program', 'search_data'));
+        return view('programari.diverse.afisare_zilnic', compact('programari', 'ore_de_program', 'search_data', 'serviciu'));
     }
 
     public function pdfExportPeZi(Request $request, $serviciu = null, $data = null)
@@ -619,19 +696,51 @@ class ProgramareController extends Controller
         $data = \Carbon\Carbon::parse($data);
 
         $ore_de_program = ProgramareOraDeProgram::select('ziua_din_saptamana', 'ora')
+            ->where (function($query) use ($serviciu) {
+                switch ($serviciu) {
+                    case 'evidenta-persoanelor':
+                        $query->where('serviciu', 1);
+                        break;
+                    case 'transcrieri-certificate':
+                        $query->where('serviciu', 2);
+                        break;
+                    case 'casatorii':
+                        $query->where('serviciu', 3);
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            })
             ->where('ziua_din_saptamana', $data->dayOfWeekIso)
             ->orderBy('ora')
             ->get();
 
         $programari = Programare::
-            whereDate('data', '=', $data)
+            where (function($query) use ($serviciu) {
+                switch ($serviciu) {
+                    case 'evidenta-persoanelor':
+                        $query->where('serviciu', 1);
+                        break;
+                    case 'transcrieri-certificate':
+                        $query->where('serviciu', 2);
+                        break;
+                    case 'casatorii':
+                        $query->where('serviciu', 3);
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            })
+            ->whereDate('data', '=', $data)
             ->orderBy('ora')
             ->get();
 
         if ($request->view_type === 'programari-html') {
-            return view('programari.export.programari-pdf', compact('programari', 'ore_de_program', 'data'));
+            return view('programari.export.programari-pdf', compact('programari', 'ore_de_program', 'data', 'serviciu'));
         } elseif ($request->view_type === 'programari-pdf') {
-            $pdf = \PDF::loadView('programari.export.programari-pdf', compact('programari', 'ore_de_program', 'data'))
+            $pdf = \PDF::loadView('programari.export.programari-pdf', compact('programari', 'ore_de_program', 'data', 'serviciu'))
                 ->setPaper('a4');
             return $pdf->download('Programari din data ' . $data->isoFormat('DD.MM.YYYY') . '.pdf');
         }

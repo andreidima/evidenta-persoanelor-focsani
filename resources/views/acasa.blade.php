@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    Bine ai venit!
+                    Bine ai venit <b>{{ auth()->user()->name ?? '' }}</b>!
                 </div>
             </div>
         </div>

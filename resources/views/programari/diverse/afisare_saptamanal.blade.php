@@ -3,11 +3,28 @@
 @section('content')
 <div class="container card" style="border-radius: 40px 40px 40px 40px;">
     <div class="row card-header justify-content-between align-items-center" style="border-radius: 40px 40px 0px 0px;">
-        <div class="col-lg-3">
-            <h4 class="mb-0"><a href="/evidenta-persoanelor/programari/afisare-saptamanal"><i class="fas fa-calendar-check me-1"></i>Programări săptămânal</a></h4>
+        <div class="col-lg-6">
+            <h4 class="mb-0">
+                <a href="/{{ $serviciu }}/programari/afisare-saptamanal">
+                    <i class="fas fa-calendar-check me-1"></i>
+                    @switch($serviciu)
+                        @case('evidenta-persoanelor')
+                            Evidența persoanelor
+                            @break
+                        @case('transcrieri-certificate')
+                            Transcrieri certificate
+                            @break
+                        @case('casatorii')
+                            Căsătorii
+                            @break
+                        @default
+                    @endswitch
+                    - Programări săptămânal
+                </a>
+            </h4>
         </div>
         <div class="col-lg-6" id="app">
-            <form class="needs-validation" novalidate method="GET" action="/evidenta-persoanelor/programari/afisare-saptamanal">
+            <form class="needs-validation" novalidate method="GET" action="/{{ $serviciu }}/programari/afisare-saptamanal">
                 @csrf
                 <div class="row mb-1 input-group custom-search-form justify-content-center">
                     <div class="col-lg-4 d-flex">
@@ -27,7 +44,7 @@
                         </button>
                     </div>
                     <div class="col-lg-4 d-grid">
-                        <a class="btn btn-sm bg-secondary text-white border border-dark rounded-pill" href="/evidenta-persoanelor/programari/afisare-saptamanal" role="button">
+                        <a class="btn btn-sm bg-secondary text-white border border-dark rounded-pill" href="/{{ $serviciu }}/programari/afisare-saptamanal" role="button">
                             <i class="far fa-trash-alt text-white me-1"></i>Resetează căutarea
                         </a>
                     </div>

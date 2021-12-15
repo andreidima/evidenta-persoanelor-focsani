@@ -3,11 +3,28 @@
 @section('content')
 <div class="container card" style="border-radius: 40px 40px 40px 40px;">
     <div class="row card-header justify-content-between align-items-center" style="border-radius: 40px 40px 0px 0px;">
-        <div class="col-lg-3">
-            <h4 class="mb-0"><a href="/evidenta-persoanelor/programari/afisare-zilnic"><i class="fas fa-print me-1"></i>Printează programări</a></h4>
+        <div class="col-lg-6">
+            <h4 class="mb-0">
+                <a href="/{{ $serviciu }}/programari/afisare-saptamanal">
+                    <i class="fas fa-print me-1"></i>
+                    @switch($serviciu)
+                        @case('evidenta-persoanelor')
+                            Evidența persoanelor
+                            @break
+                        @case('transcrieri-certificate')
+                            Transcrieri certificate
+                            @break
+                        @case('casatorii')
+                            Căsătorii
+                            @break
+                        @default
+                    @endswitch
+                    - Printează programări
+                </a>
+            </h4>
         </div>
         <div class="col-lg-6" id="app">
-            <form class="needs-validation" novalidate method="GET" action="/evidenta-persoanelor/programari/afisare-zilnic">
+            <form class="needs-validation" novalidate method="GET" action="/{{ $serviciu }}/programari/afisare-zilnic">
                 @csrf
                 <div class="row mb-1 input-group custom-search-form justify-content-center">
                     <div class="col-lg-4 d-flex">
@@ -27,7 +44,7 @@
                         </button>
                     </div>
                     <div class="col-lg-4 d-grid">
-                        <a class="btn btn-sm bg-secondary text-white border border-dark rounded-pill" href="/evidenta-persoanelor/programari/afisare-zilnic" role="button">
+                        <a class="btn btn-sm bg-secondary text-white border border-dark rounded-pill" href="/{{ $serviciu }}/programari/afisare-zilnic" role="button">
                             <i class="far fa-trash-alt text-white me-1"></i>Resetează căutarea
                         </a>
                     </div>
@@ -91,7 +108,7 @@
                 </table>
             </div>
             <div class="col-lg-12 d-flex justify-content-center">
-                <a href="/evidenta-persoanelor/programari/export/{{ $search_data->toDateString() }}/programari-pdf" class="btn bg-primary text-white border border-light rounded-pill">
+                <a href="/{{ $serviciu }}/programari/export/{{ $search_data->toDateString() }}/programari-pdf" class="btn bg-primary text-white border border-light rounded-pill">
                     <i class="fas fa-print text-white me-1"></i>Printează programările
                 </a>
             </div>
