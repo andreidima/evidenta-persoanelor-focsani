@@ -189,7 +189,7 @@
     </header>
     @endauth
 
-    <main class="flex-shrink-0 py-4">
+    <main class="flex-shrink-0 py-2">
         @yield('content')
     </main>
 

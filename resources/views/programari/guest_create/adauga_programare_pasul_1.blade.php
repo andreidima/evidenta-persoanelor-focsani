@@ -138,8 +138,17 @@
                             </li>
                         </ul>
 
+                        @break
+                    @case('transcrieri-certificate')
 
-                        <h5 class="ps-3 alert alert-warning mb-0">
+                        @break
+                    @case('casatorii')
+
+                        @break
+                    @default
+                @endswitch
+
+                        <h5 class="ps-3 alert alert-warning">
                             Selectați o zi disponibilă din următoarele 2 luni calendaristice:
                         </h5>
 
@@ -151,15 +160,6 @@
                                 <span class="badge" style="background-color:rgb(219, 219, 219); color:rgb(151, 0, 0)"><h6 class="mb-0">Zile indisponibile</h6></span>
                             </div>
                         </div>
-                        @break
-                    @case('transcrieri-certificate')
-                        Transcrieri certificate
-                        @break
-                    @case('casatorii')
-                        Căsătorii
-                        @break
-                    @default
-                @endswitch
 
                 @for ($luna = 0; $luna <= 1 ; $luna++)
                     @php
