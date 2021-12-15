@@ -124,11 +124,14 @@
                                 </div>
                             </li>
                             <li>
-                                <b>Art.9.</b> Cererile pentru eliberarea actului de identitate se depun personal sau pe bază de procură specială obţinută de la misiunile diplomatice ori oficiile consulare ale României din străinătate. Înainte de depunerea cererii se vor achita taxele necesare pentru eliberarea actelor de identitate la casieria unităţii.
+                                <b>Art.9.</b> Cererile pentru eliberarea actului de identitate se depun personal sau pe bază de procură specială obţinută de la misiunile diplomatice ori oficiile consulare ale României din străinătate.
+                                Înainte de depunerea cererii se vor achita taxele necesare pentru eliberarea actelor de identitate.
+                                Taxele se pot achita online la <a href="https://www.ghiseul.ro/" target="_blank">Ghiseul.ro</a> sau la caseriile Primăriei Municipiului Focșani, din strada Dimitrie Cantemir nr. 1 bis.
+
                             </li>
                                 Este <b>obligatoriu</b> ca persoana care depune cererea să prezinte toate documentele necesare eliberării actului de identitate, conform listei de documente afişate. Actele se prezintă în original şi copie.
                             <li>
-                                <b>Art.10.</b> Termenul de soluţionare a cererilor stabilit de Direcţia de Evidenţă a Persoanelor Focșani este fixat la 4 zile lucrătoare, excepţie făcând situaţiile în care sunt necesare verificări prevăzute de lege, în acest caz termenul fiind de 30 de zile.Funcţionarul care primeşte cererea înmânează solicitantului o dovadă care cuprinde numărul de înregistrare şi data înregistrării, precum şi data prezentării pentru eliberarea actului de identitate.
+                                <b>Art.10.</b> Termenul de soluţionare a cererilor stabilit de Direcţia de Evidenţă a Persoanelor Focșani este intre 1 și 30 de zile lucrătoare, în funcție de numărul cererilor aflate în lucru. excepţie făcând situaţiile în care sunt necesare verificări prevăzute de lege, în acest caz termenul fiind de 30 de zile. Funcţionarul care primeşte cererea înmânează solicitantului o dovadă care cuprinde numărul de înregistrare şi data înregistrării, precum şi data prezentării pentru eliberarea actului de identitate.
                             </li>
 
                         <b>Nu se fac programării online pentru eliberarea documentelor.</b>
