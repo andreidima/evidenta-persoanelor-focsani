@@ -5,7 +5,7 @@
     <div class="row card-header justify-content-between align-items-center" style="border-radius: 40px 40px 0px 0px;">
         <div class="col-lg-6">
             <h4 class="mb-0">
-                <a href="/{{ $serviciu }}/programari/afisare-saptamanal">
+                <a href="/{{ $serviciu }}/programari/afisare-zilnic">
                     <i class="fas fa-print me-1"></i>
                     @switch($serviciu)
                         @case('evidenta-persoanelor')
