@@ -187,19 +187,28 @@
             </div>
         </nav>
     </header>
+    @else
+    <header style="min-height:86.5px; background-image: linear-gradient(#FFFFFF, #CDEFFF);">
+        <div class="container d-flex align-items-center" style="min-height:86.5px;">
+                <img src="{{ asset('imagini/logo.png') }}" style="height:66.5px">
+        </div>
+    </header>
     @endauth
 
     <main class="flex-shrink-0 py-2">
         @yield('content')
     </main>
 
-    <footer class="mt-auto py-3 bg-light text-center">
+    <footer class="mt-auto py-4 text-center text-white" style="background-color:#0067AF">
         <div class="">
-            <span class="text-muted border-top">
-                <a href="https://validsoftware.ro/dezvoltare-aplicatii-web-personalizate/" target="_blank">
+            <p class="">
+                © SPCLEP Focsani - Serviciul Public Comunitar Local de Evidenta a Persoanelor Focsani
+            </p>
+            <span class="text-white">
+                <a href="https://validsoftware.ro/dezvoltare-aplicatii-web-personalizate/" class="text-white" target="_blank">
                     Aplicație web</a>
                 dezvoltată de
-                <a href="https://validsoftware.ro/" target="_blank">
+                <a href="https://validsoftware.ro/" class="text-white" target="_blank">
                     validsoftware.ro
                 </a>
             </span>
