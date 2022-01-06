@@ -84,7 +84,7 @@ class ProgramareController extends Controller
                 );
         }
 
-        return redirect('/' . $serviciu . '/programari')->with('status', 'Programarea pentru „' . ($programare->nume ?? '') . '” a fost adăugată cu succes!');
+        return redirect('/' . $serviciu . '/programari')->with('status', 'Programarea pentru „' . ($programare->nume ?? '') . ' ' . ($programare->prenume ?? '') . '” a fost adăugată cu succes!');
     }
 
     /**
@@ -120,7 +120,7 @@ class ProgramareController extends Controller
     {
         $programare->update($this->validateRequest($request, $serviciu, $programare));
 
-        return redirect('/' . $serviciu . '/programari')->with('status', 'Programarea pentru „' . ($programare->nume ?? '') . '” a fost modificată cu succes!');
+        return redirect('/' . $serviciu . '/programari')->with('status', 'Programarea pentru „' . ($programare->nume ?? '') . ' ' . ($programare->prenume ?? '') . '” a fost modificată cu succes!');
     }
 
     /**
@@ -133,7 +133,7 @@ class ProgramareController extends Controller
     {
         $programare->delete();
 
-        return redirect('/' . $serviciu . '/programari')->with('status', 'Programarea pentru „' . ($programare->nume ?? '') . '” a fost ștearsă cu succes!');
+        return redirect('/' . $serviciu . '/programari')->with('status', 'Programarea pentru „' . ($programare->nume ?? '') . ' ' . ($programare->prenume ?? '') . '” a fost ștearsă cu succes!');
     }
 
     /**
@@ -466,8 +466,9 @@ class ProgramareController extends Controller
         $ora_sfarsit->minute = $ultima_ora_din_program->minute;
 
         // Programari evidenta persoanelor: la fiecare 15 minute
-        // Programari transcrieri certificate sau casatorii: la fiecare 30 de minute
-        $ora_sfarsit->addMinutes(($programare->serviciu == 1) ? 15 : 30);
+        // Programari transcrieri certificate: la fiecare 40 de minute
+        // Programari casatorii: la fiecare 30 de minute
+        $ora_sfarsit->addMinutes(($programare->serviciu == 1) ? 15 : (($programare->serviciu == 2) ? 40 : 30));
 
         // if ($ora_sfarsit->minute == 00){
         //     $ora_sfarsit->hour -= 1;

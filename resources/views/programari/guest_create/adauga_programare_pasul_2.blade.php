@@ -25,10 +25,18 @@
                                         Depunerea cererii în vederea eliberării actului de identitate
                                         @break
                                     @case('transcrieri-certificate')
-                                        Transcrieri certificate
+                                        Transcrierii certificate
+                                        <br>
+                                        <small class="fs-5">
+                                            Depunere acte/documente în vederea Transcrierii de certificate/extrase emise de autoritățile străine
+                                        </small>
                                         @break
                                     @case('casatorii')
                                         Căsătorii
+                                        <br>
+                                        <small class="fs-5">
+                                            Depunere acte necesare în vederea oficierii căsătoriei
+                                        </small>
                                         @break
                                     @default
                                 @endswitch
@@ -73,15 +81,18 @@
 
                     <br>
 
-                    @php
 
-                    $ora_afisare = \Carbon\Carbon::parse($ora_inceput);
-                    $ora_afisare = $ora_afisare->startOfHour();
+                    {{-- Programari evidenta persoanelor: la fiecare 15 minute --}}
+                    {{-- Programari casatorii: la fiecare 30 de minute --}}
+                    @if(($programare->serviciu == 1) || ($programare->serviciu == 3))
+                        @php
+                        $ora_afisare = \Carbon\Carbon::parse($ora_inceput);
+                        $ora_afisare = $ora_afisare->startOfHour();
 
-                    $ora_sfarsit_afisare = \Carbon\Carbon::parse($ora_sfarsit);
-                    $ora_sfarsit_afisare = ($ora_sfarsit_afisare->minute <> 00) ? $ora_sfarsit_afisare->endOfHour() : $ora_sfarsit_afisare;
-                    @endphp
-                    <div class="row">
+                        $ora_sfarsit_afisare = \Carbon\Carbon::parse($ora_sfarsit);
+                        $ora_sfarsit_afisare = ($ora_sfarsit_afisare->minute <> 00) ? $ora_sfarsit_afisare->endOfHour() : $ora_sfarsit_afisare;
+                        @endphp
+                        <div class="row">
                             @while ($ora_afisare->lessThan($ora_sfarsit_afisare))
 
                                 @if ($ora_afisare->minute == 0)
@@ -100,18 +111,18 @@
                                                     class="btn btn-sm btn-success px-1 mx-1 text-white" style="">
                                                         {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                                         -
-                                                        {{-- Programari evidenta persoanelor: la fiecare 15 minute
-                                                        Programari transcrieri certificate sau casatorii: la fiecare 30 de minute --}}
-                                                        {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : 30)->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                                        {{-- Programari evidenta persoanelor: la fiecare 15 minute --}}
+                                                        {{-- Programari casatorii: la fiecare 30 de minute --}}
+                                                        {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : (($programare->serviciu == 2) ? 40 : 30))->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                                 </button>
                                             @else
                                                 <button type="submit" name=""
                                                     class="btn btn-sm btn-danger px-1 mx-1 text-white" disabled style="">
                                                         {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                                         -
-                                                        {{-- Programari evidenta persoanelor: la fiecare 15 minute
-                                                        Programari transcrieri certificate sau casatorii: la fiecare 30 de minute --}}
-                                                        {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : 30)->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                                        {{-- Programari evidenta persoanelor: la fiecare 15 minute --}}
+                                                        {{-- Programari casatorii: la fiecare 30 de minute --}}
+                                                        {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : (($programare->serviciu == 2) ? 40 : 30))->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                                 </button>
                                             @endif
 
@@ -121,15 +132,76 @@
                                         class="btn btn-sm btn-secondary px-1 mx-1 text-white" disabled style="">
                                             {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                             -
-                                            {{-- Programari evidenta persoanelor: la fiecare 15 minute
-                                            Programari transcrieri certificate sau casatorii: la fiecare 30 de minute --}}
-                                            {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : 30)->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                            {{-- Programari evidenta persoanelor: la fiecare 15 minute --}}
+                                            {{-- Programari casatorii: la fiecare 30 de minute --}}
+                                            {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : (($programare->serviciu == 2) ? 40 : 30))->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                 @endif
                                 @if ($ora_afisare->minute == 0)
                                     </div>
                                 @endif
                             @endwhile
                         </div>
+
+                    {{-- Programari evidenta persoanelor: la fiecare 40 minute - este un alt mod de afisare al orelor, mai simplist, pentru ca sunt si mai putine --}}
+                    @elseif($programare->serviciu == 2)
+                        @php
+                        $ora_afisare = \Carbon\Carbon::parse($ora_inceput);
+                        // $ora_afisare = $ora_afisare->startOfHour();
+
+                        $ora_sfarsit_afisare = \Carbon\Carbon::parse($ora_sfarsit);
+                        // $ora_sfarsit_afisare = ($ora_sfarsit_afisare->minute <> 00) ? $ora_sfarsit_afisare->endOfHour() : $ora_sfarsit_afisare;
+                        @endphp
+                        <div class="row">
+                            @while ($ora_afisare->lessThan($ora_sfarsit_afisare))
+
+                                {{-- @if ($ora_afisare->minute == 0) --}}
+                                    <div class="col-lg-12 mb-2 d-flex justify-content-center align-items-center">
+                                        {{-- <b>
+                                            Ora {{ $ora_afisare->isoFormat('HH') }} :
+                                        </b> --}}
+                                {{-- @endif --}}
+                                @if (($ora_afisare->greaterThanOrEqualTo($ora_inceput)) && ($ora_afisare->lessThan($ora_sfarsit)))
+                                    <form class="needs-validation mb-0" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-2">
+                                        @csrf
+
+                                            <input type="hidden" id="ora" name="ora" value="{{ $ora_afisare }}">
+                                            @if (in_array($ora_afisare->toTimeString(), $ore_disponibile))
+                                                <button type="submit" name=""
+                                                    class="btn btn-sm btn-success px-1 mx-1 text-white" style="">
+                                                        {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                                        -
+                                                        {{-- Programari evidenta persoanelor: la fiecare 15 minute --}}
+                                                        {{-- Programari casatorii: la fiecare 30 de minute --}}
+                                                        {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : (($programare->serviciu == 2) ? 40 : 30))->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                                </button>
+                                            @else
+                                                <button type="submit" name=""
+                                                    class="btn btn-sm btn-danger px-1 mx-1 text-white" disabled style="">
+                                                        {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                                        -
+                                                        {{-- Programari evidenta persoanelor: la fiecare 15 minute --}}
+                                                        {{-- Programari casatorii: la fiecare 30 de minute --}}
+                                                        {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : (($programare->serviciu == 2) ? 40 : 30))->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                                </button>
+                                            @endif
+
+                                    </form>
+                                @else
+                                    <button type="" name=""
+                                        class="btn btn-sm btn-secondary px-1 mx-1 text-white" disabled style="">
+                                            {{ $ora_afisare->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                            -
+                                            {{-- Programari evidenta persoanelor: la fiecare 15 minute --}}
+                                            {{-- Programari casatorii: la fiecare 30 de minute --}}
+                                            {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : (($programare->serviciu == 2) ? 40 : 30))->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                @endif
+                                {{-- @if ($ora_afisare->minute == 0) --}}
+                                    </div>
+                                {{-- @endif --}}
+                            @endwhile
+                        </div>
+
+                    @endif
 
                     <div class="row py-2 g-3 justify-content-center">
                         <div class="col-lg-4 d-grid">

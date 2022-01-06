@@ -24,10 +24,18 @@
                                         Depunerea cererii în vederea eliberării actului de identitate
                                         @break
                                     @case('transcrieri-certificate')
-                                        Transcrieri certificate
+                                        Transcrierii certificate
+                                        <br>
+                                        <small class="fs-5">
+                                            Depunere acte/documente în vederea Transcrierii de certificate/extrase emise de autoritățile străine
+                                        </small>
                                         @break
                                     @case('casatorii')
                                         Căsătorii
+                                        <br>
+                                        <small class="fs-5">
+                                            Depunere acte necesare în vederea oficierii căsătoriei
+                                        </small>
                                         @break
                                     @default
                                 @endswitch
@@ -146,6 +154,9 @@
 
                         @break
                     @case('casatorii')
+                        <p class="">
+                        Căsătoria se va oficia începând cu a 11-a zi de la data depunerii actelor până la 14 zile
+                        </p>
 
                         @break
                     @default
