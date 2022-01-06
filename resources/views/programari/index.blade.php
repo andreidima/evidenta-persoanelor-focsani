@@ -29,6 +29,8 @@
                     <div class="row mb-1 input-group custom-search-form justify-content-center">
                         <input type="text" class="form-control form-control-sm col-md-4 me-1 border rounded-pill" id="search_nume" name="search_nume" placeholder="Nume" autofocus
                                 value="{{ $search_nume }}">
+                        <input type="text" class="form-control form-control-sm col-md-4 me-1 border rounded-pill" id="search_prenume" name="search_prenume" placeholder="Prenume" autofocus
+                                value="{{ $search_prenume }}">
                         <div class="col-lg-4 d-flex">
                             <label for="search_data" class="mb-0 align-self-center me-1">Data:</label>
                             <vue2-datepicker
@@ -68,6 +70,7 @@
                         <tr class="" style="padding:2rem">
                             <th>Nr. Crt.</th>
                             <th>Nume</th>
+                            <th>Prenume</th>
                             <th class="text-center">Data</th>
                             <th class="text-center">Ora</th>
                             <th class="text-end">Acțiuni</th>
@@ -81,6 +84,9 @@
                                 </td>
                                 <td>
                                     <b>{{ $programare->nume ?? '' }}</b>
+                                </td>
+                                <td>
+                                    <b>{{ $programare->prenume ?? '' }}</b>
                                 </td>
                                 <td class="text-center">
                                     {{ $programare->data ? \Carbon\Carbon::parse($programare->data)->isoFormat('DD.MM.YYYY') : '' }}

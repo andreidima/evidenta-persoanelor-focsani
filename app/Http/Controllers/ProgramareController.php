@@ -20,6 +20,7 @@ class ProgramareController extends Controller
     public function index($serviciu = null)
     {
         $search_nume = \Request::get('search_nume');
+        $search_prenume = \Request::get('search_prenume');
         $search_data = \Request::get('search_data');
 
         $programari = Programare::
@@ -42,6 +43,9 @@ class ProgramareController extends Controller
             ->when($search_nume, function ($query, $search_nume) {
                 return $query->where('nume', 'like', '%' . $search_nume . '%');
             })
+            ->when($search_prenume, function ($query, $search_prenume) {
+                return $query->where('prenume', 'like', '%' . $search_prenume . '%');
+            })
             ->when($search_data, function ($query, $search_data) {
                 return $query->whereDate('data', '=', $search_data)
                             ->orderBy('ora');
@@ -50,7 +54,7 @@ class ProgramareController extends Controller
             })
             ->simplePaginate(25);
 
-        return view('programari.index', compact('programari', 'search_nume', 'search_data', 'serviciu'));
+        return view('programari.index', compact('programari', 'search_nume', 'search_prenume', 'search_data', 'serviciu'));
     }
 
     /**
@@ -197,6 +201,7 @@ class ProgramareController extends Controller
         return $request->validate(
             [
                 'nume' => 'required|max:500',
+                'prenume' => 'required|max:500',
                 'email' => 'nullable|max:500|email:rfc,dns',
                 'cnp' => 'nullable|numeric|integer|digits:13',
                 'data' => ['required',
@@ -542,6 +547,7 @@ class ProgramareController extends Controller
         $programare->fill(
             $request->validate([
                 'nume' => 'required|max:500',
+                'prenume' => 'nullable|max:500',
                 'email' => 'required|max:500|email:rfc,dns',
                 'cnp' => 'required|numeric|integer|digits:13',
                 'gdpr' => 'required',

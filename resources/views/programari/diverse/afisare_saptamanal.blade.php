@@ -78,7 +78,7 @@
                                         </span>
                                         -
                                                 <span>
-                                                    {{ $programare->nume }}
+                                                    {{ $programare->nume }} {{ $programare->prenume }}
                                                 </span>
                                     </td>
                                 @empty

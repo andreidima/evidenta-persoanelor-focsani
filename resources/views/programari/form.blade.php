@@ -36,6 +36,17 @@
         </div>
         <div class="row p-2 mb-0">
             <div class="col-lg-10 mb-2 mx-auto">
+                <label for="prenume" class="mb-0 ps-3">Prenume*:</label>
+                <input
+                    type="text"
+                    class="form-control form-control-sm rounded-pill {{ $errors->has('prenume') ? 'is-invalid' : '' }}"
+                    name="prenume"
+                    placeholder=""
+                    value="{{ old('prenume', $programare->prenume) }}">
+            </div>
+        </div>
+        <div class="row p-2 mb-0">
+            <div class="col-lg-10 mb-2 mx-auto">
                 <label for="email" class="mb-0 ps-3">Email:</label>
                 <input
                     type="text"

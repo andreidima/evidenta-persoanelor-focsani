@@ -112,7 +112,7 @@
                                     {{ \Carbon\Carbon::parse($ora->ora)->isoFormat('HH:mm') }}
                                 </td>
                                 <td style="padding: 0px 10px">
-                                    {{ $programare->nume }}
+                                    {{ $programare->nume }} {{ $programare->prenume }}
                                 </td>
                                 <td style="text-align: center">
                                     {{ $programare->cnp }}

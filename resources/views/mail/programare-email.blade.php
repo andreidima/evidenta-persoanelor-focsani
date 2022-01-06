@@ -30,6 +30,9 @@ Datele programării dumneavoastră sunt următoarele:
             Nume: {{ $programare->nume }}
         </li>
         <li>
+            Prenume: {{ $programare->prenume }}
+        </li>
+        <li>
             Email: {{ $programare->email }}
         </li>
         <li>

@@ -41,6 +41,14 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td class="pe-4">
+                                    Prenume
+                                </td>
+                                <td>
+                                    {{ $programare->prenume }}
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>
                                     Email
                                 </td>

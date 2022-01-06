@@ -102,6 +102,18 @@
                                 </div>
                                 <div class="row g-3 align-items-center">
                                     <div class="col-lg-2">
+                                        <label for="prenume" class="col-form-label">Prenume:</label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <label for="prenume" class="col-form-label">
+                                            <b>
+                                                {{ $programare->prenume }}
+                                            </b>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-lg-2">
                                         <label for="email" class="col-form-label">Email:</label>
                                     </div>
                                     <div class="col-lg-8">

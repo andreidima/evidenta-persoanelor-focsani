@@ -101,6 +101,20 @@
                                 </div>
                                 <div class="row g-3 align-items-center">
                                     <div class="col-lg-2">
+                                        <label for="prenume" class="col-form-label">Prenume*:</label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm rounded-pill {{ $errors->has('prenume') ? 'is-invalid' : '' }}"
+                                            name="prenume"
+                                            placeholder=""
+                                            value="{{ old('prenume', $programare->prenume) }}"
+                                            >
+                                    </div>
+                                </div>
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-lg-2">
                                         <label for="email" class="col-form-label">Email*:</label>
                                     </div>
                                     <div class="col-lg-8">
