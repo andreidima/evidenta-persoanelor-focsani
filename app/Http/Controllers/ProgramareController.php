@@ -547,7 +547,7 @@ class ProgramareController extends Controller
         $programare->fill(
             $request->validate([
                 'nume' => 'required|max:500',
-                'prenume' => 'nullable|max:500',
+                'prenume' => 'required|max:500',
                 'email' => 'required|max:500|email:rfc,dns',
                 'cnp' => 'required|numeric|integer|digits:13',
                 'gdpr' => 'required',
