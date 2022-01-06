@@ -132,7 +132,7 @@
                                     <div class="col-lg-12 border-start border-warning" style="border-width:5px !important"
                                     >
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input {{ $errors->has('gdpr') ? 'is-invalid' : '' }}" name="gdpr" value="1" required
+                                            <input type="checkbox" class="form-check-input {{ $errors->has('gdpr') ? 'is-invalid' : '' }}" name="gdpr" id="gdpr" value="1" required
                                             {{ old('gdpr', ($programare->gdpr ?? "0")) === "1" ? 'checked' : '' }}>
                                             <label class="form-check-label" for="gdpr">
                                                 * Sunt de acord cu prelucrarea datelor mele personale în conformitate cu Regulamentul (UE) 2016-679 - privind protecţia persoanelor fizice în ceea ce priveşte
@@ -146,7 +146,7 @@
                                     <div class="col-lg-12 border-start border-warning" style="border-width:5px !important"
                                     >
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input {{ $errors->has('acte_necesare') ? 'is-invalid' : '' }}" name="acte_necesare" value="1" required
+                                            <input type="checkbox" class="form-check-input {{ $errors->has('acte_necesare') ? 'is-invalid' : '' }}" name="acte_necesare" id="acte_necesare" value="1" required
                                             {{ old('acte_necesare', ($programare->acte_necesare ?? "0")) === "1" ? 'checked' : '' }}>
                                             <label class="form-check-label" for="acte_necesare">
                                                 * Am luat la cunoștinţă de ce acte sunt necesare

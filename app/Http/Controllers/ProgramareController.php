@@ -539,15 +539,33 @@ class ProgramareController extends Controller
             $programare = $request->session()->get($serviciu . '-programare');
         }
 
-        $request->validate([
-            'nume' => 'required|max:500',
-            'email' => 'required|max:500|email:rfc,dns',
-            'cnp' => 'required|numeric|integer|digits:13',
-            'gdpr' => 'required',
-            'acte_necesare' => 'required'
-        ]);
+        $programare->fill(
+            $request->validate([
+                'nume' => 'required|max:500',
+                'email' => 'required|max:500|email:rfc,dns',
+                'cnp' => 'required|numeric|integer|digits:13',
+                'gdpr' => 'required',
+                'acte_necesare' => 'required'
+            ])
+        );
 
-        $programare->fill($request->except(['gdpr', 'acte_necesare']));
+
+        // Verificare ca ora nu a fost aleasa intre timp de cand s-a inceput aceasta programare
+        $ore_disponibile = DB::table('programari_ore_de_program')->where('serviciu', $programare->serviciu)->where('ziua_din_saptamana', '=', \Carbon\Carbon::parse($programare->data)->dayOfWeekIso)->orderBy('ora')->pluck('ora')->all();
+        $ore_indisponibile = DB::table('programari')->where('serviciu', $programare->serviciu)->where('data', '=', $programare->data)->pluck('ora')->all();
+        $ore_disponibile = array_diff($ore_disponibile, $ore_indisponibile);
+
+        if ((!in_array(\Carbon\Carbon::parse($programare->ora)->toTimeString(), $ore_disponibile))) {
+            // Se salveaza datele introduse pentru a nu mai fi nevoie de introdus incă odată
+            $request->session()->put($serviciu . '-programare', $programare);
+
+            // Este intors inapoi, pentru a selecta alte date
+            return back()
+                ->with('eroare', 'Ne pare rău, dar ora aleasă a fost deja înregistrată de altă persoană. Vă rugăm să faceți altă programare.');
+        }
+
+
+        unset($programare->gdpr, $programare->acte_necesare);
 
         $programare->save();
 
