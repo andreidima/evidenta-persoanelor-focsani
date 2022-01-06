@@ -87,10 +87,10 @@
                                     </span>
                                 </td>
                                 <td class="text-center">
-                                    {{ $programare->nume }}
+                                    {{ $programare->nume }} {{ $programare->prenume }}
                                 </td>
                                 <td style="text-align: center">
-                                    {{ $programare->cnp }} {{ $programare->prenume }}
+                                    {{ $programare->cnp }}
                                 </td>
                             </tr>
                         @empty
