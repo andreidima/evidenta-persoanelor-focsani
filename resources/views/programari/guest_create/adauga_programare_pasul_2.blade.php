@@ -79,7 +79,7 @@
                     $ora_afisare = $ora_afisare->startOfHour();
 
                     $ora_sfarsit_afisare = \Carbon\Carbon::parse($ora_sfarsit);
-                    $ora_sfarsit_afisare = $ora_sfarsit_afisare->endOfHour();
+                    $ora_sfarsit_afisare = ($ora_sfarsit_afisare->minute <> 00) ? $ora_sfarsit_afisare->endOfHour() : $ora_sfarsit_afisare;
                     @endphp
                     <div class="row">
                             @while ($ora_afisare->lessThan($ora_sfarsit_afisare))

@@ -469,6 +469,10 @@ class ProgramareController extends Controller
         // Programari transcrieri certificate sau casatorii: la fiecare 30 de minute
         $ora_sfarsit->addMinutes(($programare->serviciu == 1) ? 15 : 30);
 
+        // if ($ora_sfarsit->minute == 00){
+        //     $ora_sfarsit->hour -= 1;
+        // }
+
         $ore_disponibile = DB::table('programari_ore_de_program')->where('serviciu', $programare->serviciu)->where('ziua_din_saptamana', '=', \Carbon\Carbon::parse($programare->data)->dayOfWeekIso)->orderBy('ora')->pluck('ora')->all();
         $ore_indisponibile = DB::table('programari')->where('serviciu', $programare->serviciu)->where('data', '=', $programare->data)->pluck('ora')->all();
         $ore_disponibile = array_diff($ore_disponibile, $ore_indisponibile);
