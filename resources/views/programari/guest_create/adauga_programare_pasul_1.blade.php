@@ -151,6 +151,15 @@
 
                         @break
                     @case('transcrieri-certificate')
+                        Vă rugăm selectați o zi de:
+                            <ul>
+                                <li>
+                                    <b>Marți</b>, dacă sunteți cetățean român cu domiciliul în municipiul Focșani, Vrancea;
+                                </li>
+                                <li>
+                                    <b>Miercuri</b>, dacă sunteți cetățean străin.
+                                </li>
+                            </ul>
 
                         @break
                     @case('casatorii')

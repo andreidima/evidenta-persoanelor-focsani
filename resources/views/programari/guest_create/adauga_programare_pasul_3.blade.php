@@ -135,20 +135,22 @@
                                             >
                                     </div>
                                 </div>
-                                <div class="row g-3 align-items-center">
-                                    <div class="col-lg-2">
-                                        <label for="cnp" class="col-form-label">CNP*:</label>
+                                @if (!(($programare->serviciu == 2) && (\Carbon\Carbon::parse($programare->data)->dayOfWeekIso == 3)))
+                                    <div class="row g-3 align-items-center">
+                                        <div class="col-lg-2">
+                                            <label for="cnp" class="col-form-label">CNP*:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input
+                                                type="text"
+                                                class="form-control form-control-sm rounded-pill {{ $errors->has('cnp') ? 'is-invalid' : '' }}"
+                                                name="cnp"
+                                                placeholder=""
+                                                value="{{ old('cnp', $programare->cnp) }}"
+                                                >
+                                        </div>
                                     </div>
-                                    <div class="col-lg-8">
-                                        <input
-                                            type="text"
-                                            class="form-control form-control-sm rounded-pill {{ $errors->has('cnp') ? 'is-invalid' : '' }}"
-                                            name="cnp"
-                                            placeholder=""
-                                            value="{{ old('cnp', $programare->cnp) }}"
-                                            >
-                                    </div>
-                                </div>
+                                @endif
 
                                 <div class="row g-3">
                                     <div class="col-lg-12 border-start border-warning" style="border-width:5px !important"

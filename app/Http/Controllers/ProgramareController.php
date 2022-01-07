@@ -10,6 +10,8 @@ use App\Mail\ProgramareEmail;
 
 use Illuminate\Http\Request;
 
+use Carbon\Carbon;
+
 class ProgramareController extends Controller
 {
     /**
@@ -549,12 +551,17 @@ class ProgramareController extends Controller
             $programare = $request->session()->get($serviciu . '-programare');
         }
 
+
         $programare->fill(
             $request->validate([
                 'nume' => 'required|max:500',
                 'prenume' => 'required|max:500',
                 'email' => 'required|max:500|email:rfc,dns',
-                'cnp' => 'required|numeric|integer|digits:13',
+
+                // CNP nu este obligatoriu pentru: Transcrieri certificate in zilele de miercuri (pentru cetateni straini, moldoveni, ce nu au inca buletin, cnp)
+                'cnp' => (($programare->serviciu == 2) && (Carbon::parse($programare->data)->dayOfWeekIso == 3)) ? 'nullable' : 'required'
+                    . '|numeric|integer|digits:13',
+
                 'gdpr' => 'required',
                 'acte_necesare' => 'required'
             ])
