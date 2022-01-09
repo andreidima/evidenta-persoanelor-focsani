@@ -180,13 +180,21 @@
                                 </div>
 
                                 <div class="row g-3 py-2 justify-content-center">
-                                    <div class="col-lg-3 py-2 d-grid">
+                                    <div class="col-lg-3 py-2 d-grid align-items-center">
                                         <a class="btn btn-primary text-white rounded-pill" href="/{{ $serviciu }}/programari/adauga-programare-pasul-2">Înapoi</a>
                                     </div>
                                     <div class="col-lg-6 py-2 d-grid">
-                                        <button type="submit" class="btn btn-success text-white rounded-pill">Înscrie programarea</button>
+                                        @if (session()->has($serviciu . '-programare-duplicat-in-DB'))
+                                            <button type="submit" class="btn btn-warning text-white rounded-pill">
+                                                Șterge programarea veche si salvează pe aceasta
+                                            </button>
+                                        @else
+                                            <button type="submit" class="btn btn-success text-white rounded-pill">
+                                                Înscrie programarea
+                                            </button>
+                                        @endif
                                     </div>
-                                    <div class="col-lg-3 py-2 d-grid">
+                                    <div class="col-lg-3 py-2 d-grid align-items-center">
                                         <a class="btn btn-primary text-white rounded-pill" href="https://evidentapersoanelorfocsani.ro/">Renunță</a>
                                     </div>
                                 </div>

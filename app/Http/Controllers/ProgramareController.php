@@ -77,7 +77,9 @@ class ProgramareController extends Controller
      */
     public function store(Request $request, $serviciu = null)
     {
-        $programare = Programare::create($this->validateRequest($request, $serviciu));
+        $programare = Programare::make($this->validateRequest($request, $serviciu));
+        $programare->cheie_unica = uniqid();
+        $programare->save();
 
         if (isset($programare->email)){
             \Mail::to($programare->email)
@@ -279,7 +281,8 @@ class ProgramareController extends Controller
     public function adaugaProgramareNoua(Request $request, $serviciu = null)
     {
         if(!empty($request->session()->get($serviciu . '-programare'))){
-            $programare = $request->session()->forget($serviciu . '-programare');
+            $request->session()->forget($serviciu . '-programare');
+            $request->session()->forget($serviciu . '-programare-duplicat-in-DB');
         }
 
         $programare = new Programare();
@@ -551,12 +554,11 @@ class ProgramareController extends Controller
             $programare = $request->session()->get($serviciu . '-programare');
         }
 
-
         $programare->fill(
             $request->validate([
                 'nume' => 'required|max:500',
                 'prenume' => 'required|max:500',
-                'email' => 'required|max:500|email:rfc,dns',
+                'email' => 'required|max:500|email',
 
                 // CNP nu este obligatoriu pentru: Transcrieri certificate in zilele de miercuri (pentru cetateni straini, moldoveni, ce nu au inca buletin, cnp)
                 'cnp' => (($programare->serviciu == 2) && (Carbon::parse($programare->data)->dayOfWeekIso == 3)) ? 'nullable' : 'required'
@@ -583,7 +585,28 @@ class ProgramareController extends Controller
         }
 
 
+        // Verificare daca nu cumva exista deja o viitoare programare pentru acest CNP, caz in care i se ofera alternativa sa pastreze programarea sau sa o modifice
+        if ($request->session()->has($serviciu . '-programare-duplicat-in-DB')){
+            // Daca exista deja in sesiune variabila programare_duplicat, inseamna ca utilizatorul a fost de acord sa o stearga pe cea veche
+            $programare_duplicat_in_DB = $request->session()->get($serviciu . '-programare-duplicat-in-DB');
+            $programare_duplicat_in_DB->delete();
+        } else{
+            // Daca nu exista in sesiune variabila programare_duplicat, o incarcam acum si ne intoarcem in formular sa atentionam utilizatorul
+            $programare_duplicat_in_DB = Programare::where('cnp', $programare->cnp)->where('serviciu', $programare->serviciu)->whereDate('data', '>', Carbon::today())->first();
+            if (!is_null($programare_duplicat_in_DB)){
+                $request->session()->put($serviciu . '-programare-duplicat-in-DB', $programare_duplicat_in_DB);
+                return back()->with('warning', 'Există deja o programare pentru acest CNP: ' . $programare_duplicat_in_DB->cnp . '
+                    pe numele ' . $programare_duplicat_in_DB->nume . ' ' . $programare_duplicat_in_DB->prenume . ' ,
+                    în data de '. Carbon::parse($programare_duplicat_in_DB->data)->dayName . ', ' . Carbon::parse($programare_duplicat_in_DB->data)->isoFormat('DD MMMM YYYY') .
+                    ', ora ' . Carbon::parse($programare_duplicat_in_DB->ora)->isoFormat('HH:mm') . '.
+                    Doriți să ștergeți vechea programarea, și să o înlocuiți cu cea de acum?.' );
+            }
+        }
+
+
         unset($programare->gdpr, $programare->acte_necesare);
+
+        $programare->cheie_unica = uniqid();
 
         $programare->save();
 
@@ -613,6 +636,7 @@ class ProgramareController extends Controller
         }
 
         $request->session()->forget($serviciu . '-programare');
+        $request->session()->forget($serviciu . '-programare-duplicat-in-DB');
 
         return view('programari.guest_create.adauga_programare_pasul_4', compact('serviciu', 'programare'));
     }

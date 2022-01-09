@@ -30,6 +30,8 @@ Route::get('/{serviciu}/programari/adauga-programare-pasul-3', [ProgramareContro
 Route::post('/{serviciu}/programari/adauga-programare-pasul-3', [ProgramareController::class, 'postAdaugaProgramarePasul3']);
 Route::get('/{serviciu}/programari/adauga-programare-pasul-4', [ProgramareController::class, 'adaugaProgramarePasul4']);
 
+Route::post('/{serviciu}/programari/stergere-programare/{programare}', [ProgramareController::class, 'stergereProgramare']);
+
 // Extras date cu Axios
 Route::get('/{serviciu}/programari/axios', [ProgramareController::class, 'axios']);
 
