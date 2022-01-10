@@ -600,7 +600,7 @@ class ProgramareController extends Controller
                         pe numele ' . $programare_duplicat_in_DB->nume . ' ' . $programare_duplicat_in_DB->prenume . ' ,
                         în data de '. Carbon::parse($programare_duplicat_in_DB->data)->dayName . ', ' . Carbon::parse($programare_duplicat_in_DB->data)->isoFormat('DD MMMM YYYY') .
                         ', ora ' . Carbon::parse($programare_duplicat_in_DB->ora)->isoFormat('HH:mm') . '.
-                        Doriți să ștergeți vechea programarea, și să o înlocuiți cu cea de acum?.' );
+                        Doriți să ștergeți vechea programarea, și să o înlocuiți cu cea de acum?' );
                 }
             }
         }
