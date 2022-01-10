@@ -641,6 +641,46 @@ class ProgramareController extends Controller
         return view('programari.guest_create.adauga_programare_pasul_4', compact('serviciu', 'programare'));
     }
 
+
+    /**
+     *
+     */
+    public function stergeProgramarePasul1(Request $request, $serviciu = null, $cheie_unica = null)
+    {
+        $programare = Programare::where('cheie_unica', $cheie_unica)->first();
+
+        // if (!is_null($programare)){
+            return view('programari.guest_delete.sterge_programare_pasul_1', compact('serviciu', 'cheie_unica', 'programare'));
+        // } else {
+        //     return redirect ('https://evidentapersoanelorfocsani.ro/');
+        // }
+    }
+
+    /**
+     *
+     */
+    public function postStergeProgramarePasul1(Request $request, $serviciu = null, $cheie_unica = null)
+    {
+        $programare = Programare::where('cheie_unica', $cheie_unica)->first();
+
+        if (!is_null($programare)){
+            $programare->delete();
+            return redirect('/' . $serviciu . '/programari/sterge-programare-pasul-2/' . $cheie_unica);
+        } else {
+            return redirect ('https://evidentapersoanelorfocsani.ro/');
+        }
+    }
+
+    /**
+     *
+     */
+    public function stergeProgramarePasul2(Request $request, $serviciu = null, $cheie_unica = null)
+    {
+        return view('programari.guest_delete.sterge_programare_pasul_2', compact('serviciu'));
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
