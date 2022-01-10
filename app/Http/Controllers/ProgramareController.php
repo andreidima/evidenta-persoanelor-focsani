@@ -586,20 +586,22 @@ class ProgramareController extends Controller
 
 
         // Verificare daca nu cumva exista deja o viitoare programare pentru acest CNP, caz in care i se ofera alternativa sa pastreze programarea sau sa o modifice
-        if ($request->session()->has($serviciu . '-programare-duplicat-in-DB')){
-            // Daca exista deja in sesiune variabila programare_duplicat, inseamna ca utilizatorul a fost de acord sa o stearga pe cea veche
-            $programare_duplicat_in_DB = $request->session()->get($serviciu . '-programare-duplicat-in-DB');
-            $programare_duplicat_in_DB->delete();
-        } else{
-            // Daca nu exista in sesiune variabila programare_duplicat, o incarcam acum si ne intoarcem in formular sa atentionam utilizatorul
-            $programare_duplicat_in_DB = Programare::where('cnp', $programare->cnp)->where('serviciu', $programare->serviciu)->whereDate('data', '>', Carbon::today())->first();
-            if (!is_null($programare_duplicat_in_DB)){
-                $request->session()->put($serviciu . '-programare-duplicat-in-DB', $programare_duplicat_in_DB);
-                return back()->with('warning', 'Există deja o programare pentru acest CNP: ' . $programare_duplicat_in_DB->cnp . '
-                    pe numele ' . $programare_duplicat_in_DB->nume . ' ' . $programare_duplicat_in_DB->prenume . ' ,
-                    în data de '. Carbon::parse($programare_duplicat_in_DB->data)->dayName . ', ' . Carbon::parse($programare_duplicat_in_DB->data)->isoFormat('DD MMMM YYYY') .
-                    ', ora ' . Carbon::parse($programare_duplicat_in_DB->ora)->isoFormat('HH:mm') . '.
-                    Doriți să ștergeți vechea programarea, și să o înlocuiți cu cea de acum?.' );
+        if ($programare->cnp){ //Daca programarea nu are CNP, este pentru transcrieri acte de miercuri, si se sare peste
+            if ($request->session()->has($serviciu . '-programare-duplicat-in-DB')){
+                // Daca exista deja in sesiune variabila programare_duplicat, inseamna ca utilizatorul a fost de acord sa o stearga pe cea veche
+                $programare_duplicat_in_DB = $request->session()->get($serviciu . '-programare-duplicat-in-DB');
+                $programare_duplicat_in_DB->delete();
+            } else{
+                // Daca nu exista in sesiune variabila programare_duplicat, o incarcam acum si ne intoarcem in formular sa atentionam utilizatorul
+                $programare_duplicat_in_DB = Programare::where('cnp', $programare->cnp)->where('serviciu', $programare->serviciu)->whereDate('data', '>', Carbon::today())->first();
+                if (!is_null($programare_duplicat_in_DB)){
+                    $request->session()->put($serviciu . '-programare-duplicat-in-DB', $programare_duplicat_in_DB);
+                    return back()->with('warning', 'Există deja o programare pentru acest CNP: ' . $programare_duplicat_in_DB->cnp . '
+                        pe numele ' . $programare_duplicat_in_DB->nume . ' ' . $programare_duplicat_in_DB->prenume . ' ,
+                        în data de '. Carbon::parse($programare_duplicat_in_DB->data)->dayName . ', ' . Carbon::parse($programare_duplicat_in_DB->data)->isoFormat('DD MMMM YYYY') .
+                        ', ora ' . Carbon::parse($programare_duplicat_in_DB->ora)->isoFormat('HH:mm') . '.
+                        Doriți să ștergeți vechea programarea, și să o înlocuiți cu cea de acum?.' );
+                }
             }
         }
 
