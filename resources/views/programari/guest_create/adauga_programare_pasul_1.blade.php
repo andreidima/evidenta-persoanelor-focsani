@@ -186,8 +186,8 @@
 
                 @for ($luna = 0; $luna <= 1 ; $luna++)
                     @php
-                        $luna_prima_zi = \Carbon\Carbon::today()->addMonth($luna)->startOfMonth();
-                        $luna_ultima_zi = \Carbon\Carbon::today()->addMonth($luna)->endOfMonth();
+                        $luna_prima_zi = \Carbon\Carbon::today()->addMonthsNoOverflow($luna)->startOfMonth();
+                        $luna_ultima_zi = \Carbon\Carbon::today()->addMonthsNoOverflow($luna)->endOfMonth();
                     @endphp
 
 
@@ -253,7 +253,7 @@
                                             <tr>
                                         @endif
 
-                                        @if ($ziua->month != \Carbon\Carbon::today()->addMonth($luna)->month)
+                                        @if ($ziua->month != \Carbon\Carbon::today()->addMonthsNoOverflow($luna)->month)
                                             <td class="" style="">
                                                 {{ $ziua->isoFormat('DD') }}
                                             </td>

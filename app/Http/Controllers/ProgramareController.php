@@ -210,7 +210,7 @@ class ProgramareController extends Controller
                 'cnp' => 'nullable|numeric|integer|digits:13',
                 'data' => ['required',
                     'after:today',
-                    'before:' . \Carbon\Carbon::today()->addMonth(1)->endOfMonth(),
+                    'before:' . \Carbon\Carbon::today()->addMonthsNoOverflow(1)->endOfMonth(),
                     function ($attribute, $value, $fail) use ($request) {
                         $data_selectata = \Carbon\Carbon::parse($value);
                         // dd($data_selectata, $value);
@@ -327,7 +327,7 @@ class ProgramareController extends Controller
         // dd($ore_disponibile, $ore_indisponibile);
         $data = \Carbon\Carbon::tomorrow();
         $zile_pline = array();
-        while ($data->lessThan(\Carbon\Carbon::today()->addMonth(1)->endOfMonth())){
+        while ($data->lessThan(\Carbon\Carbon::today()->addMonthsNoOverflow(1)->endOfMonth())){
             $ore_disponibile_la_data = $ore_disponibile->where('ziua_din_saptamana', $data->dayOfWeekIso)->pluck('ora')->toArray();
             $ore_indisponibile_la_data = $ore_indisponibile->where('data', $data->toDateString())->pluck('ora')->toArray();
 
@@ -417,7 +417,7 @@ class ProgramareController extends Controller
                     'required',
                     'date',
                     'after:today',
-                    'before:' . \Carbon\Carbon::today()->addMonth(1)->endOfMonth(),
+                    'before:' . \Carbon\Carbon::today()->addMonthsNoOverflow(1)->endOfMonth(),
                     function ($attribute, $value, $fail) use ($request, $programare) {
                         $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
                         // dd($programare->serviciu);
