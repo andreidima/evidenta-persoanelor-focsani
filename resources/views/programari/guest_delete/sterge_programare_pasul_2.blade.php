@@ -59,7 +59,7 @@
                     <div class="row">
                         <div class="col-lg-7 py-4 mx-auto">
                             <h5 class="ps-3 py-2 mb-0 text-center alert alert-success">
-                                Programarea dumneavoastră a fost ștearsă cu success!
+                                Programarea dumneavoastră a fost anulată cu success!
                             </h5>
                         </div>
 

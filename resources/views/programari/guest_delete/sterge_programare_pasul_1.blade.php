@@ -60,7 +60,7 @@
                     <div class="row">
                         <div class="col-lg-7 py-2 mx-auto">
                             <h5 class="ps-3 py-2 mb-0 text-center alert alert-danger">
-                                Doriți să vă ștergeți programarea din sistem?
+                                Doriți să vă anulați programarea din sistem?
                             </h5>
                         </div>
                         <div class="col-lg-6 mx-auto">
@@ -142,18 +142,24 @@
                             </div>
 
                             <div class="row g-3 justify-content-center">
-                                <form method="POST" action="/{{$serviciu}}/programari/sterge-programare-pasul-1/{{$cheie_unica}}">
-                                    @method('DELETE')
-                                    @csrf
-                                    <div class="col-lg-12 d-grid">
-                                        <button
-                                            type="submit"
-                                            class="btn btn-danger rounded-3 text-white"
-                                            >
-                                            Șterge Programare
-                                        </button>
-                                    </div>
-                                </form>
+                                @if (\Carbon\Carbon::parse($programare->data)->greaterThan(\Carbon\Carbon::today()))
+                                    <form method="POST" action="/{{$serviciu}}/programari/sterge-programare-pasul-1/{{$cheie_unica}}">
+                                        @method('DELETE')
+                                        @csrf
+                                        <div class="col-lg-12 d-grid">
+                                            <button
+                                                type="submit"
+                                                class="btn btn-danger rounded-3 text-white"
+                                                >
+                                                Anulează Programare
+                                            </button>
+                                        </div>
+                                    </form>
+                                @else
+                                    <h5 class="ps-3 py-2 mb-0 text-center alert alert-danger">
+                                        Această programare nu mai poate fi anulată. Programările se pot anula cu minim o zi înaintea datei programate.
+                                    </h5>
+                                @endif
                                 <div class="col-lg-12 d-grid">
                                     <a class="btn btn-secondary text-white rounded-3" href="https://evidentapersoanelorfocsani.ro/">Înapoi la site-ul principal</a>
                                 </div>

@@ -665,7 +665,7 @@ class ProgramareController extends Controller
     {
         $programare = Programare::where('cheie_unica', $cheie_unica)->first();
 
-        if (!is_null($programare)){
+        if (!is_null($programare) && (\Carbon\Carbon::parse($programare->data)->greaterThan(\Carbon\Carbon::today()))){
             $programare->delete();
             return redirect('/' . $serviciu . '/programari/sterge-programare-pasul-2/' . $cheie_unica);
         } else {

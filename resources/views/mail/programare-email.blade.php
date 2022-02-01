@@ -52,8 +52,8 @@ Dacă doriți să renunțați la programare, puteți face acest lucru de
 <a href="{{ config('app.url') }}/{{
         ($programare->serviciu == '1') ? 'evidenta-persoanelor' : (($programare->serviciu == '2') ? 'transcrieri-certificate' : (($programare->serviciu == '3') ? 'casatorii' : ''))
     }}/programari/sterge-programare-pasul-1/{{$programare->cheie_unica}}">
-    aici
-</a>
+    aici</a>.
+Programările se pot anula până în ziua datei programate.
 
 <br>
 <br>
