@@ -24,7 +24,7 @@
                                         Depunerea cererii în vederea eliberării actului de identitate
                                         @break
                                     @case('transcrieri-certificate')
-                                        Transcrierii certificate
+                                        Transcrieri certificate
                                         <br>
                                         <small class="fs-5">
                                             Depunere acte/documente în vederea Transcrierii de certificate/extrase emise de autoritățile străine
