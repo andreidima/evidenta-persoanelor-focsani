@@ -353,22 +353,47 @@ class ProgramareController extends Controller
                             break;
                         }
                     break;
-                case '2': // transcrieri-certificate: au program doar Marti si Miercuri
+                // case '2': // transcrieri-certificate: au program doar Marti si Miercuri
+                //     switch ($data->dayOfWeekIso) {
+                //         case '3':
+                //             $data->addDay(6);
+                //             break;
+                //         case '4':
+                //             $data->addDay(5);
+                //             break;
+                //         case '5':
+                //             $data->addDay(4);
+                //             break;
+                //         case '6':
+                //             $data->addDay(3);
+                //             break;
+                //         case '7':
+                //             $data->addDay(2);
+                //             break;
+                //         default:
+                //             $data->addDay(1);
+                //             break;
+                //         }
+                //     break;
+                case '2': // transcrieri-certificate: au program doar Miercuri
                     switch ($data->dayOfWeekIso) {
+                        case '1':
+                            $data->addDay(2);
+                            break;
                         case '3':
-                            $data->addDay(6);
+                            $data->addDay(7);
                             break;
                         case '4':
-                            $data->addDay(5);
+                            $data->addDay(6);
                             break;
                         case '5':
-                            $data->addDay(4);
+                            $data->addDay(5);
                             break;
                         case '6':
-                            $data->addDay(3);
+                            $data->addDay(4);
                             break;
                         case '7':
-                            $data->addDay(2);
+                            $data->addDay(3);
                             break;
                         default:
                             $data->addDay(1);
@@ -426,8 +451,11 @@ class ProgramareController extends Controller
                         if (
                             \Carbon\Carbon::parse($value)->isWeekend()
                             ||
-                            // transcrieri-certificate: se lucreaza doar 2 zile pe saptamana (nu luni, joi sau vineri)
-                            (($programare->serviciu == 2) && ($ziua->isMonday() || $ziua->isThursday() || $ziua->isFriday()))
+                            // // transcrieri-certificate: se lucreaza doar 2 zile pe saptamana (nu luni, joi sau vineri)
+                            // (($programare->serviciu == 2) && ($ziua->isMonday() || $ziua->isThursday() || $ziua->isFriday()))
+
+                            // transcrieri-certificate: se lucreaza doar 1 zi pe saptamana (nu luni, marti, joi sau vineri)
+                            (($programare->serviciu == 2) && ($ziua->isMonday() || $ziua->isTuesday() || $ziua->isThursday() || $ziua->isFriday()))
                             ||
                             (in_array($value, $zile_nelucratoare))) {
                             $fail('Data aleasă, ' . \Carbon\Carbon::parse($value)->isoFormat('DD.MM.YYYY') . ', nu este o zi lucrătoare');

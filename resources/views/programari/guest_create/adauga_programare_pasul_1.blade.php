@@ -260,8 +260,12 @@
                                         @elseif (
                                             ($ziua->isWeekend() == true)
                                             ||
-                                            // transcrieri-certificate: se lucreaza doar 2 zile pe saptamana (nu luni, joi sau vineri)
-                                            (($programare->serviciu == 2) && ($ziua->isMonday() || $ziua->isThursday() || $ziua->isFriday()))
+
+                                            // // transcrieri-certificate: se lucreaza doar 2 zile pe saptamana (nu luni, joi sau vineri)
+                                            // (($programare->serviciu == 2) && ($ziua->isMonday() || $ziua->isThursday() || $ziua->isFriday()))
+
+                                            // transcrieri-certificate: se lucreaza doar 1 zi pe saptamana (nu luni, marti, joi sau vineri)
+                                            (($programare->serviciu == 2) && ($ziua->isMonday() || $ziua->isTuesday() || $ziua->isThursday() || $ziua->isFriday()))
                                             ||
                                             ($ziua->lessThan(\Carbon\Carbon::tomorrow()))
                                             ||
