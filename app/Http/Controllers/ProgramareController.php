@@ -297,6 +297,9 @@ class ProgramareController extends Controller
             case 'casatorii':
                 $programare->serviciu = 3;
                 break;
+            case 'casatorii-oficieri':
+                $programare->serviciu = 456;
+                break;
             default:
                 # code...
                 break;
@@ -304,7 +307,46 @@ class ProgramareController extends Controller
 
         $request->session()->put($serviciu . '-programare', $programare);
 
-        return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
+        if ($programare->serviciu == 456){ // Doar pentru „Casatorii oficieri”, care au 3 locatii diferite
+            return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-0');
+        } else {
+            return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
+        }
+    }
+
+    // Doar pentru „Casatorii oficieri”, care au 3 locatii diferite
+    public function adaugaProgramarePasul0(Request $request, $serviciu = null)
+    {
+        if(empty($request->session()->get($serviciu . '-programare'))){
+            return redirect('/' . $serviciu . '/programari/adauga-programare-noua');
+        } else {
+            $programare = $request->session()->get($serviciu . '-programare');
+        }
+
+        return view('programari.guest_create.adauga_programare_pasul_1');
+    }
+
+    // Doar pentru „Casatorii oficieri”, care au 3 locatii diferite
+    public function postAdaugaProgramarePasul0(Request $request, $serviciu = null)
+    {
+        if(empty($request->session()->get($serviciu . '-programare'))){
+            return redirect('/' . $serviciu . '/programari/adauga-programare-noua');
+        } else {
+            $programare = $request->session()->get($serviciu . '-programare');
+        }
+
+        $request->validate([
+            'locatie' => 'integer|between:4,6'
+        ]);
+
+        $programare->serviciu = $request->locatie;
+
+        // Se sterge data si ora, de siguranta, pentru situatiile cand se foloseste butonul „Inapoi”
+        $programare->offsetUnset('data', 'ora');
+
+        $request->session()->put($serviciu . '-programare', $programare);
+
+        return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-2');
     }
 
     /**
@@ -353,28 +395,6 @@ class ProgramareController extends Controller
                             break;
                         }
                     break;
-                // case '2': // transcrieri-certificate: au program doar Marti si Miercuri
-                //     switch ($data->dayOfWeekIso) {
-                //         case '3':
-                //             $data->addDay(6);
-                //             break;
-                //         case '4':
-                //             $data->addDay(5);
-                //             break;
-                //         case '5':
-                //             $data->addDay(4);
-                //             break;
-                //         case '6':
-                //             $data->addDay(3);
-                //             break;
-                //         case '7':
-                //             $data->addDay(2);
-                //             break;
-                //         default:
-                //             $data->addDay(1);
-                //             break;
-                //         }
-                //     break;
                 case '2': // transcrieri-certificate: au program doar Miercuri
                     switch ($data->dayOfWeekIso) {
                         case '1':

@@ -22,6 +22,8 @@ Route::view('/acasa', 'acasa');
 Route::redirect('/', 'https://evidentapersoanelorfocsani.ro/');
 
 Route::get('/{serviciu}/programari/adauga-programare-noua', [ProgramareController::class, 'adaugaProgramareNoua']);
+Route::get('/{serviciu}/programari/adauga-programare-pasul-0', [ProgramareController::class, 'adaugaProgramarePasul1']); // Doar pentru „Casatorii oficieri”, care au 3 locatii diferite
+Route::post('/{serviciu}/programari/adauga-programare-pasul-0', [ProgramareController::class, 'postadaugaProgramarePasul1']); // Doar pentru „Casatorii oficieri”, care au 3 locatii diferite
 Route::get('/{serviciu}/programari/adauga-programare-pasul-1', [ProgramareController::class, 'adaugaProgramarePasul1']);
 Route::post('/{serviciu}/programari/adauga-programare-pasul-1', [ProgramareController::class, 'postadaugaProgramarePasul1']);
 Route::get('/{serviciu}/programari/adauga-programare-pasul-2', [ProgramareController::class, 'adaugaProgramarePasul2']);
