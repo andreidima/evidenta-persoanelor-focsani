@@ -433,6 +433,57 @@ class ProgramareController extends Controller
                             break;
                         }
                     break;
+                case '4': // casatorii-oficieri-sediu: au program in fiecare zi de lucru a saptamanii
+                    switch ($data->dayOfWeekIso) {
+                        case '5':
+                            $data->addDay(3);
+                            break;
+                        case '6':
+                            $data->addDay(2);
+                            break;
+                        default:
+                            $data->addDay(1);
+                            break;
+                        }
+                    break;
+                case '5': // casatorii-oficieri-foisor: au program doar sambata si duminica
+                    switch ($data->dayOfWeekIso) {
+                        case '1':
+                            $data->addDay(5);
+                            break;
+                        case '2':
+                            $data->addDay(4);
+                            break;
+                        case '3':
+                            $data->addDay(3);
+                            break;
+                        case '4':
+                            $data->addDay(2);
+                            break;
+                        case '5':
+                            $data->addDay(1);
+                            break;
+                        case '6':
+                            $data->addDay(1);
+                            break;
+                        case '7':
+                            $data->addDay(6);
+                            break;
+                        default:
+                            $data->addDay(1);
+                            break;
+                        }
+                    break;
+                case '6': // casatorii-oficieri-teatru: au program in fiecare zi a saptamanii
+                    switch ($data->dayOfWeekIso) {
+                        // case '1':
+                        //     $data->addDay(1);
+                        //     break;
+                        default:
+                            $data->addDay(1);
+                            break;
+                        }
+                    break;
                 }
         }
         // dd($ore_disponibile, $ore_indisponibile, $zile_pline);
