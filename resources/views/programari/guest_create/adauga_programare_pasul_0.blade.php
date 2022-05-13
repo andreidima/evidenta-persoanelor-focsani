@@ -37,7 +37,6 @@
                                             Depunere acte necesare în vederea oficierii căsătoriei
                                         </small>
                                         @break
-                                        @break
                                     @case('casatorii-oficieri')
                                         Căsătorii
                                         <br>
@@ -74,14 +73,50 @@
                     @case('casatorii')
 
                         @break
+                    @case('casatorii-oficieri')
+                        <div class="row">
+                            <div class="col-lg-12 text-center">
+                                <h5 class="ps-3 alert alert-warning text-start">
+                                    Selectați locația în care doriți sa aibă loc oficierea căsătoriei:
+                                </h5>
+                                <form class="needs-validation mb-3" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-0">
+                                    @csrf
+                                    <div class="" style="">
+                                        <input type="hidden" id="serviciu" name="serviciu" value="4">
+                                        <button type="submit" name=""
+                                            class="btn btn-success text-white" style="">
+                                            <b>Sediul S.P.C.L.E.P Focșani</b>
+                                        </button>
+                                    </div>
+                                </form>
+                                <form class="needs-validation mb-3" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-0">
+                                    @csrf
+                                    <div>
+                                        <input type="hidden" id="serviciu" name="serviciu" value="5">
+                                        <button type="submit" name=""
+                                            class="btn btn-success text-white" style="">
+                                            <b>Foișorul central din Grădina Publică</b>
+                                        </button>
+                                    </div>
+                                </form>
+                                <form class="needs-validation mb-3" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-0">
+                                    @csrf
+                                    <div>
+                                        <input type="hidden" id="serviciu" name="serviciu" value="6">
+                                        <button type="submit" name=""
+                                            class="btn btn-success text-white" style="">
+                                            <b>Teatrul Municipal Focșani „Mr. Gheorghe Pastia”</b>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        @break
                     @default
                 @endswitch
 
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                @endfor
+
 
 
                 </div>

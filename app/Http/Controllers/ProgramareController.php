@@ -323,7 +323,7 @@ class ProgramareController extends Controller
             $programare = $request->session()->get($serviciu . '-programare');
         }
 
-        return view('programari.guest_create.adauga_programare_pasul_1');
+        return view('programari.guest_create.adauga_programare_pasul_0', compact('serviciu'));
     }
 
     // Doar pentru „Casatorii oficieri”, care au 3 locatii diferite
@@ -336,17 +336,17 @@ class ProgramareController extends Controller
         }
 
         $request->validate([
-            'locatie' => 'integer|between:4,6'
+            'serviciu' => 'integer|between:4,6'
         ]);
 
-        $programare->serviciu = $request->locatie;
+        $programare->serviciu = $request->serviciu;
 
         // Se sterge data si ora, de siguranta, pentru situatiile cand se foloseste butonul „Inapoi”
         $programare->offsetUnset('data', 'ora');
 
         $request->session()->put($serviciu . '-programare', $programare);
 
-        return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-2');
+        return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
     }
 
     /**
