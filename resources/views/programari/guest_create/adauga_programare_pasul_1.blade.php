@@ -182,271 +182,197 @@
                     @case('evidenta-persoanelor')
                     @case('transcrieri-certificate')
                     @case('casatorii')
-                                <h5 class="ps-3 alert alert-warning">
-                                    Selectați o zi disponibilă din următoarele 2 luni calendaristice:
-                                </h5>
-
-                                <div class="row mb-0">
-                                    <div class="col-lg-12 ps-4 mb-0">
-                                        Legendă:
-                                        <span class="badge bg-success"><h6 class="mb-0">Zile cu ore disponibile</h6></span>
-                                        <span class="badge" style="background-color:rgb(219, 107, 107)"><h6 class="mb-0">Zile ocupate complet</h6></span>
-                                        <span class="badge" style="background-color:rgb(219, 219, 219); color:rgb(151, 0, 0)"><h6 class="mb-0">Zile indisponibile</h6></span>
-                                    </div>
-                                </div>
-
-                        @for ($luna = 0; $luna <= 1 ; $luna++)
-                            @php
-                                $luna_prima_zi = \Carbon\Carbon::today()->addMonthsNoOverflow($luna)->startOfMonth();
-                                $luna_ultima_zi = \Carbon\Carbon::today()->addMonthsNoOverflow($luna)->endOfMonth();
-                            @endphp
-
-
-
-                            <style>
-                            #lunar {
-                            border-collapse: collapse;
-                            color: rgb(151, 0, 0);
-                            margin: auto;
-                            }
-
-                            #lunar td, #lunar th {
-                            border: 1px solid rgb(0, 0, 0);
-                            padding: 8px;
-                            text-align: center;
-                            }
-
-                            #lunar th {
-                            padding-top: 12px;
-                            padding-bottom: 12px;
-                            }
-                            </style>
-
-                            <div class="row p-md-4 justify-content-center">
-                                <div class="table-responsive px-0" style="background-color: rgb(255, 255, 255)">
-                                    <table class="table align-middle" id="lunar" style="width: 100%">
-                                        <tr>
-                                            <th colspan="7">
-                                                <h5 class="mb-0">
-                                                    {{ ucfirst($luna_prima_zi->isoFormat('MMMM YYYY')) }}
-                                                </h5>
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th width="13%">
-                                                Luni
-                                            </th>
-                                            <th width="13%">
-                                                Marți
-                                            </th>
-                                            <th width="13%">
-                                                Miercuri
-                                            </th>
-                                            <th width="13%">
-                                                Joi
-                                            </th>
-                                            <th width="13%">
-                                                Vineri
-                                            </th>
-                                            <th width="13%">
-                                                Sâmbătă
-                                            </th>
-                                            <th width="13%">
-                                                Duminică
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            @for ($ziua = $luna_prima_zi->startOfWeek(); $ziua < $luna_ultima_zi->endOfWeek(); $ziua->addDay())
-                                            @php
-                                                // dd($ziua);
-                                            @endphp
-                                                @if (($ziua->isMonday() == true) && ($ziua->day > 1))
-                                                    <tr>
-                                                @endif
-
-                                                @if ($ziua->month != \Carbon\Carbon::today()->addMonthsNoOverflow($luna)->month)
-                                                    <td class="" style="">
-                                                        {{ $ziua->isoFormat('DD') }}
-                                                    </td>
-                                                @elseif (
-                                                    ($ziua->isWeekend() == true)
-                                                    ||
-
-                                                    // // transcrieri-certificate: se lucreaza doar 2 zile pe saptamana (nu luni, joi sau vineri)
-                                                    // (($programare->serviciu == 2) && ($ziua->isMonday() || $ziua->isThursday() || $ziua->isFriday()))
-
-                                                    // transcrieri-certificate: se lucreaza doar 1 zi pe saptamana (nu luni, marti, joi sau vineri)
-                                                    (($programare->serviciu == 2) && ($ziua->isMonday() || $ziua->isTuesday() || $ziua->isThursday() || $ziua->isFriday()))
-                                                    ||
-                                                    ($ziua->lessThan(\Carbon\Carbon::tomorrow()))
-                                                    ||
-                                                    (in_array($ziua->toDateString(), $zile_nelucratoare))
-                                                )
-                                                        <td class="" style="background-color:rgb(219, 219, 219)">
-                                                            {{ $ziua->isoFormat('DD') }}
-                                                        </td>
-                                                @elseif (in_array($ziua->toDateString(), $zile_pline))
-                                                        <td class="text-white" style="background-color:rgb(219, 107, 107)">
-                                                            {{ $ziua->isoFormat('DD') }}
-                                                        </td>
-                                                @else
-                                                    <td class="p-0" style="">
-                                                        <form class="needs-validation mb-0" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-1">
-                                                            @csrf
-                                                            <div class="d-grid" style="height:100%;width:100%;">
-                                                                <input type="hidden" id="data" name="data" value="{{ $ziua->toDateString(); }}">
-                                                                <button type="submit" name=""
-                                                                    class="btn btn-success text-white" style="">
-                                                                    <b>{{ $ziua->isoFormat('DD') }}</b>
-                                                                </button>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-                                                @endif
-
-                                                @if ($ziua->isSunday() == true)
-                                                    </tr>
-                                                @endif
-                                            @endfor
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        @endfor
+                        <h5 class="ps-3 alert alert-warning">
+                            Selectați o zi disponibilă din următoarele 2 luni calendaristice:
+                        </h5>
                         @break
                     @case('casatorii-oficieri')
-                                <h5 class="ps-3 alert alert-warning">
-                                    Selectați o zi disponibilă din următorul an calendaristic:
-                                </h5>
+                        <h5 class="ps-4 mb-4 text-center">
+                            Programări disponibile pentru:
+                            @switch($programare->serviciu)
+                                @case(4)
+                                    <b>Sediul S.P.C.L.E.P. Focșani</b>
+                                    @break
+                                @case(5)
+                                    <b>Foișorul central din Grădina Publică</b>
+                                    @break
+                                @case(6)
+                                    <b>Teatrul Municipal Focșani „Mr. Gheorghe Pastia”</b>
+                                    @break
+                                @default
 
-                                <div class="row mb-0">
-                                    <div class="col-lg-12 ps-4 mb-0">
-                                        Legendă:
-                                        <span class="badge bg-success"><h6 class="mb-0">Zile cu ore disponibile</h6></span>
-                                        <span class="badge" style="background-color:rgb(219, 107, 107)"><h6 class="mb-0">Zile ocupate complet</h6></span>
-                                        <span class="badge" style="background-color:rgb(219, 219, 219); color:rgb(151, 0, 0)"><h6 class="mb-0">Zile indisponibile</h6></span>
-                                    </div>
-                                </div>
+                            @endswitch
+                        </h5>
 
-                        @for ($luna = 0; $luna < 12 ; $luna++)
-                            @php
-                                $luna_prima_zi = \Carbon\Carbon::today()->addMonthsNoOverflow($luna)->startOfMonth();
-                                $luna_ultima_zi = \Carbon\Carbon::today()->addMonthsNoOverflow($luna)->endOfMonth();
-                            @endphp
-
-
-
-                            <style>
-                            #lunar {
-                            border-collapse: collapse;
-                            color: rgb(151, 0, 0);
-                            margin: auto;
-                            }
-
-                            #lunar td, #lunar th {
-                            border: 1px solid rgb(0, 0, 0);
-                            padding: 8px;
-                            text-align: center;
-                            }
-
-                            #lunar th {
-                            padding-top: 12px;
-                            padding-bottom: 12px;
-                            }
-                            </style>
-
-                            <div class="row p-md-4 justify-content-center">
-                                <div class="table-responsive px-0" style="background-color: rgb(255, 255, 255)">
-                                    <table class="table align-middle" id="lunar" style="width: 100%">
-                                        <tr>
-                                            <th colspan="7">
-                                                <h5 class="mb-0">
-                                                    {{ ucfirst($luna_prima_zi->isoFormat('MMMM YYYY')) }}
-                                                </h5>
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th width="13%">
-                                                Luni
-                                            </th>
-                                            <th width="13%">
-                                                Marți
-                                            </th>
-                                            <th width="13%">
-                                                Miercuri
-                                            </th>
-                                            <th width="13%">
-                                                Joi
-                                            </th>
-                                            <th width="13%">
-                                                Vineri
-                                            </th>
-                                            <th width="13%">
-                                                Sâmbătă
-                                            </th>
-                                            <th width="13%">
-                                                Duminică
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            @for ($ziua = $luna_prima_zi->startOfWeek(); $ziua < $luna_ultima_zi->endOfWeek(); $ziua->addDay())
-                                            @php
-                                                // dd($ziua);
-                                            @endphp
-                                                @if (($ziua->isMonday() == true) && ($ziua->day > 1))
-                                                    <tr>
-                                                @endif
-
-                                                @if ($ziua->month != \Carbon\Carbon::today()->addMonthsNoOverflow($luna)->month)
-                                                    <td class="" style="">
-                                                        {{ $ziua->isoFormat('DD') }}
-                                                    </td>
-                                                @elseif (
-                                                    // casatorii-oficieri - sediu - se lucreaza Luni - Vineri fara weekend
-                                                    (($programare->serviciu == 4) && ($ziua->isWeekend() == true))
-                                                    ||
-                                                    // casatorii-oficieri - foisor - se lucreaza doar in weekend
-                                                    (($programare->serviciu == 5) && ($ziua->isWeekDay() == true))
-                                                    ||
-                                                    // casatorii-oficieri - teatru - se lucreaza in fiecare zi
-
-                                                    ($ziua->lessThan(\Carbon\Carbon::tomorrow()))
-                                                    ||
-                                                    (in_array($ziua->toDateString(), $zile_nelucratoare))
-                                                )
-                                                        <td class="" style="background-color:rgb(219, 219, 219)">
-                                                            {{ $ziua->isoFormat('DD') }}
-                                                        </td>
-                                                @elseif (in_array($ziua->toDateString(), $zile_pline))
-                                                        <td class="text-white" style="background-color:rgb(219, 107, 107)">
-                                                            {{ $ziua->isoFormat('DD') }}
-                                                        </td>
-                                                @else
-                                                    <td class="p-0" style="">
-                                                        <form class="needs-validation mb-0" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-1">
-                                                            @csrf
-                                                            <div class="d-grid" style="height:100%;width:100%;">
-                                                                <input type="hidden" id="data" name="data" value="{{ $ziua->toDateString(); }}">
-                                                                <button type="submit" name=""
-                                                                    class="btn btn-success text-white" style="">
-                                                                    <b>{{ $ziua->isoFormat('DD') }}</b>
-                                                                </button>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-                                                @endif
-
-                                                @if ($ziua->isSunday() == true)
-                                                    </tr>
-                                                @endif
-                                            @endfor
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        @endfor
+                        <h5 class="ps-3 alert alert-warning">
+                            Selectați o zi disponibilă din următoarele 12 luni calendaristice:
+                        </h5>
+                    @break
                     @default
                 @endswitch
+
+                <div class="row mb-0">
+                    <div class="col-lg-12 ps-4 mb-0">
+                        Legendă:
+                        <span class="badge bg-success"><h6 class="mb-0">Zile cu ore disponibile</h6></span>
+                        <span class="badge" style="background-color:rgb(219, 107, 107)"><h6 class="mb-0">Zile ocupate complet</h6></span>
+                        <span class="badge" style="background-color:rgb(219, 219, 219); color:rgb(151, 0, 0)"><h6 class="mb-0">Zile indisponibile</h6></span>
+                    </div>
+                </div>
+
+                @switch($serviciu)
+                    @case('evidenta-persoanelor')
+                    @case('transcrieri-certificate')
+                    @case('casatorii')
+                        @php
+                            $nr_luni_disponibile = 2;
+                        @endphp
+                        @break
+                    @case('casatorii-oficieri')
+                        @php
+                            $nr_luni_disponibile = 12;
+                        @endphp
+                        @break
+                    @default
+                @endswitch
+
+                @for ($luna = 0; $luna < $nr_luni_disponibile ; $luna++)
+                    @php
+                        $luna_prima_zi = \Carbon\Carbon::today()->addMonthsNoOverflow($luna)->startOfMonth();
+                        $luna_ultima_zi = \Carbon\Carbon::today()->addMonthsNoOverflow($luna)->endOfMonth();
+                    @endphp
+
+
+
+                    <style>
+                    #lunar {
+                    border-collapse: collapse;
+                    color: rgb(151, 0, 0);
+                    margin: auto;
+                    }
+
+                    #lunar td, #lunar th {
+                    border: 1px solid rgb(0, 0, 0);
+                    padding: 8px;
+                    text-align: center;
+                    }
+
+                    #lunar th {
+                    padding-top: 12px;
+                    padding-bottom: 12px;
+                    }
+                    </style>
+
+                    <div class="row p-md-4 justify-content-center">
+                        <div class="table-responsive px-0" style="background-color: rgb(255, 255, 255)">
+                            <table class="table align-middle" id="lunar" style="width: 100%">
+                                <tr>
+                                    <th colspan="7">
+                                        <h5 class="mb-0">
+                                            {{ ucfirst($luna_prima_zi->isoFormat('MMMM YYYY')) }}
+                                        </h5>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th width="13%">
+                                        Luni
+                                    </th>
+                                    <th width="13%">
+                                        Marți
+                                    </th>
+                                    <th width="13%">
+                                        Miercuri
+                                    </th>
+                                    <th width="13%">
+                                        Joi
+                                    </th>
+                                    <th width="13%">
+                                        Vineri
+                                    </th>
+                                    <th width="13%">
+                                        Sâmbătă
+                                    </th>
+                                    <th width="13%">
+                                        Duminică
+                                    </th>
+                                </tr>
+                                <tr>
+                                    @for ($ziua = $luna_prima_zi->startOfWeek(); $ziua < $luna_ultima_zi->endOfWeek(); $ziua->addDay())
+                                    @php
+                                        // dd($ziua);
+                                    @endphp
+                                        @if (($ziua->isMonday() == true) && ($ziua->day > 1))
+                                            <tr>
+                                        @endif
+
+                                        @if ($ziua->month != \Carbon\Carbon::today()->addMonthsNoOverflow($luna)->month)
+                                            <td class="" style="">
+                                                {{ $ziua->isoFormat('DD') }}
+                                            </td>
+                                        @elseif (
+                                            // evidenta-persoanelor: nu se lucreaza in weekend
+                                            (($programare->serviciu == 1) && $ziua->isWeekend())
+                                            ||
+
+                                            // transcrieri-certificate: se lucreaza doar 1 zi pe saptamana, miercurea
+                                            (($programare->serviciu == 2) && (!$ziua->isWednesday()))
+                                            ||
+
+                                            // casatorii: nu se lucreaza in weekend
+                                            (($programare->serviciu == 3) && $ziua->isWeekend())
+                                            ||
+
+                                            // casatorii-oficieri - sediu - se lucreaza Luni - Vineri fara weekend
+                                            (($programare->serviciu == 4) && ($ziua->isWeekend() == true))
+                                            ||
+
+                                            // casatorii-oficieri - foisor - se lucreaza doar in weekend
+                                            (($programare->serviciu == 5) && ($ziua->isWeekDay() == true))
+                                            ||
+
+                                            ($ziua->lessThan(\Carbon\Carbon::tomorrow()))
+                                            ||
+                                            (in_array($ziua->toDateString(), $zile_nelucratoare))
+                                        )
+                                                <td class="" style="background-color:rgb(219, 219, 219)">
+                                                    {{ $ziua->isoFormat('DD') }}
+                                                </td>
+                                        @elseif (in_array($ziua->toDateString(), $zile_pline))
+                                                <td class="text-white" style="background-color:rgb(219, 107, 107)">
+                                                    {{ $ziua->isoFormat('DD') }}
+                                                </td>
+                                        @else
+                                            <td class="p-0" style="">
+                                                <form class="needs-validation mb-0" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-1">
+                                                    @csrf
+                                                    <div class="d-grid" style="height:100%;width:100%;">
+                                                        <input type="hidden" id="data" name="data" value="{{ $ziua->toDateString(); }}">
+                                                        <button type="submit" name=""
+                                                            class="btn btn-success text-white" style="">
+                                                            <b>{{ $ziua->isoFormat('DD') }}</b>
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </td>
+                                        @endif
+
+                                        @if ($ziua->isSunday() == true)
+                                            </tr>
+                                        @endif
+                                    @endfor
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                @endfor
+
+                @if ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6)
+                    <div class="row py-2 g-3 justify-content-center">
+                        <div class="col-lg-4 d-grid">
+                            <a class="btn btn-primary text-white rounded-pill" href="/{{ $serviciu }}/programari/adauga-programare-pasul-0">Înapoi</a>
+                        </div>
+                    </div>
+                @endif
 
 
                 </div>

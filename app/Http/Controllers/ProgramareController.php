@@ -37,6 +37,15 @@ class ProgramareController extends Controller
                     case 'casatorii':
                         $query->where('serviciu', 3);
                         break;
+                    case 'casatorii-oficieri-sediu':
+                        $query->where('serviciu', 4);
+                        break;
+                    case 'casatorii-oficieri-foisor':
+                        $query->where('serviciu', 5);
+                        break;
+                    case 'casatorii-oficieri-teatru':
+                        $query->where('serviciu', 6);
+                        break;
                     default:
                         # code...
                         break;
@@ -195,6 +204,15 @@ class ProgramareController extends Controller
             case 'casatorii':
                 $serviciu = 3;
                 break;
+            case 'casatorii-oficieri-sediu':
+                $serviciu = 4;
+                break;
+            case 'casatorii-oficieri-foisor':
+                $serviciu = 5;
+                break;
+            case 'casatorii-oficieri-teatru':
+                $serviciu = 6;
+                break;
             default:
                 # code...
                 break;
@@ -206,25 +224,32 @@ class ProgramareController extends Controller
             [
                 'nume' => 'required|max:500',
                 'prenume' => 'required|max:500',
-                'email' => 'nullable|max:500|email:rfc,dns',
                 'cnp' => 'nullable|numeric|integer|digits:13',
+
+                // Doar pentru casatorii-oficieri
+                'nume_sotie' => ($serviciu == 4 || $serviciu == 5 || $serviciu == 6) ? 'required|max:500' : '',
+                'prenume_sotie' => ($serviciu == 4 || $serviciu == 5 || $serviciu == 6) ? 'required|max:500' : '',
+                'cnp_sotie' => ($serviciu == 4 || $serviciu == 5 || $serviciu == 6) ? 'required|numeric|integer|digits:13' : '',
+                'telefon' => ($serviciu == 4 || $serviciu == 5 || $serviciu == 6) ? 'required|max:500' : '',
+
+                'email' => 'nullable|max:500|email:rfc,dns',
                 'data' => ['required',
                     'after:today',
-                    'before:' . \Carbon\Carbon::today()->addMonthsNoOverflow(1)->endOfMonth(),
-                    function ($attribute, $value, $fail) use ($request) {
-                        $data_selectata = \Carbon\Carbon::parse($value);
-                        // dd($data_selectata, $value);
-                        $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
-                        if (
-                            $data_selectata->isWeekend()
-                            ||
-                            // transcrieri-certificate: se lucreaza doar 2 zile pe saptamana (nu luni, joi sau vineri)
-                            (($request->serviciu == 2) && ($data_selectata->isMonday() || $data_selectata->isThursday() || $data_selectata->isFriday()))
-                            ||
-                            (in_array($value, $zile_nelucratoare))) {
-                            $fail('Data aleasă, ' . $data_selectata->isoFormat('DD.MM.YYYY') . ', nu este o zi lucrătoare');
-                        }
-                    },
+                    // 'before:' . \Carbon\Carbon::today()->addMonthsNoOverflow(1)->endOfMonth(),
+                    // function ($attribute, $value, $fail) use ($request) {
+                    //     $data_selectata = \Carbon\Carbon::parse($value);
+                    //     // dd($data_selectata, $value);
+                    //     $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
+                    //     if (
+                    //         $data_selectata->isWeekend()
+                    //         ||
+                    //         // transcrieri-certificate: se lucreaza doar 2 zile pe saptamana (nu luni, joi sau vineri)
+                    //         (($request->serviciu == 2) && ($data_selectata->isMonday() || $data_selectata->isThursday() || $data_selectata->isFriday()))
+                    //         ||
+                    //         (in_array($value, $zile_nelucratoare))) {
+                    //         $fail('Data aleasă, ' . $data_selectata->isoFormat('DD.MM.YYYY') . ', nu este o zi lucrătoare');
+                    //     }
+                    // },
                 ],
                 'ora' => [
                     'required',
@@ -290,28 +315,29 @@ class ProgramareController extends Controller
         switch ($serviciu) {
             case 'evidenta-persoanelor':
                 $programare->serviciu = 1;
+                $request->session()->put($serviciu . '-programare', $programare);
+                return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
                 break;
             case 'transcrieri-certificate':
                 $programare->serviciu = 2;
+                $request->session()->put($serviciu . '-programare', $programare);
+                return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
                 break;
             case 'casatorii':
                 $programare->serviciu = 3;
+                $request->session()->put($serviciu . '-programare', $programare);
+                return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
                 break;
             case 'casatorii-oficieri':
                 $programare->serviciu = 456;
+                $request->session()->put($serviciu . '-programare', $programare);
+                return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-0'); // Doar pentru „Casatorii oficieri”, care au 3 locatii diferite
                 break;
             default:
-                # code...
+                return redirect()->away('https://evidentapersoanelorfocsani.ro/');
                 break;
             }
 
-        $request->session()->put($serviciu . '-programare', $programare);
-
-        if ($programare->serviciu == 456){ // Doar pentru „Casatorii oficieri”, care au 3 locatii diferite
-            return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-0');
-        } else {
-            return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
-        }
     }
 
     // Doar pentru „Casatorii oficieri”, care au 3 locatii diferite
@@ -506,28 +532,55 @@ class ProgramareController extends Controller
         }
 
         $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
-
+// dd($programare->serviciu);
         $programare->fill(
             $request->validate([
                 'data' => [
                     'required',
                     'date',
                     'after:today',
-                    'before:' . \Carbon\Carbon::today()->addMonthsNoOverflow(1)->endOfMonth(),
+                    'before:' .
+                        // Pentru evidenta-persoanelor, transcrieri-certificate, casatorii: 2 luni
+                        // Pentru casatorii-oficieri: 12 luni
+                        \Carbon\Carbon::today()->addMonthsNoOverflow(
+                                ( ($programare->serviciu == 1) || ($programare->serviciu == 2) || ($programare->serviciu == 3) ) ?
+                                    1 // se adauga inca o luna
+                                    :
+                                    (
+                                        ( ($programare->serviciu == 4) || ($programare->serviciu == 5) || ($programare->serviciu == 6) ) ?
+                                        11 // se adauga inca 11 luni
+                                        :
+                                        0 // se adauga inca 0 luni - nu ar trebui sa se ajunga niciodata aici
+                                    )
+                            )->endOfMonth(),
                     function ($attribute, $value, $fail) use ($request, $programare) {
                         $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
                         // dd($programare->serviciu);
 
                         $ziua = \Carbon\Carbon::parse($value);
                         if (
-                            \Carbon\Carbon::parse($value)->isWeekend()
+                            // evidenta-persoanelor: nu se lucreaza in weekend
+                            (($programare->serviciu == 1) && $ziua->isWeekend())
                             ||
-                            // // transcrieri-certificate: se lucreaza doar 2 zile pe saptamana (nu luni, joi sau vineri)
-                            // (($programare->serviciu == 2) && ($ziua->isMonday() || $ziua->isThursday() || $ziua->isFriday()))
 
-                            // transcrieri-certificate: se lucreaza doar 1 zi pe saptamana (nu luni, marti, joi sau vineri)
-                            (($programare->serviciu == 2) && ($ziua->isMonday() || $ziua->isTuesday() || $ziua->isThursday() || $ziua->isFriday()))
+                            // transcrieri-certificate: se lucreaza doar 1 zi pe saptamana, miercurea
+                            (($programare->serviciu == 2) && (!$ziua->isWednesday()))
                             ||
+
+                            // casatorii: nu se lucreaza in weekend
+                            (($programare->serviciu == 3) && $ziua->isWeekend())
+                            ||
+
+                            // casatorii-oficieri - sediu - se lucreaza Luni - Vineri fara weekend
+                            (($programare->serviciu == 4) && ($ziua->isWeekend() == true))
+                            ||
+
+                            // casatorii-oficieri - foisor - se lucreaza doar in weekend
+                            (($programare->serviciu == 5) && ($ziua->isWeekDay() == true))
+                            ||
+
+                            // casatorii-oficieri - teatru - se lucreaza in fiecare zi
+
                             (in_array($value, $zile_nelucratoare))) {
                             $fail('Data aleasă, ' . \Carbon\Carbon::parse($value)->isoFormat('DD.MM.YYYY') . ', nu este o zi lucrătoare');
                         }
@@ -558,13 +611,39 @@ class ProgramareController extends Controller
         $prima_ora_din_program = \Carbon\Carbon::parse(
             DB::table('programari_ore_de_program')->where('serviciu', $programare->serviciu)->where('ziua_din_saptamana', '=', \Carbon\Carbon::parse($programare->data)->dayOfWeekIso)->orderBy('ora')->pluck('ora')->first()
         );
+        $ultima_ora_din_program = \Carbon\Carbon::parse(
+            DB::table('programari_ore_de_program')->where('serviciu', $programare->serviciu)->where('ziua_din_saptamana', '=', \Carbon\Carbon::parse($programare->data)->dayOfWeekIso)->orderBy('ora', 'desc')->pluck('ora')->first()
+        );
+
+        $ore_disponibile = DB::table('programari_ore_de_program')->where('serviciu', $programare->serviciu)->where('ziua_din_saptamana', '=', \Carbon\Carbon::parse($programare->data)->dayOfWeekIso)->orderBy('ora')->pluck('ora')->all();
+        $ore_indisponibile = DB::table('programari')->where('serviciu', $programare->serviciu)->where('data', '=', $programare->data)->orderBy('ora')->pluck('ora')->all();
+        $ore_disponibile = array_diff($ore_disponibile, $ore_indisponibile);
+
+        if ($programare->serviciu == 5){ // Programarile pentru foisor se pot face la maxim 45 minute distanta una de alta, pentru a nu fi goluri mari
+            if (count($ore_indisponibile) > 0){ // Daca exista macar o programare, ca altfel utilizatorul poate alege orice din program
+                // In varianta aceasta, intervalele sunt marcate ca „Perioada in afara programului”
+                // if ($prima_ora_din_program < Carbon::parse($ore_indisponibile[0])->subMinutes(45)){ // maxim 45 de minute inaintea primei programari
+                //     $prima_ora_din_program = Carbon::parse($ore_indisponibile[0])->subMinutes(45);
+                // }
+                // if ($ultima_ora_din_program > Carbon::parse($ore_indisponibile[count($ore_indisponibile)-1])->addMinutes(45)){ // maxim 45 de minute inaintea primei programari
+                //     $ultima_ora_din_program = Carbon::parse($ore_indisponibile[count($ore_indisponibile)-1])->addMinutes(45);
+                // }
+
+                // In varianta aceasta, intervalele sunt marcate ca „Perioada indisponibila”
+                $ore_disponibile = array_filter($ore_disponibile,function($ora) use($ore_indisponibile){
+                    return (
+                        ($ora) >= Carbon::parse($ore_indisponibile[0])->subMinutes(45)->toTimeString() // maxim 45 de minute inaintea primei programari
+                        &&
+                        ($ora) <= Carbon::parse($ore_indisponibile[count($ore_indisponibile)-1])->addMinutes(45)->toTimeString() // maxim 45 de minute dupa ultima programare
+                    );
+                });
+            }
+        }
+
         $ora_inceput = \Carbon\Carbon::today();
         $ora_inceput->hour = $prima_ora_din_program->hour;
         $ora_inceput->minute = $prima_ora_din_program->minute;
 
-        $ultima_ora_din_program = \Carbon\Carbon::parse(
-            DB::table('programari_ore_de_program')->where('serviciu', $programare->serviciu)->where('ziua_din_saptamana', '=', \Carbon\Carbon::parse($programare->data)->dayOfWeekIso)->orderBy('ora', 'desc')->pluck('ora')->first()
-        );
         $ora_sfarsit = \Carbon\Carbon::today();
         $ora_sfarsit->hour = $ultima_ora_din_program->hour;
         $ora_sfarsit->minute = $ultima_ora_din_program->minute;
@@ -572,15 +651,8 @@ class ProgramareController extends Controller
         // Programari evidenta persoanelor: la fiecare 15 minute
         // Programari transcrieri certificate: la fiecare 40 de minute
         // Programari casatorii: la fiecare 30 de minute
-        $ora_sfarsit->addMinutes(($programare->serviciu == 1) ? 15 : (($programare->serviciu == 2) ? 40 : 30));
-
-        // if ($ora_sfarsit->minute == 00){
-        //     $ora_sfarsit->hour -= 1;
-        // }
-
-        $ore_disponibile = DB::table('programari_ore_de_program')->where('serviciu', $programare->serviciu)->where('ziua_din_saptamana', '=', \Carbon\Carbon::parse($programare->data)->dayOfWeekIso)->orderBy('ora')->pluck('ora')->all();
-        $ore_indisponibile = DB::table('programari')->where('serviciu', $programare->serviciu)->where('data', '=', $programare->data)->pluck('ora')->all();
-        $ore_disponibile = array_diff($ore_disponibile, $ore_indisponibile);
+        // Programari casatorii-oficieri: la fiecare 15 de minute
+        $ora_sfarsit->addMinutes(($programare->serviciu == 1 || $programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? 15 : (($programare->serviciu == 2) ? 40 : 30));
 
         return view('programari.guest_create.adauga_programare_pasul_2', compact('serviciu', 'programare', 'ora_inceput', 'ora_sfarsit', 'ore_disponibile'));
     }
@@ -605,8 +677,20 @@ class ProgramareController extends Controller
                     'required',
                     function ($attribute, $value, $fail) use ($request, $programare) {
                         $ore_disponibile = DB::table('programari_ore_de_program')->where('serviciu', $programare->serviciu)->where('ziua_din_saptamana', '=', \Carbon\Carbon::parse($programare->data)->dayOfWeekIso)->orderBy('ora')->pluck('ora')->all();
-                        $ore_indisponibile = DB::table('programari')->where('serviciu', $programare->serviciu)->where('data', '=', $programare->data)->pluck('ora')->all();
+                        $ore_indisponibile = DB::table('programari')->where('serviciu', $programare->serviciu)->where('data', '=', $programare->data)->orderBy('ora')->pluck('ora')->all();
                         $ore_disponibile = array_diff($ore_disponibile, $ore_indisponibile);
+
+                        if ($programare->serviciu == 5){ // Programarile pentru foisor se pot face la maxim 45 minute distanta una de alta, pentru a nu fi goluri mari
+                            if (count($ore_indisponibile) > 0){ // Daca exista macar o programare, ca altfel utilizatorul poate alege orice din program
+                                $ore_disponibile = array_filter($ore_disponibile,function($ora) use($ore_indisponibile){
+                                    return (
+                                        ($ora) >= Carbon::parse($ore_indisponibile[0])->subMinutes(45)->toTimeString() // maxim 45 de minute inaintea primei programari
+                                        &&
+                                        ($ora) <= Carbon::parse($ore_indisponibile[count($ore_indisponibile)-1])->addMinutes(45)->toTimeString() // maxim 45 de minute dupa ultima programare
+                                    );
+                                });
+                            }
+                        }
 
                         if ((!in_array(\Carbon\Carbon::parse($value)->toTimeString(), $ore_disponibile))) {
                             $fail('Ora aleasă, ' . \Carbon\Carbon::parse($value)->isoFormat('HH:mm') . ', este indisponibilă');
@@ -657,17 +741,23 @@ class ProgramareController extends Controller
             $request->validate([
                 'nume' => 'required|max:500',
                 'prenume' => 'required|max:500',
-                'email' => 'required|max:500|email',
 
                 // CNP nu este obligatoriu pentru: Transcrieri certificate in zilele de miercuri (pentru cetateni straini, moldoveni, ce nu au inca buletin, cnp)
                 'cnp' => (($programare->serviciu == 2) && (Carbon::parse($programare->data)->dayOfWeekIso == 3)) ? 'nullable' : 'required'
                     . '|numeric|integer|digits:13',
 
+                // Doar pentru casatorii-oficieri
+                'nume_sotie' => ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? 'required|max:500' : '',
+                'prenume_sotie' => ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? 'required|max:500' : '',
+                'cnp_sotie' => ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? 'required|numeric|integer|digits:13' : '',
+                'telefon' => ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? 'required|max:500' : '',
+
+                'email' => 'required|max:500|email',
+
                 'gdpr' => 'required',
                 'acte_necesare' => 'required'
             ])
         );
-
 
         // Verificare ca ora nu a fost aleasa intre timp de cand s-a inceput aceasta programare
         $ore_disponibile = DB::table('programari_ore_de_program')->where('serviciu', $programare->serviciu)->where('ziua_din_saptamana', '=', \Carbon\Carbon::parse($programare->data)->dayOfWeekIso)->orderBy('ora')->pluck('ora')->all();
@@ -804,6 +894,15 @@ class ProgramareController extends Controller
                     case 'casatorii':
                         $query->where('serviciu', 3);
                         break;
+                    case 'casatorii-oficieri-sediu':
+                        $query->where('serviciu', 4);
+                        break;
+                    case 'casatorii-oficieri-foisor':
+                        $query->where('serviciu', 5);
+                        break;
+                    case 'casatorii-oficieri-teatru':
+                        $query->where('serviciu', 6);
+                        break;
                     default:
                         # code...
                         break;
@@ -824,6 +923,15 @@ class ProgramareController extends Controller
                         break;
                     case 'casatorii':
                         $query->where('serviciu', 3);
+                        break;
+                    case 'casatorii-oficieri-sediu':
+                        $query->where('serviciu', 4);
+                        break;
+                    case 'casatorii-oficieri-foisor':
+                        $query->where('serviciu', 5);
+                        break;
+                    case 'casatorii-oficieri-teatru':
+                        $query->where('serviciu', 6);
                         break;
                     default:
                         # code...
@@ -859,6 +967,15 @@ class ProgramareController extends Controller
                     case 'casatorii':
                         $query->where('serviciu', 3);
                         break;
+                    case 'casatorii-oficieri-sediu':
+                        $query->where('serviciu', 4);
+                        break;
+                    case 'casatorii-oficieri-foisor':
+                        $query->where('serviciu', 5);
+                        break;
+                    case 'casatorii-oficieri-teatru':
+                        $query->where('serviciu', 6);
+                        break;
                     default:
                         # code...
                         break;
@@ -879,6 +996,15 @@ class ProgramareController extends Controller
                         break;
                     case 'casatorii':
                         $query->where('serviciu', 3);
+                        break;
+                    case 'casatorii-oficieri-sediu':
+                        $query->where('serviciu', 4);
+                        break;
+                    case 'casatorii-oficieri-foisor':
+                        $query->where('serviciu', 5);
+                        break;
+                    case 'casatorii-oficieri-teatru':
+                        $query->where('serviciu', 6);
                         break;
                     default:
                         # code...
@@ -908,6 +1034,15 @@ class ProgramareController extends Controller
                     case 'casatorii':
                         $query->where('serviciu', 3);
                         break;
+                    case 'casatorii-oficieri-sediu':
+                        $query->where('serviciu', 4);
+                        break;
+                    case 'casatorii-oficieri-foisor':
+                        $query->where('serviciu', 5);
+                        break;
+                    case 'casatorii-oficieri-teatru':
+                        $query->where('serviciu', 6);
+                        break;
                     default:
                         # code...
                         break;
@@ -928,6 +1063,15 @@ class ProgramareController extends Controller
                         break;
                     case 'casatorii':
                         $query->where('serviciu', 3);
+                        break;
+                    case 'casatorii-oficieri-sediu':
+                        $query->where('serviciu', 4);
+                        break;
+                    case 'casatorii-oficieri-foisor':
+                        $query->where('serviciu', 5);
+                        break;
+                    case 'casatorii-oficieri-teatru':
+                        $query->where('serviciu', 6);
                         break;
                     default:
                         # code...

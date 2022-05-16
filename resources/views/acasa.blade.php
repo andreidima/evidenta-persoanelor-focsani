@@ -45,6 +45,24 @@
                                             Căsătorii
                                         </span>
                                     </a>
+                                    <br>
+                                    <a class="" href="/casatorii-oficieri-sediu/programari/afisare-zilnic">
+                                        <span class="badge bg-primary my-1 fs-5">
+                                            Căsătorii Sediu
+                                        </span>
+                                    </a>
+                                    <br>
+                                    <a class="" href="/casatorii-oficieri-foisor/programari/afisare-zilnic">
+                                        <span class="badge bg-primary my-1 fs-5">
+                                            Căsătorii Foișor
+                                        </span>
+                                    </a>
+                                    <br>
+                                    <a class="" href="/casatorii-oficieri-teatru/programari/afisare-zilnic">
+                                        <span class="badge bg-primary my-1 fs-5">
+                                            Căsătorii Teatru
+                                        </span>
+                                    </a>
                                 </div>
                             </div>
                         </div>

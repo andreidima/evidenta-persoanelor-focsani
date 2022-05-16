@@ -17,6 +17,15 @@
                             @case('casatorii')
                                 Căsătorii
                                 @break
+                            @case('casatorii-oficieri-sediu')
+                                Căsătorii Sediu
+                                @break
+                            @case('casatorii-oficieri-foisor')
+                                Căsătorii Foisor
+                                @break
+                            @case('casatorii-oficieri-teatru')
+                                Căsătorii Teatru
+                                @break
                             @default
                         @endswitch
                         - Programări

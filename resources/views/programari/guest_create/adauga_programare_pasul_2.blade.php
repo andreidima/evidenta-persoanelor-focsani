@@ -38,6 +38,13 @@
                                             Depunere acte necesare în vederea oficierii căsătoriei
                                         </small>
                                         @break
+                                    @case('casatorii-oficieri')
+                                        Căsătorii
+                                        <br>
+                                        <small class="fs-5">
+                                            Programare online în vederea oficierii căsătoriei
+                                        </small>
+                                        @break
                                     @default
                                 @endswitch
                             </h3>
@@ -56,12 +63,40 @@
 
                 @include ('errors')
 
-                    <h5 class="ps-4 mb-4 text-center">
-                        Programări disponibile pentru
+                @switch($serviciu)
+                    @case('evidenta-persoanelor')
+                    @case('transcrieri-certificate')
+                    @case('casatorii')
+                        <h5 class="ps-4 mb-4 text-center">
+                            Programări disponibile pentru
+                                <b>
+                                    {{ \Carbon\Carbon::parse($programare->data)->dayName }}, {{ \Carbon\Carbon::parse($programare->data)->isoFormat('DD MMMM YYYY') }}
+                                </b>
+                        </h5>
+                        @break
+                    @case('casatorii-oficieri')
+                        <h5 class="ps-4 mb-4 text-center">
+                            Programări disponibile pentru <br>
+                            @switch($programare->serviciu)
+                                @case(4)
+                                    <b>Sediul S.P.C.L.E.P. Focșani</b><br>
+                                    @break
+                                @case(5)
+                                    <b>Foișorul central din Grădina Publică</b><br>
+                                    @break
+                                @case(6)
+                                    <b>Teatrul Municipal Focșani „Mr. Gheorghe Pastia”</b><br>
+                                    @break
+                                @default
+                            @endswitch
                             <b>
                                 {{ \Carbon\Carbon::parse($programare->data)->dayName }}, {{ \Carbon\Carbon::parse($programare->data)->isoFormat('DD MMMM YYYY') }}
                             </b>
-                    </h5>
+                        </h5>
+
+                    @break
+                    @default
+                @endswitch
 
                     <div class="row">
                         <div class="col-lg-12 text-start">
@@ -84,7 +119,8 @@
 
                     {{-- Programari evidenta persoanelor: la fiecare 15 minute --}}
                     {{-- Programari casatorii: la fiecare 30 de minute --}}
-                    @if(($programare->serviciu == 1) || ($programare->serviciu == 3))
+                    {{-- Programari casatorii-oficieri: la fiecare 15 minute --}}
+                    @if(($programare->serviciu == 1) || ($programare->serviciu == 3) || ($programare->serviciu == 4) || ($programare->serviciu == 5) || ($programare->serviciu == 6))
                         @php
                         $ora_afisare = \Carbon\Carbon::parse($ora_inceput);
                         $ora_afisare = $ora_afisare->startOfHour();
@@ -113,7 +149,8 @@
                                                         -
                                                         {{-- Programari evidenta persoanelor: la fiecare 15 minute --}}
                                                         {{-- Programari casatorii: la fiecare 30 de minute --}}
-                                                        {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : (($programare->serviciu == 2) ? 40 : 30))->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                                        {{-- Programari casatorii-oficieri: la fiecare 15 minute --}}
+                                                        {{ $ora_afisare->addMinutes((($programare->serviciu == 1) || ($programare->serviciu == 4) || ($programare->serviciu == 5) || ($programare->serviciu == 6)) ? 15 : (($programare->serviciu == 2) ? 40 : 30))->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                                 </button>
                                             @else
                                                 <button type="submit" name=""
@@ -122,7 +159,8 @@
                                                         -
                                                         {{-- Programari evidenta persoanelor: la fiecare 15 minute --}}
                                                         {{-- Programari casatorii: la fiecare 30 de minute --}}
-                                                        {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : (($programare->serviciu == 2) ? 40 : 30))->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                                        {{-- Programari casatorii-oficieri: la fiecare 15 minute --}}
+                                                        {{ $ora_afisare->addMinutes((($programare->serviciu == 1) || ($programare->serviciu == 4) || ($programare->serviciu == 5) || ($programare->serviciu == 6)) ? 15 : (($programare->serviciu == 2) ? 40 : 30))->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                                 </button>
                                             @endif
 
@@ -134,7 +172,8 @@
                                             -
                                             {{-- Programari evidenta persoanelor: la fiecare 15 minute --}}
                                             {{-- Programari casatorii: la fiecare 30 de minute --}}
-                                            {{ $ora_afisare->addMinutes(($programare->serviciu == 1) ? 15 : (($programare->serviciu == 2) ? 40 : 30))->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
+                                            {{-- Programari casatorii-oficieri: la fiecare 15 minute --}}
+                                            {{ $ora_afisare->addMinutes((($programare->serviciu == 1) || ($programare->serviciu == 4) || ($programare->serviciu == 5) || ($programare->serviciu == 6)) ? 15 : (($programare->serviciu == 2) ? 40 : 30))->isoFormat('HH') }}:{{ $ora_afisare->isoFormat('mm') }}
                                 @endif
                                 @if ($ora_afisare->minute == 0)
                                     </div>
@@ -142,7 +181,7 @@
                             @endwhile
                         </div>
 
-                    {{-- Programari evidenta persoanelor: la fiecare 40 minute - este un alt mod de afisare al orelor, mai simplist, pentru ca sunt si mai putine --}}
+                    {{-- Programari transcrieri-certificate: la fiecare 40 minute - este un alt mod de afisare al orelor, mai simplist, pentru ca sunt si mai putine --}}
                     @elseif($programare->serviciu == 2)
                         @php
                         $ora_afisare = \Carbon\Carbon::parse($ora_inceput);

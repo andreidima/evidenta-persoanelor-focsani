@@ -84,8 +84,8 @@
                                     <div class="" style="">
                                         <input type="hidden" id="serviciu" name="serviciu" value="4">
                                         <button type="submit" name=""
-                                            class="btn btn-success text-white" style="">
-                                            <b>Sediul S.P.C.L.E.P Focșani</b>
+                                            class="btn btn-primary text-white" style="">
+                                            <h5 class="mb-0">Sediul S.P.C.L.E.P. Focșani</h5>
                                         </button>
                                     </div>
                                 </form>
@@ -94,8 +94,8 @@
                                     <div>
                                         <input type="hidden" id="serviciu" name="serviciu" value="5">
                                         <button type="submit" name=""
-                                            class="btn btn-success text-white" style="">
-                                            <b>Foișorul central din Grădina Publică</b>
+                                            class="btn btn-primary text-white" style="">
+                                            <h5 class="mb-0">Foișorul central din Grădina Publică</h5>
                                         </button>
                                     </div>
                                 </form>
@@ -104,8 +104,8 @@
                                     <div>
                                         <input type="hidden" id="serviciu" name="serviciu" value="6">
                                         <button type="submit" name=""
-                                            class="btn btn-success text-white" style="">
-                                            <b>Teatrul Municipal Focșani „Mr. Gheorghe Pastia”</b>
+                                            class="btn btn-primary text-white" style="">
+                                            <h5 class="mb-0">Teatrul Municipal Focșani „Mr. Gheorghe Pastia”</h5>
                                         </button>
                                     </div>
                                 </form>

@@ -19,31 +19,86 @@ V-ați programat la serviciul:
     @case('3')
         Căsătorii
         @break
+    @case('4')
+    @case('5')
+    @case('6')
+        Oficieri Căsătorii
+        @break
     @default
 @endswitch
 
 <br>
 
 Datele programării dumneavoastră sunt următoarele:
-<ul>
-        <li>
-            Nume: {{ $programare->nume }}
-        </li>
-        <li>
-            Prenume: {{ $programare->prenume }}
-        </li>
-        <li>
-            Email: {{ $programare->email }}
-        </li>
-        <li>
-            CNP: {{ $programare->cnp }}
-        </li>
-        <li>
-            Data: {{ \Carbon\Carbon::parse($programare->data)->dayName }}, {{ \Carbon\Carbon::parse($programare->data)->isoFormat('DD MMMM YYYY') }}
-        </li>
-        <li>
-            Ora: {{ \Carbon\Carbon::parse($programare->ora)->isoFormat('HH:mm') }}
-        </li>
+<ul style="margin: 0px">
+    <li>
+        Nume{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}: {{ $programare->nume }}
+    </li>
+    <li>
+        Prenume{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}: {{ $programare->prenume }}
+    </li>
+    <li>
+        CNP{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}: {{ $programare->cnp }}
+    </li>
+</ul>
+
+{{-- Doar pentru casatorii-oficieri --}}
+@if($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6)
+<ul style="margin: 0px">
+    <li>
+        Nume soție: {{ $programare->nume_sotie }}
+    </li>
+    <li>
+        Prenume soție: {{ $programare->prenume_sotie }}
+    </li>
+    <li>
+        CNP soție: {{ $programare->cnp_sotie }}
+    </li>
+    <li>
+        Telefon: {{ $programare->telefon }}
+    </li>
+</ul>
+@endif
+
+<ul style="margin: 0px">
+    <li>
+        Email: {{ $programare->email }}
+    </li>
+</ul>
+
+{{-- Doar pentru casatorii-oficieri --}}
+@switch($programare->serviciu)
+    @case(4)
+<ul style="margin: 0px">
+    <li>
+        Locație: Sediul S.P.C.L.E.P. Focșani
+    </li>
+</ul>
+    @break
+    @case(5)
+<ul style="margin: 0px">
+    <li>
+        Locație: Foișorul central din Grădina Publică
+    </li>
+</ul>
+    @break
+    @case(6)
+<ul style="margin: 0px">
+    <li>
+        Locație: Teatrul Municipal Focșani „Mr. Gheorghe Pastia”
+    </li>
+</ul>
+    @break
+    @default
+@endswitch
+
+<ul style="margin: 0px">
+    <li>
+        Data: {{ \Carbon\Carbon::parse($programare->data)->dayName }}, {{ \Carbon\Carbon::parse($programare->data)->isoFormat('DD MMMM YYYY') }}
+    </li>
+    <li>
+        Ora: {{ \Carbon\Carbon::parse($programare->ora)->isoFormat('HH:mm') }}
+    </li>
 </ul>
 
 <br>

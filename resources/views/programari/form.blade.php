@@ -9,23 +9,56 @@
                     <script type="application/javascript">
                         serviciu=1
                     </script>
+                    @php
+                        $programare->serviciu = 1;
+                    @endphp
                 @break
             @case('transcrieri-certificate')
                     <script type="application/javascript">
                         serviciu=2
                     </script>
+                    @php
+                        $programare->serviciu = 2;
+                    @endphp
                 @break
             @case('casatorii')
                     <script type="application/javascript">
                         serviciu=3
                     </script>
+                    @php
+                        $programare->serviciu = 3;
+                    @endphp
+                @break
+            @case('casatorii-oficieri-sediu')
+                    <script type="application/javascript">
+                        serviciu=4
+                    </script>
+                    @php
+                        $programare->serviciu = 4;
+                    @endphp
+                @break
+            @case('casatorii-oficieri-foisor')
+                    <script type="application/javascript">
+                        serviciu=5
+                    </script>
+                    @php
+                        $programare->serviciu = 5;
+                    @endphp
+                @break
+            @case('casatorii-oficieri-teatru')
+                    <script type="application/javascript">
+                        serviciu=6
+                    </script>
+                    @php
+                        $programare->serviciu = 6;
+                    @endphp
                 @break
             @default
         @endswitch
 
         <div class="row p-2 mb-0">
             <div class="col-lg-10 mb-2 mx-auto">
-                <label for="nume" class="mb-0 ps-3">Nume*:</label>
+                <label for="nume" class="mb-0 ps-3">Nume{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}*:</label>
                 <input
                     type="text"
                     class="form-control form-control-sm rounded-pill {{ $errors->has('nume') ? 'is-invalid' : '' }}"
@@ -36,7 +69,7 @@
         </div>
         <div class="row p-2 mb-0">
             <div class="col-lg-10 mb-2 mx-auto">
-                <label for="prenume" class="mb-0 ps-3">Prenume*:</label>
+                <label for="prenume" class="mb-0 ps-3">Prenume{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}*:</label>
                 <input
                     type="text"
                     class="form-control form-control-sm rounded-pill {{ $errors->has('prenume') ? 'is-invalid' : '' }}"
@@ -47,6 +80,68 @@
         </div>
         <div class="row p-2 mb-0">
             <div class="col-lg-10 mb-2 mx-auto">
+                <label for="cnp" class="mb-0 ps-3">CNP{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}:</label>
+                <input
+                    type="text"
+                    class="form-control form-control-sm rounded-pill {{ $errors->has('cnp') ? 'is-invalid' : '' }}"
+                    name="cnp"
+                    placeholder=""
+                    value="{{ old('cnp', $programare->cnp) }}"
+                    required>
+            </div>
+        </div>
+
+        @if ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6)
+            <div class="row p-2 mb-0">
+                <div class="col-lg-10 mb-2 mx-auto">
+                    <label for="nume_sotie" class="mb-0 ps-3">Nume soție:</label>
+                    <input
+                        type="text"
+                        class="form-control form-control-sm rounded-pill {{ $errors->has('nume_sotie') ? 'is-invalid' : '' }}"
+                        name="nume_sotie"
+                        placeholder=""
+                        value="{{ old('nume_sotie', $programare->nume_sotie) }}">
+                </div>
+            </div>
+            <div class="row p-2 mb-0">
+                <div class="col-lg-10 mb-2 mx-auto">
+                    <label for="prenume_sotie" class="mb-0 ps-3">Prenume soție:</label>
+                    <input
+                        type="text"
+                        class="form-control form-control-sm rounded-pill {{ $errors->has('prenume_sotie') ? 'is-invalid' : '' }}"
+                        name="prenume_sotie"
+                        placeholder=""
+                        value="{{ old('prenume_sotie', $programare->prenume_sotie) }}">
+                </div>
+            </div>
+            <div class="row p-2 mb-0">
+                <div class="col-lg-10 mb-2 mx-auto">
+                    <label for="cnp_sotie" class="mb-0 ps-3">CNP soție:</label>
+                    <input
+                        type="text"
+                        class="form-control form-control-sm rounded-pill {{ $errors->has('cnp_sotie') ? 'is-invalid' : '' }}"
+                        name="cnp_sotie"
+                        placeholder=""
+                        value="{{ old('cnp_sotie', $programare->cnp_sotie) }}"
+                        required>
+                </div>
+            </div>
+            <div class="row p-2 mb-0">
+                <div class="col-lg-10 mb-2 mx-auto">
+                    <label for="telefon" class="mb-0 ps-3">Telefon:</label>
+                    <input
+                        type="text"
+                        class="form-control form-control-sm rounded-pill {{ $errors->has('telefon') ? 'is-invalid' : '' }}"
+                        name="telefon"
+                        placeholder=""
+                        value="{{ old('telefon', $programare->telefon) }}"
+                        required>
+                </div>
+            </div>
+        @endif
+
+        <div class="row p-2 mb-0">
+            <div class="col-lg-10 mb-2 mx-auto">
                 <label for="email" class="mb-0 ps-3">Email:</label>
                 <input
                     type="text"
@@ -54,18 +149,6 @@
                     name="email"
                     placeholder=""
                     value="{{ old('email', $programare->email) }}"
-                    required>
-            </div>
-        </div>
-        <div class="row p-2 mb-0">
-            <div class="col-lg-10 mb-2 mx-auto">
-                <label for="cnp" class="mb-0 ps-3">CNP:</label>
-                <input
-                    type="text"
-                    class="form-control form-control-sm rounded-pill {{ $errors->has('cnp') ? 'is-invalid' : '' }}"
-                    name="cnp"
-                    placeholder=""
-                    value="{{ old('cnp', $programare->cnp) }}"
                     required>
             </div>
         </div>

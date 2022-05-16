@@ -18,6 +18,15 @@
                             @case('casatorii')
                                 Căsătorii
                                 @break
+                            @case('casatorii-oficieri-sediu')
+                                Căsătorii Sediu
+                                @break
+                            @case('casatorii-oficieri-foisor')
+                                Căsătorii Foisor
+                                @break
+                            @case('casatorii-oficieri-teatru')
+                                Căsătorii Teatru
+                                @break
                             @default
                         @endswitch
                         / Programări / {{ $programare->nume ?? '' }}</h6>
@@ -34,7 +43,7 @@
                         >
                             <tr>
                                 <td class="pe-4">
-                                    Nume
+                                    Nume{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}
                                 </td>
                                 <td>
                                     {{ $programare->nume }}
@@ -42,7 +51,7 @@
                             </tr>
                             <tr>
                                 <td class="pe-4">
-                                    Prenume
+                                    Prenume{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}
                                 </td>
                                 <td>
                                     {{ $programare->prenume }}
@@ -50,18 +59,54 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Email
+                                    CNP{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}
                                 </td>
                                 <td>
-                                    {{ $programare->email }}
+                                    {{ $programare->cnp }}
+                                </td>
+                            </tr>
+
+                            @if ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6)
+                            <tr>
+                                <td class="pe-4">
+                                    Nume soție
+                                </td>
+                                <td>
+                                    {{ $programare->nume_sotie }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pe-4">
+                                    Prenume soție
+                                </td>
+                                <td>
+                                    {{ $programare->prenume_sotie }}
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    CNP
+                                    CNP soție
                                 </td>
                                 <td>
-                                    {{ $programare->cnp }}
+                                    {{ $programare->cnp_sotie }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Telefon
+                                </td>
+                                <td>
+                                    {{ $programare->telefon }}
+                                </td>
+                            </tr>
+                            @endif
+
+                            <tr>
+                                <td>
+                                    Email
+                                </td>
+                                <td>
+                                    {{ $programare->email }}
                                 </td>
                             </tr>
                             <tr>

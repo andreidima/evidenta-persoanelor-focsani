@@ -38,6 +38,13 @@
                                             Depunere acte necesare în vederea oficierii căsătoriei
                                         </small>
                                         @break
+                                    @case('casatorii-oficieri')
+                                        Căsătorii
+                                        <br>
+                                        <small class="fs-5">
+                                            Programare online în vederea oficierii căsătoriei
+                                        </small>
+                                        @break
                                     @default
                                 @endswitch
                             </h3>
@@ -65,37 +72,66 @@
                             <form  class="mb-0 needs-validation" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-3">
                                 @csrf
 
-                                <div class="row g-3 align-items-center">
-                                    <div class="col-lg-2">
-                                        <label for="data" class="col-form-label">Data:</label>
+                                {{-- Serviciul casatorii-oficieri are si locatii, 3 la numar --}}
+                                @if($serviciu === 'casatorii-oficieri')
+                                <div class="row g-3 align-items-center mb-4">
+                                    <div class="col-lg-3">
+                                        <label for="locatie" class="col-form-label py-0">Locație:</label>
                                     </div>
                                     <div class="col-lg-8">
-                                        <label for="data" class="col-form-label">
+                                        <label for="locatie" class="col-form-label py-0">
+                                            <b>
+                                                @switch($programare->serviciu)
+                                                    @case(4)
+                                                        Sediul S.P.C.L.E.P. Focșani
+                                                        @break
+                                                    @case(5)
+                                                        Foișorul central din Grădina Publică
+                                                        @break
+                                                    @case(6)
+                                                        Teatrul Municipal Focșani „Mr. Gheorghe Pastia”
+                                                        @break
+                                                    @default
+                                                @endswitch
+                                            </b>
+                                        </label>
+                                    </div>
+                                </div>
+                                @endif
+
+                                <div class="row g-3 align-items-center mb-4">
+                                    <div class="col-lg-3">
+                                        <label for="data" class="col-form-label py-0">Data:</label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <label for="data" class="col-form-label py-0">
                                             <b>
                                                 {{ \Carbon\Carbon::parse($programare->data)->dayName }}, {{ \Carbon\Carbon::parse($programare->data)->isoFormat('DD MMMM YYYY') }}
                                             </b>
                                         </label>
                                     </div>
                                 </div>
-                                <div class="row g-3 align-items-center">
-                                    <div class="col-lg-2">
-                                        <label for="ora" class="col-form-label">Ora:</label>
+                                <div class="row g-3 align-items-center mb-4">
+                                    <div class="col-lg-3">
+                                        <label for="ora" class="col-form-label py-0">Ora:</label>
                                     </div>
                                     <div class="col-lg-8">
-                                        <label for="ora" class="col-form-label">
+                                        <label for="ora" class="col-form-label py-0">
                                             <b>
                                                 {{ \Carbon\Carbon::parse($programare->ora)->isoFormat('HH:mm') }}
                                                 -
                                                 {{-- Programari evidenta persoanelor: la fiecare 15 minute
-                                                Programari transcrieri certificate sau casatorii: la fiecare 30 de minute --}}
-                                                {{ \Carbon\Carbon::parse($programare->ora)->addMinutes(($programare->serviciu == 1) ? 15 : 30)->isoFormat('HH:mm') }}
+                                                Programari transcrieri certificate: la fiecare 40 de minute
+                                                Programari casatorii: la fiecare 30 de minute
+                                                Programari casatorii-oficieri: la fiecare 15 de minute --}}
+                                                {{ \Carbon\Carbon::parse($programare->ora)->addMinutes(($programare->serviciu == 1 || $programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? 15 : (($programare->serviciu == 2) ? 40 : 30))->isoFormat('HH:mm') }}
                                             </b>
                                         </label>
                                     </div>
                                 </div>
-                                <div class="row g-3 align-items-center">
-                                    <div class="col-lg-2">
-                                        <label for="nume" class="col-form-label">Nume*:</label>
+                                <div class="row g-3 align-items-center mb-4">
+                                    <div class="col-lg-3">
+                                        <label for="nume" class="col-form-label py-0">Nume{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}*:</label>
                                     </div>
                                     <div class="col-lg-8">
                                         <input
@@ -107,9 +143,9 @@
                                             >
                                     </div>
                                 </div>
-                                <div class="row g-3 align-items-center">
-                                    <div class="col-lg-2">
-                                        <label for="prenume" class="col-form-label">Prenume*:</label>
+                                <div class="row g-3 align-items-center mb-4">
+                                    <div class="col-lg-3">
+                                        <label for="prenume" class="col-form-label py-0">Prenume{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}*:</label>
                                     </div>
                                     <div class="col-lg-8">
                                         <input
@@ -121,24 +157,10 @@
                                             >
                                     </div>
                                 </div>
-                                <div class="row g-3 align-items-center">
-                                    <div class="col-lg-2">
-                                        <label for="email" class="col-form-label">Email*:</label>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <input
-                                            type="text"
-                                            class="form-control form-control-sm rounded-pill {{ $errors->has('email') ? 'is-invalid' : '' }}"
-                                            name="email"
-                                            placeholder=""
-                                            value="{{ old('email', $programare->email) }}"
-                                            >
-                                    </div>
-                                </div>
                                 @if (!(($programare->serviciu == 2) && (\Carbon\Carbon::parse($programare->data)->dayOfWeekIso == 3)))
-                                    <div class="row g-3 align-items-center">
-                                        <div class="col-lg-2">
-                                            <label for="cnp" class="col-form-label">CNP*:</label>
+                                    <div class="row g-3 align-items-center mb-4">
+                                        <div class="col-lg-3">
+                                            <label for="cnp" class="col-form-label py-0">CNP{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}*:</label>
                                         </div>
                                         <div class="col-lg-8">
                                             <input
@@ -151,6 +173,80 @@
                                         </div>
                                     </div>
                                 @endif
+
+                                @if ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6)
+                                    <div class="row g-3 align-items-center mb-4">
+                                        <div class="col-lg-3">
+                                            <label for="nume_sotie" class="col-form-label py-0">Nume soție*:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input
+                                                type="text"
+                                                class="form-control form-control-sm rounded-pill {{ $errors->has('nume_sotie') ? 'is-invalid' : '' }}"
+                                                name="nume_sotie"
+                                                placeholder=""
+                                                value="{{ old('nume_sotie', $programare->nume_sotie) }}"
+                                                >
+                                        </div>
+                                    </div>
+                                    <div class="row g-3 align-items-center mb-4">
+                                        <div class="col-lg-3">
+                                            <label for="prenume_sotie" class="col-form-label py-0">Prenume soție*:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input
+                                                type="text"
+                                                class="form-control form-control-sm rounded-pill {{ $errors->has('prenume_sotie') ? 'is-invalid' : '' }}"
+                                                name="prenume_sotie"
+                                                placeholder=""
+                                                value="{{ old('prenume_sotie', $programare->prenume_sotie) }}"
+                                                >
+                                        </div>
+                                    </div>
+                                    <div class="row g-3 align-items-center mb-4">
+                                        <div class="col-lg-3">
+                                            <label for="cnp_sotie" class="col-form-label py-0">CNP soție*:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input
+                                                type="text"
+                                                class="form-control form-control-sm rounded-pill {{ $errors->has('cnp_sotie') ? 'is-invalid' : '' }}"
+                                                name="cnp_sotie"
+                                                placeholder=""
+                                                value="{{ old('cnp_sotie', $programare->cnp_sotie) }}"
+                                                >
+                                        </div>
+                                    </div>
+                                    <div class="row g-3 align-items-center mb-4">
+                                        <div class="col-lg-3">
+                                            <label for="telefon" class="col-form-label py-0">Telefon*:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input
+                                                type="text"
+                                                class="form-control form-control-sm rounded-pill {{ $errors->has('telefon') ? 'is-invalid' : '' }}"
+                                                name="telefon"
+                                                placeholder=""
+                                                value="{{ old('telefon', $programare->telefon) }}"
+                                                >
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="row g-3 align-items-center mb-4">
+                                    <div class="col-lg-3">
+                                        <label for="email" class="col-form-label py-0">Email*:</label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm rounded-pill {{ $errors->has('email') ? 'is-invalid' : '' }}"
+                                            name="email"
+                                            placeholder=""
+                                            value="{{ old('email', $programare->email) }}"
+                                            >
+                                    </div>
+                                </div>
 
                                 <div class="row g-3">
                                     <div class="col-lg-12 border-start border-warning" style="border-width:5px !important"
@@ -173,7 +269,7 @@
                                             <input type="checkbox" class="form-check-input {{ $errors->has('acte_necesare') ? 'is-invalid' : '' }}" name="acte_necesare" id="acte_necesare" value="1" required
                                             {{ old('acte_necesare', ($programare->acte_necesare ?? "0")) === "1" ? 'checked' : '' }}>
                                             <label class="form-check-label" for="acte_necesare">
-                                                * Am luat la cunoștinţă de ce acte sunt necesare
+                                                * Am luat la cunoștinţă de ce acte sunt necesare. Toate informațiile se regăsesc pe site-ul <a href="https://evidentapersoanelorfocsani.ro/" target="_blank">www.evidentapersoanelorfocsani.ro</a>
                                             </label>
                                         </div>
                                     </div>

@@ -30,7 +30,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background-color: darkcyan">
             <div class="container">
-                <a class="navbar-brand me-5" href="{{ url('/') }}">
+                <a class="navbar-brand me-5" href="{{ url('/acasa') }}">
                     {{ config('app.name', 'Evidența persoanelor Focșani') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -142,6 +142,70 @@
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider">
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item me-3 dropdown">
+                            <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-ring me-1"></i>
+                                Căsătorii - oficieri
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="/casatorii-oficieri-sediu/programari">
+                                        <i class="fas fa-calendar-check me-1"></i>
+                                        Sediu - Programări
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/casatorii-oficieri-sediu/programari/afisare-saptamanal">
+                                        <i class="fas fa-calendar-check me-1"></i>
+                                        Sediu - Programări săptămânal
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/casatorii-oficieri-sediu/programari/afisare-zilnic">
+                                        <i class="fas fa-print me-1"></i>
+                                        Sediu - Printează programări
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="/casatorii-oficieri-foisor/programari">
+                                        <i class="fas fa-calendar-check me-1"></i>
+                                        Foișor - Programări
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/casatorii-oficieri-foisor/programari/afisare-saptamanal">
+                                        <i class="fas fa-calendar-check me-1"></i>
+                                        Foișor - Programări săptămânal
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/casatorii-oficieri-foisor/programari/afisare-zilnic">
+                                        <i class="fas fa-print me-1"></i>
+                                        Foișor - Printează programări
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="/casatorii-oficieri-teatru/programari">
+                                        <i class="fas fa-calendar-check me-1"></i>
+                                        Teatru - Programări
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/casatorii-oficieri-teatru/programari/afisare-saptamanal">
+                                        <i class="fas fa-calendar-check me-1"></i>
+                                        Teatru - Programări săptămânal
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/casatorii-oficieri-teatru/programari/afisare-zilnic">
+                                        <i class="fas fa-print me-1"></i>
+                                        Teatru - Printează programări
+                                    </a>
                                 </li>
                             </ul>
                         </li>

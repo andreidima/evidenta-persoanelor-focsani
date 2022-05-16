@@ -8,16 +8,25 @@
                 <a href="/{{ $serviciu }}/programari/afisare-saptamanal">
                     <i class="fas fa-calendar-check me-1"></i>
                     @switch($serviciu)
-                        @case('evidenta-persoanelor')
-                            Evidența persoanelor
-                            @break
-                        @case('transcrieri-certificate')
-                            Transcrieri certificate
-                            @break
-                        @case('casatorii')
-                            Căsătorii
-                            @break
-                        @default
+                            @case('evidenta-persoanelor')
+                                Evidența persoanelor
+                                @break
+                            @case('transcrieri-certificate')
+                                Transcrieri certificate
+                                @break
+                            @case('casatorii')
+                                Căsătorii
+                                @break
+                            @case('casatorii-oficieri-sediu')
+                                Căsătorii Sediu
+                                @break
+                            @case('casatorii-oficieri-foisor')
+                                Căsătorii Foisor
+                                @break
+                            @case('casatorii-oficieri-teatru')
+                                Căsătorii Teatru
+                                @break
+                            @default
                     @endswitch
                     - Programări săptămânal
                 </a>
