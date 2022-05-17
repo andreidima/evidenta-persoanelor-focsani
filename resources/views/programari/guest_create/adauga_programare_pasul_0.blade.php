@@ -75,37 +75,174 @@
                         @break
                     @case('casatorii-oficieri')
                         <div class="row">
-                            <div class="col-lg-12 text-center">
+                            <div class="col-lg-12">
+                                <p class="ms-3">Programarea online se poate înregistra cu cel puțin 12 zile înainte de încheierea căsătoriei.</p>
                                 <h5 class="ps-3 alert alert-warning text-start">
                                     Selectați locația în care doriți sa aibă loc oficierea căsătoriei:
                                 </h5>
+                            </div>
+                            <div class="col-lg-4">
                                 <form class="needs-validation mb-3" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-0">
                                     @csrf
-                                    <div class="" style="">
+                                    <div class="d-grid gap-0" style="">
                                         <input type="hidden" id="serviciu" name="serviciu" value="4">
                                         <button type="submit" name=""
                                             class="btn btn-primary text-white" style="">
                                             <h5 class="mb-0">Sediul S.P.C.L.E.P. Focșani</h5>
                                         </button>
+                                        <table class="fs-6 table table-sm table-striped table-hover mb-0 border">
+                                            <tr>
+                                                <td class="">
+                                                    Luni
+                                                </td>
+                                                <td class="text-center">
+                                                    09:00 - 16:00
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Marți
+                                                </td>
+                                                <td class="text-center">
+                                                    09:00 - 16:00
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pe-4">
+                                                    Miercuri
+                                                </td>
+                                                <td class="text-center">
+                                                    09:00 - 16:00
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Joi
+                                                </td>
+                                                <td class="text-center">
+                                                    09:00 - 16:00
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Vineri
+                                                </td>
+                                                <td class="text-center">
+                                                    09:00 - 16:00
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <button type="submit" name=""
+                                            class="btn btn-success text-white" style="">
+                                            <h5 class="mb-0">Selectează</h5>
+                                        </button>
                                     </div>
                                 </form>
+                            </div>
+                            <div class="col-lg-4">
                                 <form class="needs-validation mb-3" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-0">
                                     @csrf
-                                    <div>
+                                    <div class="d-grid gap-0" style="">
                                         <input type="hidden" id="serviciu" name="serviciu" value="5">
                                         <button type="submit" name=""
                                             class="btn btn-primary text-white" style="">
                                             <h5 class="mb-0">Foișorul central din Grădina Publică</h5>
                                         </button>
+                                        <table class="fs-6 table table-sm table-striped table-hover mb-0 border">
+                                            <tr>
+                                                <td class="">
+                                                    Sâmbătă
+                                                </td>
+                                                <td class="text-center">
+                                                    16:00 - 19:00
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Duminică
+                                                </td>
+                                                <td class="text-center">
+                                                    16:00 - 19:00
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <button type="submit" name=""
+                                            class="btn btn-success text-white" style="">
+                                            <h5 class="mb-0">Selectează</h5>
+                                        </button>
                                     </div>
                                 </form>
+                            </div>
+                            <div class="col-lg-4">
                                 <form class="needs-validation mb-3" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-0">
                                     @csrf
-                                    <div>
+                                    <div class="d-grid gap-0" style="">
                                         <input type="hidden" id="serviciu" name="serviciu" value="6">
                                         <button type="submit" name=""
                                             class="btn btn-primary text-white" style="">
                                             <h5 class="mb-0">Teatrul Municipal Focșani „Mr. Gheorghe Pastia”</h5>
+                                        </button>
+                                        <table class="fs-6 table table-sm table-striped table-hover mb-0 border" style="">
+                                            <tr>
+                                                <td class="">
+                                                    Luni
+                                                </td>
+                                                <td class="text-center">
+                                                    09:00 - 15:00
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Marți
+                                                </td>
+                                                <td class="text-center">
+                                                    09:00 - 15:00
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pe-4">
+                                                    Miercuri
+                                                </td>
+                                                <td class="text-center">
+                                                    09:00 - 15:00
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Joi
+                                                </td>
+                                                <td class="text-center">
+                                                    09:00 - 15:00
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Vineri
+                                                </td>
+                                                <td class="text-center">
+                                                    09:00 - 15:00
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">
+                                                    Sâmbătă
+                                                </td>
+                                                <td class="text-center">
+                                                    09:00 - 14:00
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Duminică
+                                                </td>
+                                                <td class="text-center">
+                                                    09:00 - 14:00
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <button type="submit" name=""
+                                            class="btn btn-success text-white" style="">
+                                            <h5 class="mb-0">Selectează</h5>
                                         </button>
                                     </div>
                                 </form>

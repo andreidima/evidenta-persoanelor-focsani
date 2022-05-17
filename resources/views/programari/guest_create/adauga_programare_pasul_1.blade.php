@@ -330,8 +330,14 @@
                                             (($programare->serviciu == 5) && ($ziua->isWeekDay() == true))
                                             ||
 
-                                            ($ziua->lessThan(\Carbon\Carbon::tomorrow()))
+                                            // evidenta-persoanelor, transcrieri-certificate, casatorii - programarile se pot face incepand de maine
+                                            (($programare->serviciu == 1 || $programare->serviciu == 2 || $programare->serviciu == 3) && $ziua->lessThan(\Carbon\Carbon::tomorrow()))
                                             ||
+
+                                            // casatorii-oficieri - programarile se pot face cu cel putin 12 zile inainte
+                                            (($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) && $ziua->lessThan(\Carbon\Carbon::today()->addDays(12)))
+                                            ||
+
                                             (in_array($ziua->toDateString(), $zile_nelucratoare))
                                         )
                                                 <td class="" style="background-color:rgb(219, 219, 219)">

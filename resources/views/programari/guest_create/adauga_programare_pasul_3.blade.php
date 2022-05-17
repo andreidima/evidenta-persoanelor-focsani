@@ -14,7 +14,7 @@
                     "
                 >
                     <div class="row">
-                        <div class="col-lg-12 mb-4 d-flex justify-content-between align-items-end">
+                        <div class="col-lg-12 mb-3 d-flex justify-content-between align-items-end">
                             <h3 class="ms-3 my-2" style="color:#ffffff"><i class="fas fa-users fa-lg me-1"></i>Evidența persoanelor Focșani</h3>
                             {{-- <img src="{{ asset('images/logo.png') }}" height="70" class="mr-3"> --}}
                         </div>
@@ -68,13 +68,13 @@
                     </h3> --}}
 
                     <div class="row">
-                        <div class="col-lg-6 mx-auto">
+                        <div class="col-lg-7 mx-auto">
                             <form  class="mb-0 needs-validation" novalidate method="POST" action="/{{ $serviciu }}/programari/adauga-programare-pasul-3">
                                 @csrf
 
                                 {{-- Serviciul casatorii-oficieri are si locatii, 3 la numar --}}
                                 @if($serviciu === 'casatorii-oficieri')
-                                <div class="row g-3 align-items-center mb-4">
+                                <div class="row g-3 align-items-center mb-3">
                                     <div class="col-lg-3">
                                         <label for="locatie" class="col-form-label py-0">Locație:</label>
                                     </div>
@@ -99,7 +99,7 @@
                                 </div>
                                 @endif
 
-                                <div class="row g-3 align-items-center mb-4">
+                                <div class="row g-3 align-items-center mb-3">
                                     <div class="col-lg-3">
                                         <label for="data" class="col-form-label py-0">Data:</label>
                                     </div>
@@ -111,7 +111,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="row g-3 align-items-center mb-4">
+                                <div class="row g-3 align-items-center mb-3">
                                     <div class="col-lg-3">
                                         <label for="ora" class="col-form-label py-0">Ora:</label>
                                     </div>
@@ -129,28 +129,28 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="row g-3 align-items-center mb-4">
+                                <div class="row g-3 align-items-center mb-3">
                                     <div class="col-lg-3">
                                         <label for="nume" class="col-form-label py-0">Nume{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}*:</label>
                                     </div>
                                     <div class="col-lg-8">
                                         <input
                                             type="text"
-                                            class="form-control form-control-sm rounded-pill {{ $errors->has('nume') ? 'is-invalid' : '' }}"
+                                            class="form-control rounded-pill {{ $errors->has('nume') ? 'is-invalid' : '' }}"
                                             name="nume"
                                             placeholder=""
                                             value="{{ old('nume', $programare->nume) }}"
                                             >
                                     </div>
                                 </div>
-                                <div class="row g-3 align-items-center mb-4">
+                                <div class="row g-3 align-items-center mb-3">
                                     <div class="col-lg-3">
                                         <label for="prenume" class="col-form-label py-0">Prenume{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}*:</label>
                                     </div>
                                     <div class="col-lg-8">
                                         <input
                                             type="text"
-                                            class="form-control form-control-sm rounded-pill {{ $errors->has('prenume') ? 'is-invalid' : '' }}"
+                                            class="form-control rounded-pill {{ $errors->has('prenume') ? 'is-invalid' : '' }}"
                                             name="prenume"
                                             placeholder=""
                                             value="{{ old('prenume', $programare->prenume) }}"
@@ -158,14 +158,14 @@
                                     </div>
                                 </div>
                                 @if (!(($programare->serviciu == 2) && (\Carbon\Carbon::parse($programare->data)->dayOfWeekIso == 3)))
-                                    <div class="row g-3 align-items-center mb-4">
+                                    <div class="row g-3 align-items-center mb-3">
                                         <div class="col-lg-3">
                                             <label for="cnp" class="col-form-label py-0">CNP{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}*:</label>
                                         </div>
                                         <div class="col-lg-8">
                                             <input
                                                 type="text"
-                                                class="form-control form-control-sm rounded-pill {{ $errors->has('cnp') ? 'is-invalid' : '' }}"
+                                                class="form-control rounded-pill {{ $errors->has('cnp') ? 'is-invalid' : '' }}"
                                                 name="cnp"
                                                 placeholder=""
                                                 value="{{ old('cnp', $programare->cnp) }}"
@@ -175,56 +175,56 @@
                                 @endif
 
                                 @if ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6)
-                                    <div class="row g-3 align-items-center mb-4">
+                                    <div class="row g-3 align-items-center mb-3">
                                         <div class="col-lg-3">
                                             <label for="nume_sotie" class="col-form-label py-0">Nume soție*:</label>
                                         </div>
                                         <div class="col-lg-8">
                                             <input
                                                 type="text"
-                                                class="form-control form-control-sm rounded-pill {{ $errors->has('nume_sotie') ? 'is-invalid' : '' }}"
+                                                class="form-control rounded-pill {{ $errors->has('nume_sotie') ? 'is-invalid' : '' }}"
                                                 name="nume_sotie"
                                                 placeholder=""
                                                 value="{{ old('nume_sotie', $programare->nume_sotie) }}"
                                                 >
                                         </div>
                                     </div>
-                                    <div class="row g-3 align-items-center mb-4">
+                                    <div class="row g-3 align-items-center mb-3">
                                         <div class="col-lg-3">
                                             <label for="prenume_sotie" class="col-form-label py-0">Prenume soție*:</label>
                                         </div>
                                         <div class="col-lg-8">
                                             <input
                                                 type="text"
-                                                class="form-control form-control-sm rounded-pill {{ $errors->has('prenume_sotie') ? 'is-invalid' : '' }}"
+                                                class="form-control rounded-pill {{ $errors->has('prenume_sotie') ? 'is-invalid' : '' }}"
                                                 name="prenume_sotie"
                                                 placeholder=""
                                                 value="{{ old('prenume_sotie', $programare->prenume_sotie) }}"
                                                 >
                                         </div>
                                     </div>
-                                    <div class="row g-3 align-items-center mb-4">
+                                    <div class="row g-3 align-items-center mb-3">
                                         <div class="col-lg-3">
                                             <label for="cnp_sotie" class="col-form-label py-0">CNP soție*:</label>
                                         </div>
                                         <div class="col-lg-8">
                                             <input
                                                 type="text"
-                                                class="form-control form-control-sm rounded-pill {{ $errors->has('cnp_sotie') ? 'is-invalid' : '' }}"
+                                                class="form-control rounded-pill {{ $errors->has('cnp_sotie') ? 'is-invalid' : '' }}"
                                                 name="cnp_sotie"
                                                 placeholder=""
                                                 value="{{ old('cnp_sotie', $programare->cnp_sotie) }}"
                                                 >
                                         </div>
                                     </div>
-                                    <div class="row g-3 align-items-center mb-4">
+                                    <div class="row g-3 align-items-center mb-3">
                                         <div class="col-lg-3">
                                             <label for="telefon" class="col-form-label py-0">Telefon*:</label>
                                         </div>
                                         <div class="col-lg-8">
                                             <input
                                                 type="text"
-                                                class="form-control form-control-sm rounded-pill {{ $errors->has('telefon') ? 'is-invalid' : '' }}"
+                                                class="form-control rounded-pill {{ $errors->has('telefon') ? 'is-invalid' : '' }}"
                                                 name="telefon"
                                                 placeholder=""
                                                 value="{{ old('telefon', $programare->telefon) }}"
@@ -233,14 +233,14 @@
                                     </div>
                                 @endif
 
-                                <div class="row g-3 align-items-center mb-4">
+                                <div class="row g-3 align-items-center mb-3">
                                     <div class="col-lg-3">
                                         <label for="email" class="col-form-label py-0">Email*:</label>
                                     </div>
                                     <div class="col-lg-8">
                                         <input
                                             type="text"
-                                            class="form-control form-control-sm rounded-pill {{ $errors->has('email') ? 'is-invalid' : '' }}"
+                                            class="form-control rounded-pill {{ $errors->has('email') ? 'is-invalid' : '' }}"
                                             name="email"
                                             placeholder=""
                                             value="{{ old('email', $programare->email) }}"

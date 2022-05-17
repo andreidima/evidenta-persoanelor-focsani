@@ -17,7 +17,6 @@ use App\Http\Controllers\ProgramareController;
 
 Auth::routes(['register' => false, 'password.request' => false, 'reset' => false]);
 
-Route::view('/acasa', 'acasa');
 
 Route::redirect('/', 'https://evidentapersoanelorfocsani.ro/');
 
@@ -51,6 +50,8 @@ Route::get('/{serviciu}/programari/axios2', function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::view('/acasa', 'acasa');
+
     Route::get('/{serviciu}/programari/afisare-saptamanal', [ProgramareController::class, 'afisare_saptamanal']);
     Route::get('/{serviciu}/programari/afisare-zilnic', [ProgramareController::class, 'afisare_zilnic']);
     Route::get('/{serviciu}/programari/export/{data}/{view_type}', [ProgramareController::class, 'PdfExportPeZi']);
