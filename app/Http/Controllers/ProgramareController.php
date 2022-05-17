@@ -347,6 +347,8 @@ class ProgramareController extends Controller
             return redirect('/' . $serviciu . '/programari/adauga-programare-noua');
         } else {
             $programare = $request->session()->get($serviciu . '-programare');
+            // Se sterge programarea duplicat, pentru situatiile cand se foloseste butonul „Inapoi”
+            $request->session()->forget($serviciu . '-programare-duplicat-in-DB');
         }
 
         return view('programari.guest_create.adauga_programare_pasul_0', compact('serviciu'));
@@ -386,6 +388,8 @@ class ProgramareController extends Controller
             return redirect('/' . $serviciu . '/programari/adauga-programare-noua');
         } else {
             $programare = $request->session()->get($serviciu . '-programare');
+            // Se sterge programarea duplicat, pentru situatiile cand se foloseste butonul „Inapoi”
+            $request->session()->forget($serviciu . '-programare-duplicat-in-DB');
         }
 
         $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
@@ -606,6 +610,8 @@ class ProgramareController extends Controller
             return redirect('/' . $serviciu . '/programari/adauga-programare-noua');
         } else {
             $programare = $request->session()->get($serviciu . '-programare');
+            // Se sterge programarea duplicat, pentru situatiile cand se foloseste butonul „Inapoi”
+            $request->session()->forget($serviciu . '-programare-duplicat-in-DB');
         }
 
         $prima_ora_din_program = \Carbon\Carbon::parse(
@@ -782,7 +788,15 @@ class ProgramareController extends Controller
                 $programare_duplicat_in_DB->delete();
             } else{
                 // Daca nu exista in sesiune variabila programare_duplicat, o incarcam acum si ne intoarcem in formular sa atentionam utilizatorul
-                $programare_duplicat_in_DB = Programare::where('cnp', $programare->cnp)->where('serviciu', $programare->serviciu)->whereDate('data', '>', Carbon::today())->first();
+
+                // Pentru evidenta-persoanelor, transcrieri-certificate, casatorii, se verifica doar in serviciul respectiv
+                // Pentru casatorii-oficieri, se verifica in 3 servicii, pentru sediu, foisor si teatru
+                if ($programare->serviciu == 1 || $programare->serviciu == 2 || $programare->serviciu == 3) {
+                    $programare_duplicat_in_DB = Programare::where('cnp', $programare->cnp)->where('serviciu', $programare->serviciu)->whereDate('data', '>', Carbon::today())->first();
+                } else if ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) {
+                    $programare_duplicat_in_DB = Programare::where('cnp', $programare->cnp)->whereIn('serviciu', [4,5,6])->whereDate('data', '>', Carbon::today())->first();
+                }
+
                 if (!is_null($programare_duplicat_in_DB)){
                     $request->session()->put($serviciu . '-programare-duplicat-in-DB', $programare_duplicat_in_DB);
                     return back()->with('warning', 'Există deja o programare pentru acest CNP: ' . $programare_duplicat_in_DB->cnp . '
