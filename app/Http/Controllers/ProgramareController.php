@@ -323,11 +323,12 @@ class ProgramareController extends Controller
                 $request->session()->put($serviciu . '-programare', $programare);
                 return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
                 break;
-            case 'casatorii':
-                $programare->serviciu = 3;
-                $request->session()->put($serviciu . '-programare', $programare);
-                return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
-                break;
+            // Nu se mai doreste acest serviciu, asa ca a fost scos
+            // case 'casatorii':
+            //     $programare->serviciu = 3;
+            //     $request->session()->put($serviciu . '-programare', $programare);
+            //     return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
+            //     break;
             case 'casatorii-oficieri':
                 $programare->serviciu = 456;
                 $request->session()->put($serviciu . '-programare', $programare);
