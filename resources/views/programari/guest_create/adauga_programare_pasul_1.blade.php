@@ -334,8 +334,8 @@
                                             (($programare->serviciu == 1 || $programare->serviciu == 2 || $programare->serviciu == 3) && $ziua->lessThan(\Carbon\Carbon::tomorrow()))
                                             ||
 
-                                            // casatorii-oficieri - programarile se pot face cu cel putin 12 zile inainte
-                                            (($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) && $ziua->lessThan(\Carbon\Carbon::today()->addDays(12)))
+                                            // casatorii-oficieri - programarile se pot face cu cel putin 14 zile inainte
+                                            (($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) && $ziua->lessThan(\Carbon\Carbon::today()->addDays(14)))
                                             ||
 
                                             (in_array($ziua->toDateString(), $zile_nelucratoare))

@@ -78,7 +78,7 @@
                             <div class="col-lg-12">
                                 <p class="ms-3">Înainte de a vă programa, vă rugăm să citiți acest
                                     <a href="{{ asset('documente/Regulament-privind-programarea-online-in-vederea-oficierii-casatoriei.pdf') }}" target="_blank"><b>REGULAMENT</b></a>.
-                                <p class="ms-3">Programarea online se poate înregistra cu cel puțin 12 zile înainte de încheierea căsătoriei.</p>
+                                <p class="ms-3">Programarea online se poate înregistra cu cel puțin 14 zile înainte de încheierea căsătoriei.</p>
                                 <h5 class="ps-3 alert alert-warning text-start">
                                     Selectați locația în care doriți sa aibă loc oficierea căsătoriei:
                                 </h5>
@@ -156,7 +156,7 @@
                                                     Sâmbătă
                                                 </td>
                                                 <td class="text-center">
-                                                    16:00 - 19:00
+                                                    09:00 - 13:00
                                                 </td>
                                             </tr>
                                             <tr>
@@ -164,7 +164,7 @@
                                                     Duminică
                                                 </td>
                                                 <td class="text-center">
-                                                    16:00 - 19:00
+                                                    09:00 - 13:00
                                                 </td>
                                             </tr>
                                         </table>
@@ -230,7 +230,7 @@
                                                     Sâmbătă
                                                 </td>
                                                 <td class="text-center">
-                                                    09:00 - 14:00
+                                                    13:00 - 18:00
                                                 </td>
                                             </tr>
                                             <tr>
@@ -238,7 +238,7 @@
                                                     Duminică
                                                 </td>
                                                 <td class="text-center">
-                                                    09:00 - 14:00
+                                                    13:00 - 18:00
                                                 </td>
                                             </tr>
                                         </table>

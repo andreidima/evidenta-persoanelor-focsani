@@ -535,7 +535,7 @@ class ProgramareController extends Controller
         } else {
             $programare = $request->session()->get($serviciu . '-programare');
         }
-// dd(\Carbon\Carbon::today()->addMonthsNoOverflow(2)->endOfMonth(), Carbon::today()->addDays(12));
+// dd(\Carbon\Carbon::today()->addMonthsNoOverflow(2)->endOfMonth(), Carbon::today()->addDays(14));
         $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('serviciu', $programare->serviciu)->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
 // dd($request);
         $programare->fill(
@@ -543,7 +543,7 @@ class ProgramareController extends Controller
                 'data' => [
                     'required',
                     'date',
-                    'after:' . ( ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? Carbon::today()->addDays(11)->isoFormat('DD.MM.YYYY') : 'today'),
+                    'after:' . ( ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? Carbon::today()->addDays(13)->isoFormat('DD.MM.YYYY') : 'today'),
                     'before:' .
                         // Pentru evidenta-persoanelor, transcrieri-certificate, casatorii: 2 luni
                         // Pentru casatorii-oficieri: 12 luni
