@@ -76,6 +76,8 @@
                     @case('casatorii-oficieri')
                         <div class="row">
                             <div class="col-lg-12">
+                                <p class="ms-3">Înainte de a vă programa, vă rugăm să citiți acest
+                                    <a href="{{ asset('documente/Regulament-privind-programarea-online-in-vederea-oficierii-casatoriei.pdf') }}" target="_blank"><b>REGULAMENT</b></a>.
                                 <p class="ms-3">Programarea online se poate înregistra cu cel puțin 12 zile înainte de încheierea căsătoriei.</p>
                                 <h5 class="ps-3 alert alert-warning text-start">
                                     Selectați locația în care doriți sa aibă loc oficierea căsătoriei:

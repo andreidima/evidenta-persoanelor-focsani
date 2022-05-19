@@ -393,7 +393,7 @@ class ProgramareController extends Controller
             $request->session()->forget($serviciu . '-programare-duplicat-in-DB');
         }
 
-        $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
+        $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('serviciu', $programare->serviciu)->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
 
         $ore_disponibile = ProgramareOraDeProgram::all()->where('serviciu', $programare->serviciu);
         $ore_indisponibile = Programare::where('serviciu', $programare->serviciu)->where('data', '>=', \Carbon\Carbon::tomorrow()->toDateString())->get();
@@ -536,7 +536,7 @@ class ProgramareController extends Controller
             $programare = $request->session()->get($serviciu . '-programare');
         }
 // dd(\Carbon\Carbon::today()->addMonthsNoOverflow(2)->endOfMonth(), Carbon::today()->addDays(12));
-        $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
+        $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('serviciu', $programare->serviciu)->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
 // dd($request);
         $programare->fill(
             $request->validate([
@@ -559,7 +559,7 @@ class ProgramareController extends Controller
                                     )
                             )->endOfMonth(),
                     function ($attribute, $value, $fail) use ($request, $programare) {
-                        $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
+                        $zile_nelucratoare = DB::table('programari_zile_nelucratoare')->where('serviciu', $programare->serviciu)->where('data', '>', \Carbon\Carbon::today())->pluck('data')->all();
                         // dd($programare->serviciu);
 
                         $ziua = \Carbon\Carbon::parse($value);
@@ -626,7 +626,7 @@ class ProgramareController extends Controller
         $ore_indisponibile = DB::table('programari')->where('serviciu', $programare->serviciu)->where('data', '=', $programare->data)->orderBy('ora')->pluck('ora')->all();
         $ore_disponibile = array_diff($ore_disponibile, $ore_indisponibile);
 
-        if ($programare->serviciu == 5){ // Programarile pentru foisor se pot face la maxim 45 minute distanta una de alta, pentru a nu fi goluri mari
+        if ($programare->serviciu == 5 || $programare->serviciu == 6){ // Programarile pentru foisor si teatru se pot face la maxim 45 minute distanta una de alta, pentru a nu fi goluri mari
             if (count($ore_indisponibile) > 0){ // Daca exista macar o programare, ca altfel utilizatorul poate alege orice din program
                 // In varianta aceasta, intervalele sunt marcate ca „Perioada in afara programului”
                 // if ($prima_ora_din_program < Carbon::parse($ore_indisponibile[0])->subMinutes(45)){ // maxim 45 de minute inaintea primei programari
