@@ -626,22 +626,22 @@ class ProgramareController extends Controller
         $ore_indisponibile = DB::table('programari')->where('serviciu', $programare->serviciu)->where('data', '=', $programare->data)->orderBy('ora')->pluck('ora')->all();
         $ore_disponibile = array_diff($ore_disponibile, $ore_indisponibile);
 
-        if ($programare->serviciu == 5 || $programare->serviciu == 6){ // Programarile pentru foisor si teatru se pot face la maxim 45 minute distanta una de alta, pentru a nu fi goluri mari
+        if ($programare->serviciu == 5 || $programare->serviciu == 6){ // Programarile pentru foisor si teatru se pot face la maxim 60 minute distanta una de alta, pentru a nu fi goluri mari
             if (count($ore_indisponibile) > 0){ // Daca exista macar o programare, ca altfel utilizatorul poate alege orice din program
                 // In varianta aceasta, intervalele sunt marcate ca „Perioada in afara programului”
-                // if ($prima_ora_din_program < Carbon::parse($ore_indisponibile[0])->subMinutes(45)){ // maxim 45 de minute inaintea primei programari
-                //     $prima_ora_din_program = Carbon::parse($ore_indisponibile[0])->subMinutes(45);
+                // if ($prima_ora_din_program < Carbon::parse($ore_indisponibile[0])->subMinutes(60)){ // maxim 60 de minute inaintea primei programari
+                //     $prima_ora_din_program = Carbon::parse($ore_indisponibile[0])->subMinutes(60);
                 // }
-                // if ($ultima_ora_din_program > Carbon::parse($ore_indisponibile[count($ore_indisponibile)-1])->addMinutes(45)){ // maxim 45 de minute inaintea primei programari
-                //     $ultima_ora_din_program = Carbon::parse($ore_indisponibile[count($ore_indisponibile)-1])->addMinutes(45);
+                // if ($ultima_ora_din_program > Carbon::parse($ore_indisponibile[count($ore_indisponibile)-1])->addMinutes(60)){ // maxim 60 de minute inaintea primei programari
+                //     $ultima_ora_din_program = Carbon::parse($ore_indisponibile[count($ore_indisponibile)-1])->addMinutes(60);
                 // }
 
                 // In varianta aceasta, intervalele sunt marcate ca „Perioada indisponibila”
                 $ore_disponibile = array_filter($ore_disponibile,function($ora) use($ore_indisponibile){
                     return (
-                        ($ora) >= Carbon::parse($ore_indisponibile[0])->subMinutes(45)->toTimeString() // maxim 45 de minute inaintea primei programari
+                        ($ora) >= Carbon::parse($ore_indisponibile[0])->subMinutes(60)->toTimeString() // maxim 60 de minute inaintea primei programari
                         &&
-                        ($ora) <= Carbon::parse($ore_indisponibile[count($ore_indisponibile)-1])->addMinutes(45)->toTimeString() // maxim 45 de minute dupa ultima programare
+                        ($ora) <= Carbon::parse($ore_indisponibile[count($ore_indisponibile)-1])->addMinutes(60)->toTimeString() // maxim 60 de minute dupa ultima programare
                     );
                 });
             }
@@ -687,13 +687,13 @@ class ProgramareController extends Controller
                         $ore_indisponibile = DB::table('programari')->where('serviciu', $programare->serviciu)->where('data', '=', $programare->data)->orderBy('ora')->pluck('ora')->all();
                         $ore_disponibile = array_diff($ore_disponibile, $ore_indisponibile);
 
-                        if ($programare->serviciu == 5){ // Programarile pentru foisor se pot face la maxim 45 minute distanta una de alta, pentru a nu fi goluri mari
+                        if ($programare->serviciu == 5){ // Programarile pentru foisor se pot face la maxim 60 minute distanta una de alta, pentru a nu fi goluri mari
                             if (count($ore_indisponibile) > 0){ // Daca exista macar o programare, ca altfel utilizatorul poate alege orice din program
                                 $ore_disponibile = array_filter($ore_disponibile,function($ora) use($ore_indisponibile){
                                     return (
-                                        ($ora) >= Carbon::parse($ore_indisponibile[0])->subMinutes(45)->toTimeString() // maxim 45 de minute inaintea primei programari
+                                        ($ora) >= Carbon::parse($ore_indisponibile[0])->subMinutes(60)->toTimeString() // maxim 60 de minute inaintea primei programari
                                         &&
-                                        ($ora) <= Carbon::parse($ore_indisponibile[count($ore_indisponibile)-1])->addMinutes(45)->toTimeString() // maxim 45 de minute dupa ultima programare
+                                        ($ora) <= Carbon::parse($ore_indisponibile[count($ore_indisponibile)-1])->addMinutes(60)->toTimeString() // maxim 60 de minute dupa ultima programare
                                     );
                                 });
                             }
