@@ -237,6 +237,20 @@
                 @endswitch
 
                 @for ($luna = 0; $luna < $nr_luni_disponibile ; $luna++)
+
+                    {{-- La foisor se pot face programari doar din mai pana in septembrie --}}
+                    @if (($programare->serviciu == 5) && ( (\Carbon\Carbon::today()->addMonthsNoOverflow($luna)->month < 5) || (\Carbon\Carbon::today()->addMonthsNoOverflow($luna)->month > 9) ))
+                        @continue
+                    @endif
+
+                    {{-- Pentru casatorii, daca in luna curenta nu se mai pot face programari, aceasta nu mai este afisata --}}
+                    @if (($luna == 0) &&
+                        ($programare->serviciu == 5 || $programare->serviciu == 6 || $programare->serviciu == 7) &&
+                        (!\Carbon\Carbon::today()->addDays(14)->isCurrentMonth()))
+                        @continue
+                    @endif
+
+
                     @php
                         $luna_prima_zi = \Carbon\Carbon::today()->addMonthsNoOverflow($luna)->startOfMonth();
                         $luna_ultima_zi = \Carbon\Carbon::today()->addMonthsNoOverflow($luna)->endOfMonth();
