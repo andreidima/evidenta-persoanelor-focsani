@@ -217,6 +217,10 @@
                         <span class="badge bg-success"><h6 class="mb-0">Zile cu ore disponibile</h6></span>
                         <span class="badge" style="background-color:rgb(219, 107, 107)"><h6 class="mb-0">Zile ocupate complet</h6></span>
                         <span class="badge" style="background-color:rgb(219, 219, 219); color:rgb(151, 0, 0)"><h6 class="mb-0">Zile indisponibile</h6></span>
+                        @if ($programare->serviciu == 5)
+                            <br><br>
+                            <p>În Foișorul central din Grădina Publică se oficiază căsătorii doar în perioada 1 mai - 30 septembrie</p>
+                        @endif
                     </div>
                 </div>
 
@@ -239,13 +243,15 @@
                 @for ($luna = 0; $luna < $nr_luni_disponibile ; $luna++)
 
                     {{-- La foisor se pot face programari doar din mai pana in septembrie --}}
-                    @if (($programare->serviciu == 5) && ( (\Carbon\Carbon::today()->addMonthsNoOverflow($luna)->month < 5) || (\Carbon\Carbon::today()->addMonthsNoOverflow($luna)->month > 9) ))
-                        @continue
+                    @if ($programare->serviciu == 5)
+                        @if ( (\Carbon\Carbon::today()->addMonthsNoOverflow($luna)->month < 5) || (\Carbon\Carbon::today()->addMonthsNoOverflow($luna)->month > 9) )
+                            @continue
+                        @endif
                     @endif
 
                     {{-- Pentru casatorii, daca in luna curenta nu se mai pot face programari, aceasta nu mai este afisata --}}
                     @if (($luna == 0) &&
-                        ($programare->serviciu == 5 || $programare->serviciu == 6 || $programare->serviciu == 7) &&
+                        ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) &&
                         (!\Carbon\Carbon::today()->addDays(14)->isCurrentMonth()))
                         @continue
                     @endif
