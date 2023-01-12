@@ -229,7 +229,8 @@
                     @case('transcrieri-certificate')
                     @case('casatorii')
                         @php
-                            $nr_luni_disponibile = 2;
+                            // $nr_luni_disponibile = 2;
+                            $nr_luni_disponibile = 6; // de modificat inapoi
                         @endphp
                         @break
                     @case('casatorii-oficieri')
@@ -334,8 +335,17 @@
                                             (($programare->serviciu == 1) && $ziua->isWeekend())
                                             ||
 
-                                            // transcrieri-certificate: se lucreaza doar 1 zi pe saptamana, miercurea
-                                            (($programare->serviciu == 2) && (!$ziua->isWednesday()))
+                                            // transcrieri-certificate: pana la 1 martie 2023. se lucreaza doar 1 zi pe saptamana, miercurea
+                                            (($programare->serviciu == 2) && ($ziua->lessThan(\Carbon\Carbon::create(2023, 2, 28, 00, 00, 00))) && (!$ziua->isWednesday()))
+                                            ||
+
+                                            // transcrieri-certificate: dupa 1 martie 2023. se lucreaza odata la 2 saptamani, martea
+                                            (
+                                                ($programare->serviciu == 2) &&
+                                                ($ziua->greaterThanOrEqualTo(\Carbon\Carbon::create(2023, 3, 1, 00, 00, 00))) &&
+                                                (intval(fmod(($ziua->diffInDays(\Carbon\Carbon::create(2023, 2,28, 00, 00, 00))), 14)) !== 0)
+                                                // (!$ziua->isTuesday())
+                                            )
                                             ||
 
                                             // casatorii: nu se lucreaza in weekend

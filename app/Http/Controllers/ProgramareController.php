@@ -400,7 +400,8 @@ class ProgramareController extends Controller
         // dd($ore_disponibile, $ore_indisponibile);
         $data = \Carbon\Carbon::tomorrow();
         $zile_pline = array();
-        while ($data->lessThan(\Carbon\Carbon::today()->addMonthsNoOverflow(1)->endOfMonth())){
+        // while ($data->lessThan(\Carbon\Carbon::today()->addMonthsNoOverflow(1)->endOfMonth())){
+        while ($data->lessThan(\Carbon\Carbon::today()->addMonthsNoOverflow(3)->endOfMonth())){ // de modificat inapoi
             $ore_disponibile_la_data = $ore_disponibile->where('ziua_din_saptamana', $data->dayOfWeekIso)->pluck('ora')->toArray();
             $ore_indisponibile_la_data = $ore_indisponibile->where('data', $data->toDateString())->pluck('ora')->toArray();
 
@@ -409,6 +410,12 @@ class ProgramareController extends Controller
             if (count($ore_disponibile_ramase) === 0){
                 array_push($zile_pline, $data->toDateString());
             }
+
+            // echo $data . '<br>';
+            // if ($data == '2023-02-28 00:00:00'){
+            //     echo '<br><br>DA<br><br>';
+            // }
+
 
             // Se tot adauga cate o zi la data
             // Daca este weekend se sar 2 zile, sau daca sunt servicii la care nu se lucreaza in fiecare zi a saptamanii
@@ -426,26 +433,10 @@ class ProgramareController extends Controller
                             break;
                         }
                     break;
-                case '2': // transcrieri-certificate: au program doar Miercuri
+                case '2': // transcrieri-certificate
                     switch ($data->dayOfWeekIso) {
-                        case '1':
-                            $data->addDay(2);
-                            break;
-                        case '3':
-                            $data->addDay(7);
-                            break;
-                        case '4':
-                            $data->addDay(6);
-                            break;
-                        case '5':
-                            $data->addDay(5);
-                            break;
-                        case '6':
-                            $data->addDay(4);
-                            break;
-                        case '7':
-                            $data->addDay(3);
-                            break;
+                        // case '1':
+                        //     break;
                         default:
                             $data->addDay(1);
                             break;
@@ -549,7 +540,8 @@ class ProgramareController extends Controller
                         // Pentru casatorii-oficieri: 12 luni
                         \Carbon\Carbon::today()->addMonthsNoOverflow(
                                 ( ($programare->serviciu == 1) || ($programare->serviciu == 2) || ($programare->serviciu == 3) ) ?
-                                    1 // se adauga inca o luna
+                                    // 1 // se adauga inca o luna
+                                    3 // se adauga inca o luna // de modificat inapoi
                                     :
                                     (
                                         ( ($programare->serviciu == 4) || ($programare->serviciu == 5) || ($programare->serviciu == 6) ) ?
@@ -568,8 +560,17 @@ class ProgramareController extends Controller
                             (($programare->serviciu == 1) && $ziua->isWeekend())
                             ||
 
-                            // transcrieri-certificate: se lucreaza doar 1 zi pe saptamana, miercurea
-                            (($programare->serviciu == 2) && (!$ziua->isWednesday()))
+                            // transcrieri-certificate: pana la 1 martie 2023. se lucreaza doar 1 zi pe saptamana, miercurea
+                            (($programare->serviciu == 2) && ($ziua->lessThan(\Carbon\Carbon::create(2023, 2, 28, 00, 00, 00))) && (!$ziua->isWednesday()))
+                            ||
+
+                            // transcrieri-certificate: dupa 1 martie 2023. se lucreaza odata la 2 saptamani, martea
+                            (
+                                ($programare->serviciu == 2) &&
+                                ($ziua->greaterThanOrEqualTo(\Carbon\Carbon::create(2023, 3, 1, 00, 00, 00))) &&
+                                (intval(fmod(($ziua->diffInDays(\Carbon\Carbon::create(2023, 2,28, 00, 00, 00))), 14)) !== 0)
+                                // (!$ziua->isTuesday())
+                            )
                             ||
 
                             // casatorii: nu se lucreaza in weekend
@@ -750,7 +751,11 @@ class ProgramareController extends Controller
                 'prenume' => 'required|max:500',
 
                 // CNP nu este obligatoriu pentru: Transcrieri certificate in zilele de miercuri (pentru cetateni straini, moldoveni, ce nu au inca buletin, cnp)
-                'cnp' => (($programare->serviciu == 2) && (Carbon::parse($programare->data)->dayOfWeekIso == 3)) ? 'nullable' : 'required'
+                // 'cnp' => (($programare->serviciu == 2) && (Carbon::parse($programare->data)->dayOfWeekIso == 3)) ? 'nullable' : 'required'
+                //     . '|numeric|integer|digits:13',
+
+                // CNP nu este obligatoriu pentru: Transcrieri certificate (cetateni straini, moldoveni, ce nu au inca buletin, cnp)
+                'cnp' => (($programare->serviciu == 2)) ? 'nullable' : 'required'
                     . '|numeric|integer|digits:13',
 
                 // Doar pentru casatorii-oficieri
@@ -782,7 +787,7 @@ class ProgramareController extends Controller
 
 
         // Verificare daca nu cumva exista deja o viitoare programare pentru acest CNP, caz in care i se ofera alternativa sa pastreze programarea sau sa o modifice
-        if ($programare->cnp){ //Daca programarea nu are CNP, este pentru transcrieri acte de miercuri, si se sare peste
+        if ($programare->cnp){ //Daca programarea nu are CNP, este pentru transcrieri acte, si se sare peste
             if ($request->session()->has($serviciu . '-programare-duplicat-in-DB')){
                 // Daca exista deja in sesiune variabila programare_duplicat, inseamna ca utilizatorul a fost de acord sa o stearga pe cea veche
                 $programare_duplicat_in_DB = $request->session()->get($serviciu . '-programare-duplicat-in-DB');

@@ -157,18 +157,21 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="row g-3 align-items-center mb-3">
-                                    <div class="col-lg-3">
-                                        <label for="cnp" class="col-form-label py-0">CNP{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}:</label>
+                                {{-- Transcrieri certificate nu au cnp --}}
+                                @if (!($programare->serviciu == 2))
+                                    <div class="row g-3 align-items-center mb-3">
+                                        <div class="col-lg-3">
+                                            <label for="cnp" class="col-form-label py-0">CNP{{ ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? ' soț' : '' }}:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <label for="cnp" class="col-form-label py-0">
+                                                <b>
+                                                    {{ $programare->cnp }}
+                                                </b>
+                                            </label>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-8">
-                                        <label for="cnp" class="col-form-label py-0">
-                                            <b>
-                                                {{ $programare->cnp }}
-                                            </b>
-                                        </label>
-                                    </div>
-                                </div>
+                                @endif
 
                                 @if ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6)
                                     <div class="row g-3 align-items-center mb-3">
