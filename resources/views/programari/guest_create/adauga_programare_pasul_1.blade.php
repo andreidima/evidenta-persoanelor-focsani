@@ -229,8 +229,7 @@
                     @case('transcrieri-certificate')
                     @case('casatorii')
                         @php
-                            // $nr_luni_disponibile = 2;
-                            $nr_luni_disponibile = 6; // de modificat inapoi
+                            $nr_luni_disponibile = 2;
                         @endphp
                         @break
                     @case('casatorii-oficieri')

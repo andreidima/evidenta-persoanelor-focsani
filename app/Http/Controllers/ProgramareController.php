@@ -400,8 +400,7 @@ class ProgramareController extends Controller
         // dd($ore_disponibile, $ore_indisponibile);
         $data = \Carbon\Carbon::tomorrow();
         $zile_pline = array();
-        // while ($data->lessThan(\Carbon\Carbon::today()->addMonthsNoOverflow(1)->endOfMonth())){
-        while ($data->lessThan(\Carbon\Carbon::today()->addMonthsNoOverflow(3)->endOfMonth())){ // de modificat inapoi
+        while ($data->lessThan(\Carbon\Carbon::today()->addMonthsNoOverflow(1)->endOfMonth())){
             $ore_disponibile_la_data = $ore_disponibile->where('ziua_din_saptamana', $data->dayOfWeekIso)->pluck('ora')->toArray();
             $ore_indisponibile_la_data = $ore_indisponibile->where('data', $data->toDateString())->pluck('ora')->toArray();
 
@@ -540,8 +539,7 @@ class ProgramareController extends Controller
                         // Pentru casatorii-oficieri: 12 luni
                         \Carbon\Carbon::today()->addMonthsNoOverflow(
                                 ( ($programare->serviciu == 1) || ($programare->serviciu == 2) || ($programare->serviciu == 3) ) ?
-                                    // 1 // se adauga inca o luna
-                                    3 // se adauga inca o luna // de modificat inapoi
+                                    1 // se adauga inca o luna
                                     :
                                     (
                                         ( ($programare->serviciu == 4) || ($programare->serviciu == 5) || ($programare->serviciu == 6) ) ?
