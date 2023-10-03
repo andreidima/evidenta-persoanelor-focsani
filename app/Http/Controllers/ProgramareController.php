@@ -638,9 +638,9 @@ class ProgramareController extends Controller
                 // In varianta aceasta, intervalele sunt marcate ca „Perioada indisponibila”
                 $ore_disponibile = array_filter($ore_disponibile,function($ora) use($ore_indisponibile){
                     return (
-                        ($ora) >= Carbon::parse($ore_indisponibile[0])->subMinutes(60)->toTimeString() // maxim 60 de minute inaintea primei programari
+                        ($ora) >= Carbon::parse($ore_indisponibile[0])->subMinutes(30)->toTimeString() // maxim 30 de minute inaintea primei programari
                         &&
-                        ($ora) <= Carbon::parse($ore_indisponibile[count($ore_indisponibile)-1])->addMinutes(60)->toTimeString() // maxim 60 de minute dupa ultima programare
+                        ($ora) <= Carbon::parse($ore_indisponibile[count($ore_indisponibile)-1])->addMinutes(30)->toTimeString() // maxim 30 de minute dupa ultima programare
                     );
                 });
             }
