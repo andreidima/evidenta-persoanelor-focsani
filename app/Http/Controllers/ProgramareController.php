@@ -34,7 +34,7 @@ class ProgramareController extends Controller
                     case 'transcrieri-certificate':
                         $query->where('serviciu', 2);
                         break;
-                    case 'casatorii':
+                    case 'casatorii': // serviciul a fost scos, transformandu-se in 4,5,6
                         $query->where('serviciu', 3);
                         break;
                     case 'casatorii-oficieri-sediu':
