@@ -225,8 +225,13 @@
                 </div>
 
                 @switch($serviciu)
-                    @case('evidenta-persoanelor')
                     @case('transcrieri-certificate')
+                        {{-- Temporary until necesary restrictions will be put in place. --}}
+                        @php
+                            $nr_luni_disponibile = 1;
+                        @endphp
+                        @break
+                    @case('evidenta-persoanelor')
                     @case('casatorii')
                         @php
                             $nr_luni_disponibile = 2;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Programare;
 use App\Models\ProgramareOraDeProgram;
+use App\Models\ProgramareIstoric;
 use Illuminate\Support\Facades\DB;
 
 use App\Mail\ProgramareEmail;
@@ -762,7 +763,23 @@ class ProgramareController extends Controller
                 'cnp_sotie' => ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? 'required|numeric|integer|digits:13' : '',
                 'telefon' => ($programare->serviciu == 4 || $programare->serviciu == 5 || $programare->serviciu == 6) ? 'required|max:500' : '',
 
-                'email' => 'required|max:500|email',
+                'email' => [
+                    'required', 'max:500', 'email:rfc,dns',
+                    function ($attribute, $value, $fail) use ($request, $programare) {
+                        if ($programare->serviciu == 2){ // Transcrieri certificate - added restrictions for less spam
+                            // Just gmail.com
+                            if (!str_contains($value, 'gmail.com')){
+                                $fail('Se pot face programări doar cu emailuri Google, cu adresa „gmail.com”');
+                            }
+
+                            // Just 1 email adress ever
+                            $programariIstoric = ProgramareIstoric::where('email', $value)->get();
+                            if ($programariIstoric->count() > 0){
+                                $fail('De pe această adresă de email au mai fost făcute programări. Nu se pot face mai mult de 1 programare de pe o adresă de email.');
+                            }
+                        }
+                    },
+                ],
 
                 'gdpr' => 'required',
                 'acte_necesare' => 'required'
