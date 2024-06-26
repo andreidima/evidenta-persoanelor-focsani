@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+<script type="application/javascript">
+    email = {!! json_encode(old('email')) !!}
+</script>
+
 @section('content')
 <div class="container">
     <div class="row my-4 justify-content-center">
@@ -235,20 +239,81 @@
                                     </div>
                                 @endif
 
-                                <div class="row g-3 align-items-center mb-3">
-                                    <div class="col-lg-3">
-                                        <label for="email" class="col-form-label py-0">Email*:</label>
+
+                                {{-- Transcrieri certificate: they have an email validation --}}
+                                @if ($programare->serviciu != 2)
+                                    <div class="row g-3 align-items-center mb-3">
+                                        <div class="col-lg-3">
+                                            <label for="email" class="col-form-label py-0">Email*:</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input
+                                                type="text"
+                                                class="form-control rounded-pill {{ $errors->has('email') ? 'is-invalid' : '' }}"
+                                                name="email"
+                                                placeholder=""
+                                                value="{{ old('email', $programare->email) }}"
+                                                >
+                                        </div>
                                     </div>
-                                    <div class="col-lg-8">
-                                        <input
-                                            type="text"
-                                            class="form-control rounded-pill {{ $errors->has('email') ? 'is-invalid' : '' }}"
-                                            name="email"
-                                            placeholder=""
-                                            value="{{ old('email', $programare->email) }}"
-                                            >
+                                @else
+                                    <div class="my-2 p-2 rounded-3" id="trimitereCodValidareEmail" style="background-color: cornsilk">
+                                            Vă rugăm să nu faceți multiple înregistrări fictive.
+                                            <br>
+                                            Pentru a limita acest aspect, au fost impuse următoarele restricții:
+                                            <ul style="margin:0px;">
+                                                <li>sunt permise doar conturi de email Google;</li>
+                                                <li>emailurile trebuie confirmate - se trimite un cod prin email care trebuie completat aici in formular;</li>
+                                                <li>pentru fiecare email poate fi făcută doar o programare</li>
+                                            </ul>
+                                            <br>
+                                        <div class="row g-3 align-items-center mb-3">
+                                            <div class="col-lg-3">
+                                                <label for="email" class="col-form-label py-0">Email*:</label>
+                                            </div>
+                                            <div class="col-lg-8">
+                                                <input
+                                                    type="text"
+                                                    class="form-control rounded-pill {{ $errors->has('email') ? 'is-invalid' : '' }}"
+                                                    name="email"
+                                                    placeholder=""
+                                                    v-model="email"
+                                                    value="{{ old('email', $programare->email) }}"
+                                                    >
+                                            </div>
+                                        </div>
+                                        <div class="row g-1 align-items-center mb-0">
+                                            <div class="col-lg-12 text-center mb-0">
+                                                <button type="button" class="btn btn-sm py-0 px-1 btn-primary text-white shadow-sm rounded-3"
+                                                    {{-- style="background-color:#56af71" --}}
+                                                    @click="trimitereEmail();"
+                                                >
+                                                    Trimite cod de validare pe email
+                                                </button>
+                                            </div>
+                                            <div class="col-lg-12 text-center">
+                                                <div v-if="mesajDeAfisat" v-html="mesajDeAfisat">
+                                                    {{-- @{{ mesajDeAfisat }} --}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 align-items-center mb-0">
+                                            <div class="col-lg-3 mb-0">
+                                                <label for="cod_validare" class="col-form-label py-0">Cod validare email*:</label>
+                                            </div>
+                                            <div class="col-lg-8">
+                                                <input
+                                                    type="text"
+                                                    class="form-control rounded-pill {{ $errors->has('cod_validare') ? 'is-invalid' : '' }}"
+                                                    name="cod_validare"
+                                                    placeholder=""
+                                                    value="{{ old('cod_validare', $programare->cod_validare) }}"
+                                                    >
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
+
 
                                 <div class="row g-3">
                                     <div class="col-lg-12 border-start border-warning" style="border-width:5px !important"
@@ -283,7 +348,7 @@
                                     </div>
                                     <div class="col-lg-6 py-2 d-grid">
                                         @if (session()->has($serviciu . '-programare-duplicat-in-DB'))
-                                            <button type="submit" class="btn btn-warning text-white rounded-pill">
+                                            <button type="submit" class="btn btn-warning text-black rounded-pill">
                                                 Șterge programarea veche si salvează pe aceasta
                                             </button>
                                         @else

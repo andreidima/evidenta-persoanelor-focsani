@@ -226,9 +226,8 @@
 
                 @switch($serviciu)
                     @case('transcrieri-certificate')
-                        {{-- Temporary until necesary restrictions will be put in place. --}}
                         @php
-                            $nr_luni_disponibile = 1;
+                            $nr_luni_disponibile = 2;
                         @endphp
                         @break
                     @case('evidenta-persoanelor')

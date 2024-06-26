@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Programare;
 use App\Models\ProgramareOraDeProgram;
 use App\Models\ProgramareIstoric;
+use App\Models\EmailDeVerificat;
 use Illuminate\Support\Facades\DB;
 
 use App\Mail\ProgramareEmail;
@@ -775,16 +776,36 @@ class ProgramareController extends Controller
                             // Just 1 email adress ever
                             $programariIstoric = ProgramareIstoric::where('email', $value)->get();
                             if ($programariIstoric->count() > 0){
-                                $fail('De pe această adresă de email au mai fost făcute programări. Nu se pot face mai mult de 1 programare de pe o adresă de email.');
+                                $fail('De pe această adresă de email au mai fost făcute programări. Nu se pot face mai mult de o programare de pe aceași adresă de email.');
                             }
                         }
                     },
                 ],
 
+                // Email verification for „Transcrieri certificate
+                'cod_validare' => ($programare->serviciu == 2) ?
+                    [
+                        'bail', 'required',
+                        function ($attribute, $value, $fail) use ($request) {
+                            $emailDeVerificat = EmailDeVerificat::where('email', $request->email)->where('cod_validare', $value)->first();
+                            if (!$emailDeVerificat){
+                                $fail('Nu există acest cod de validare pentru această adresă de email.');
+                            } else if (Carbon::parse($emailDeVerificat->created_at)->diffInMinutes(Carbon::now()) > 15){
+                                $fail('Acest cod nu mai este valabil, codurile sunt valabile 15 minute. Generează alt cod');
+                            }
+                        },
+                    ]
+                    :
+                    'nullable'
+                ,
+
                 'gdpr' => 'required',
                 'acte_necesare' => 'required'
             ])
         );
+
+        // If the form was for „Transcrieri certificate”, it contains „cod_validare” that must be removed before savind the model to database
+        $programare->offsetUnset('cod_validare');
 
         // Verificare ca ora nu a fost aleasa intre timp de cand s-a inceput aceasta programare
         $ore_disponibile = DB::table('programari_ore_de_program')->where('serviciu', $programare->serviciu)->where('ziua_din_saptamana', '=', \Carbon\Carbon::parse($programare->data)->dayOfWeekIso)->orderBy('ora')->pluck('ora')->all();

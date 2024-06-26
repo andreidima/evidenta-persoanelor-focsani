@@ -70,7 +70,7 @@
                     <div class="row">
                         <div class="col-lg-7 py-2 mx-auto">
                             <h5 class="ps-3 py-2 mb-0 text-center alert alert-success">
-                                Programarea dumneavoastră a fost înregistrată cu success!
+                                Programarea dumneavoastră a fost înregistrată cu succes!
                             </h5>
                         </div>
                         <div class="col-lg-7 mx-auto">

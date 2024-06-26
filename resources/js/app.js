@@ -87,3 +87,33 @@ if (document.querySelector('#app1')) {
         }
     });
 }
+
+// Send email with email validation code
+if (document.querySelector('#trimitereCodValidareEmail')) {
+    const trimitereCodValidareEmail = new Vue({
+        el: '#trimitereCodValidareEmail',
+        data: {
+            email: email,
+            mesajDeAfisat: '',
+        },
+        methods: {
+            trimitereEmail: function() {
+                // console.log('da');
+                // if (this.email) {
+                //     if (this.email.toLowerCase().substr(-10) === ('@gmail.com')) {
+                        axios.get('/axios/trimitere-cod-validare-email', {
+                            params: { email: this.email }
+                        })
+                            .then(function (response) {
+                                trimitereCodValidareEmail.mesajDeAfisat = response.data.raspuns;
+                            });
+                //     } else {
+                //         this.mesajDeAfisat = "<span class='text-danger' style='font-size:80%'>Este necesar un email din domeniul Google, de forma user@gmail.com</span>";
+                //     }
+                // } else {
+                //     this.mesajDeAfisat = "<span class='text-danger' style='font-size:80%'>Introdu un email</span>";
+                // }
+            },
+        }
+    });
+};

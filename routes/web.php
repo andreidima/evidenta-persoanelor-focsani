@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ProgramareController;
+use App\Http\Controllers\AxiosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,8 @@ Route::get('/{serviciu}/programari/sterge-programare-pasul-2/{cheie_unica}', [Pr
 
 // Extras date cu Axios
 Route::get('/{serviciu}/programari/axios', [ProgramareController::class, 'axios']);
+
+Route::get('/axios/trimitere-cod-validare-email', [AxiosController::class, 'trimitereCodValidareEmail']);
 
 Route::get('/{serviciu}/programari/axios2', function () {
     $ore_disponibile = DB::table('programari_ore_de_program')
