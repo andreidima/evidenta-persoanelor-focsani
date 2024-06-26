@@ -10,7 +10,7 @@
 
 Doriți să vă programați la serviciul „Transcrieri certificate”
 <br>
-Pentru adresa de email „{{ $emailDeVerificat->email }}” a fost generat codul <span style="font-size: 120%; font-weight:bold">{{ $emailDeVerificat->cod_validare }}</span>
+Pentru adresa de email {{ $emailDeVerificat->email }} a fost generat codul <span style="font-size: 120%; font-weight:bold">{{ $emailDeVerificat->cod_validare }}</span>
 <br>
 Folosiți codul în formularul de pe site.
 <br>
