@@ -40,12 +40,12 @@
                                         </span>
                                     </a>
                                     <br>
-                                    <a class="" href="/casatorii/programari/afisare-zilnic">
+                                    {{-- <a class="" href="/casatorii/programari/afisare-zilnic">
                                         <span class="badge bg-primary my-1 fs-5">
                                             Căsătorii
                                         </span>
                                     </a>
-                                    <br>
+                                    <br> --}}
                                     <a class="" href="/casatorii-oficieri-sediu/programari/afisare-zilnic">
                                         <span class="badge bg-primary my-1 fs-5">
                                             Căsătorii Sediu

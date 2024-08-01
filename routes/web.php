@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ProgramareController;
 use App\Http\Controllers\AxiosController;
+use App\Http\Controllers\ZiNelucratoareController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +61,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/{serviciu}/programari/export/{data}/{view_type}', [ProgramareController::class, 'PdfExportPeZi']);
 
     Route::resource('/{serviciu}/programari', ProgramareController::class,  ['parameters' => ['programari' => 'programare']]);
+    Route::resource('/{serviciu}/zile-nelucratoare', ZiNelucratoareController::class,  ['parameters' => ['zile-nelucratoare' => 'zi_nelucratoare']]);
+
 
     // Route::get('/adaugare-zile-si-ore-casatorii-oficieri', function(){
     //     $data = [

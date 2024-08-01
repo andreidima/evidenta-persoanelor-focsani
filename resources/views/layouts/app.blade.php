@@ -70,9 +70,15 @@
                                         Printează programări
                                     </a>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <hr class="dropdown-divider">
                                 </li>
+                                <li>
+                                    <a class="dropdown-item" href="/evidenta-persoanelor/zile-nelucratoare">
+                                        <i class="fas fa-calendar-day me-1"></i>
+                                        Zile nelucrătoare
+                                    </a>
+                                </li> --}}
                             </ul>
                         </li>
                         <li class="nav-item me-3 dropdown">
@@ -105,12 +111,11 @@
                                         Printează programări
                                     </a>
                                 </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
                             </ul>
                         </li>
-                        <li class="nav-item me-3 dropdown">
+
+                        {{-- This was removed when casatorii split in 3 categories --}}
+                        {{-- <li class="nav-item me-3 dropdown">
                             <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-ring me-1"></i>
                                 Căsătorii
@@ -140,11 +145,9 @@
                                         Printează programări
                                     </a>
                                 </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
                             </ul>
-                        </li>
+                        </li> --}}
+
                         <li class="nav-item me-3 dropdown">
                             <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-ring me-1"></i>
@@ -205,6 +208,21 @@
                                     <a class="dropdown-item" href="/casatorii-oficieri-teatru/programari/afisare-zilnic">
                                         <i class="fas fa-print me-1"></i>
                                         Teatru - Printează programări
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                        <li class="nav-item me-3 dropdown">
+                            <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bars me-1"></i>
+                                Utile
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="/toate-sediile/zile-nelucratoare">
+                                        Zile nelucrătoare
                                     </a>
                                 </li>
                             </ul>
