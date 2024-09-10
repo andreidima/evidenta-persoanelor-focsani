@@ -316,14 +316,18 @@ class ProgramareController extends Controller
 
         switch ($serviciu) {
             case 'evidenta-persoanelor':
-                $programare->serviciu = 1;
-                $request->session()->put($serviciu . '-programare', $programare);
-                return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
+                // Appointments for this service are put on hold starting from 10.09.2024
+                // $programare->serviciu = 1;
+                // $request->session()->put($serviciu . '-programare', $programare);
+                // return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
+                return redirect()->away('https://evidentapersoanelorfocsani.ro/');
                 break;
             case 'transcrieri-certificate':
-                $programare->serviciu = 2;
-                $request->session()->put($serviciu . '-programare', $programare);
-                return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
+                // Appointments for this service are put on hold starting from 10.09.2024
+                // $programare->serviciu = 2;
+                // $request->session()->put($serviciu . '-programare', $programare);
+                // return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
+                return redirect()->away('https://evidentapersoanelorfocsani.ro/');
                 break;
             // Nu se mai doreste acest serviciu, asa ca a fost scos
             // case 'casatorii':
