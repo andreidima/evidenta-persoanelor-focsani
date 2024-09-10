@@ -316,11 +316,9 @@ class ProgramareController extends Controller
 
         switch ($serviciu) {
             case 'evidenta-persoanelor':
-                // Appointments for this service are put on hold starting from 10.09.2024
-                // $programare->serviciu = 1;
-                // $request->session()->put($serviciu . '-programare', $programare);
-                // return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
-                return redirect()->away('https://evidentapersoanelorfocsani.ro/');
+                $programare->serviciu = 1;
+                $request->session()->put($serviciu . '-programare', $programare);
+                return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
                 break;
             case 'transcrieri-certificate':
                 // Appointments for this service are put on hold starting from 10.09.2024
@@ -336,9 +334,11 @@ class ProgramareController extends Controller
             //     return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
             //     break;
             case 'casatorii-oficieri':
-                $programare->serviciu = 456;
-                $request->session()->put($serviciu . '-programare', $programare);
-                return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-0'); // Doar pentru „Casatorii oficieri”, care au 3 locatii diferite
+                // Appointments for this service are put on hold starting from 10.09.2024
+                // $programare->serviciu = 456;
+                // $request->session()->put($serviciu . '-programare', $programare);
+                // return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-0'); // Doar pentru „Casatorii oficieri”, care au 3 locatii diferite
+                return redirect()->away('https://evidentapersoanelorfocsani.ro/');
                 break;
             default:
                 return redirect()->away('https://evidentapersoanelorfocsani.ro/');
