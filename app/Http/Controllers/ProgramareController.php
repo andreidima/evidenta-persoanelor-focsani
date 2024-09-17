@@ -322,10 +322,11 @@ class ProgramareController extends Controller
                 break;
             case 'transcrieri-certificate':
                 // Appointments for this service are put on hold starting from 10.09.2024
-                // $programare->serviciu = 2;
-                // $request->session()->put($serviciu . '-programare', $programare);
-                // return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
-                return redirect()->away('https://evidentapersoanelorfocsani.ro/');
+                // return redirect()->away('https://evidentapersoanelorfocsani.ro/');
+                // Appointments for this service are put back on 19.09.2024, until the end of 2024
+                $programare->serviciu = 2;
+                $request->session()->put($serviciu . '-programare', $programare);
+                return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-1');
                 break;
             // Nu se mai doreste acest serviciu, asa ca a fost scos
             // case 'casatorii':
@@ -335,10 +336,11 @@ class ProgramareController extends Controller
             //     break;
             case 'casatorii-oficieri':
                 // Appointments for this service are put on hold starting from 10.09.2024
-                // $programare->serviciu = 456;
-                // $request->session()->put($serviciu . '-programare', $programare);
-                // return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-0'); // Doar pentru „Casatorii oficieri”, care au 3 locatii diferite
-                return redirect()->away('https://evidentapersoanelorfocsani.ro/');
+                // return redirect()->away('https://evidentapersoanelorfocsani.ro/');
+                // Appointments for this service are put back on 19.09.2024, until the end of 2024
+                $programare->serviciu = 456;
+                $request->session()->put($serviciu . '-programare', $programare);
+                return redirect('/' . $serviciu . '/programari/adauga-programare-pasul-0'); // Doar pentru „Casatorii oficieri”, care au 3 locatii diferite
                 break;
             default:
                 return redirect()->away('https://evidentapersoanelorfocsani.ro/');
